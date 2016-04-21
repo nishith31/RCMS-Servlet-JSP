@@ -11,4 +11,5 @@ public class Constants {
     public static final String HEADER_TYPE_HTML = "text/html";
     public static final String COMPLETE = "complete";
     public static final String PARTIAL = "partial";
+    public static final String LOGIN_ACCESS_MESSAGE = "Please Login to Access MDU System";
 }
