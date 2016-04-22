@@ -8,6 +8,10 @@ package utility;
 
 public class Constants {
     public static final String NONE = "NONE";
+    public static final String NO = "NO";
+    public static final String YES = "YES";
+    public static final String UNDERSCORE = "_";
+    public static final String SPACE = " ";
     public static final String HEADER_TYPE_HTML = "text/html";
     public static final String COMPLETE = "complete";
     public static final String PARTIAL = "partial";

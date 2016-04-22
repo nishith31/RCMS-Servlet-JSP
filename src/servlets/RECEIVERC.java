@@ -36,7 +36,7 @@ public class RECEIVERC extends HttpServlet {
             /*LOGIC FOR GETTING ALL THE PARAMETERS FROM THE REQUEST AND STORING THEM IN THE VARIABLES*/
             String reg_code = request.getParameter("mnu_reg_code").toUpperCase();
             String courseCode = request.getParameter("mnu_crs_code").toUpperCase();
-            String crs_code2 = request.getParameter("mnu_crs_code2").toUpperCase();
+            String courseCode2 = request.getParameter("mnu_crs_code2").toUpperCase();
             String courseCode3 = request.getParameter("mnu_crs_code3").toUpperCase();
             String courseCode4 = request.getParameter("mnu_crs_code4").toUpperCase();
             String  courseCode5 = request.getParameter("mnu_crs_code5").toUpperCase();
@@ -73,7 +73,7 @@ public class RECEIVERC extends HttpServlet {
                 index++;
             }
         
-            if(!crs_code2.equals(Constants.NONE)) {
+            if(!courseCode2.equals(Constants.NONE)) {
                 index++;
             }
             
@@ -115,8 +115,8 @@ public class RECEIVERC extends HttpServlet {
                 quantities[insert] = quantity;
                 insert++;
             }
-            if(!crs_code2.equals(Constants.NONE)) {
-                courses[insert] = crs_code2;
+            if(!courseCode2.equals(Constants.NONE)) {
+                courses[insert] = courseCode2;
                 quantities[insert] = quantity2;
                 insert++;
             }
