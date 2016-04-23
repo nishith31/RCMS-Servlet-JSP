@@ -1,316 +1,353 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
-  <display-name>RCMS_APACHE_PROJECT</display-name>
-  <welcome-file-list>	  
-    <welcome-file>jsp/login.jsp</welcome-file>
-  </welcome-file-list>
-  			<servlet>
-<servlet-name>CheckLogin</servlet-name>
-<servlet-class>servlets.CheckLogin</servlet-class>
-			</servlet>
-			<servlet-mapping>
-<servlet-name>CheckLogin</servlet-name>
-<url-pattern>/login</url-pattern>
-			</servlet-mapping>
-			<servlet>
-<servlet-name>BYE</servlet-name>
-<servlet-class>servlets.BYE</servlet-class>
-			</servlet>
-			<servlet-mapping>
-<servlet-name>BYE</servlet-name>
-<url-pattern>/BYE</url-pattern>
-	</servlet-mapping>
-			<servlet>
-<servlet-name>BYHANDFIRSTSUBMIT</servlet-name>
-<servlet-class>servlets.BYHANDFIRSTSUBMIT</servlet-class>
-			</servlet>
-			<servlet-mapping>
-<servlet-name>BYHANDFIRSTSUBMIT</servlet-name>
-<url-pattern>/BYHANDFIRSTSUBMIT</url-pattern>
-			</servlet-mapping>
-	
-	<servlet>
-<servlet-name>BYHANDREENTRYSEARCH</servlet-name>
-<servlet-class>servlets.BYHANDREENTRYSEARCH</servlet-class>
-	</servlet>
-	<servlet-mapping>
-<servlet-name>BYHANDREENTRYSEARCH</servlet-name>
-<url-pattern>/BYHANDREENTRYSEARCH</url-pattern>
-	</servlet-mapping>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xmlns="http://java.sun.com/xml/ns/javaee" 
+        xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+    <display-name>RCMS_APACHE_PROJECT</display-name>
 
-	<servlet>
-<servlet-name>BYHANDREENTRYSUBMIT</servlet-name>
-<servlet-class>servlets.BYHANDREENTRYSUBMIT</servlet-class>
-	</servlet>
-	<servlet-mapping>
-<servlet-name>BYHANDREENTRYSUBMIT</servlet-name>
-<url-pattern>/BYHANDREENTRYSUBMIT</url-pattern>
-	</servlet-mapping>
-		<servlet>
-<servlet-name>BYEPOSTSEARCH</servlet-name>
-<servlet-class>servlets.BYEPOSTSEARCH</servlet-class>
-	</servlet>
-	<servlet-mapping>
-<servlet-name>BYEPOSTSEARCH</servlet-name>
-<url-pattern>/BYEPOSTSEARCH</url-pattern>
-	</servlet-mapping>
-		<servlet>
-<servlet-name>BYPOSTSUBMIT</servlet-name>
-<servlet-class>servlets.BYPOSTSUBMIT</servlet-class>
-	</servlet>
-	<servlet-mapping>
-<servlet-name>BYPOSTSUBMIT</servlet-name>
-<url-pattern>/BYPOSTSUBMIT</url-pattern>
-	</servlet-mapping>
-	
-		<servlet>
-<servlet-name>BYPOSTBULKSEARCH</servlet-name>
-<servlet-class>servlets.BYPOSTBULKSEARCH</servlet-class>
-	</servlet>
-	<servlet-mapping>
-<servlet-name>BYPOSTBULKSEARCH</servlet-name>
-<url-pattern>/BYPOSTBULKSEARCH</url-pattern>
-	</servlet-mapping>
-	<servlet>
-<servlet-name>BYPOSTBULKSUBMIT</servlet-name>
-<servlet-class>servlets.BYPOSTBULKSUBMIT</servlet-class>
-	</servlet>
-	<servlet-mapping>
-<servlet-name>BYPOSTBULKSUBMIT</servlet-name>
-<url-pattern>/BYPOSTBULKSUBMIT</url-pattern>
-	</servlet-mapping>
-			<servlet>
-<servlet-name>BYSCPRIVATE_PG_STOCK</servlet-name>
-<servlet-class>servlets.BYSCPRIVATE_PG_STOCK</servlet-class>
-			</servlet>
-			<servlet-mapping>
-<servlet-name>BYSCPRIVATE_PG_STOCK</servlet-name>
-<url-pattern>/BYSCPRIVATE_PG_STOCK</url-pattern>
-			</servlet-mapping>
-		<servlet>
-<servlet-name>BYSCPRIVATE_PG_SUBMIT</servlet-name>
-<servlet-class>servlets.BYSCPRIVATE_PG_SUBMIT</servlet-class>
-	</servlet>
-	<servlet-mapping>
-<servlet-name>BYSCPRIVATE_PG_SUBMIT</servlet-name>
-<url-pattern>/BYSCPRIVATE_PG_SUBMIT</url-pattern>
-	</servlet-mapping>
-				<servlet>
-<servlet-name>BYSCPRIVATESTOCK</servlet-name>
-<servlet-class>servlets.BYSCPRIVATESTOCK</servlet-class>
-			</servlet>
-			<servlet-mapping>
-<servlet-name>BYSCPRIVATESTOCK</servlet-name>
-<url-pattern>/BYSCPRIVATESTOCK</url-pattern>
-			</servlet-mapping>
-	<servlet>
-<servlet-name>BYSCPRIVATESUBMIT</servlet-name>
-<servlet-class>servlets.BYSCPRIVATESUBMIT</servlet-class>
-	</servlet>
-	<servlet-mapping>
-<servlet-name>BYSCPRIVATESUBMIT</servlet-name>
-<url-pattern>/BYSCPRIVATESUBMIT</url-pattern>
-	</servlet-mapping>
-	<servlet>
-<servlet-name>BYSC_PG_SEARCH</servlet-name>
-<servlet-class>servlets.BYSC_PG_SEARCH</servlet-class>
-	</servlet>
-	<servlet-mapping>
-<servlet-name>BYSC_PG_SEARCH</servlet-name>
-<url-pattern>/BYSC_PG_SEARCH</url-pattern>
-	</servlet-mapping>
-	<servlet>
-<servlet-name>BYSCSTUDENT_PG_SUBMIT</servlet-name>
-<servlet-class>servlets.BYSCSTUDENT_PG_SUBMIT</servlet-class>
-	</servlet>
-	<servlet-mapping>
-<servlet-name>BYSCSTUDENT_PG_SUBMIT</servlet-name>
-<url-pattern>/BYSCSTUDENT_PG_SUBMIT</url-pattern>
-	</servlet-mapping>
-	<servlet>
-<servlet-name>BYSCSEARCH</servlet-name>
-<servlet-class>servlets.BYSCSEARCH</servlet-class>
-	</servlet>
-	<servlet-mapping>
-<servlet-name>BYSCSEARCH</servlet-name>
-<url-pattern>/BYSCSEARCH</url-pattern>
-	</servlet-mapping>
-	<servlet>
-<servlet-name>BYSCSTUDENTSUBMIT</servlet-name>
-<servlet-class>servlets.BYSCSTUDENTSUBMIT</servlet-class>
-	</servlet>
-	<servlet-mapping>
-<servlet-name>BYSCSTUDENTSUBMIT</servlet-name>
-<url-pattern>/BYSCSTUDENTSUBMIT</url-pattern>
-	</servlet-mapping>
-			<servlet>
-<servlet-name>BYRCAVAILABLE_PG_STOCK</servlet-name>
-<servlet-class>servlets.BYRCAVAILABLE_PG_STOCK</servlet-class>
-			</servlet>
-			<servlet-mapping>
-<servlet-name>BYRCAVAILABLE_PG_STOCK</servlet-name>
-<url-pattern>/BYRCAVAILABLE_PG_STOCK</url-pattern>
-			</servlet-mapping>
-		<servlet>
-<servlet-name>BYRC_PG_SUBMIT</servlet-name>
-<servlet-class>servlets.BYRC_PG_SUBMIT</servlet-class>
-		</servlet>
-		<servlet-mapping>
-<servlet-name>BYRC_PG_SUBMIT</servlet-name>
-<url-pattern>/BYRC_PG_SUBMIT</url-pattern>
-		</servlet-mapping>
-			<servlet>
-<servlet-name>BYRCAVAILABLESTOCK</servlet-name>
-<servlet-class>servlets.BYRCAVAILABLESTOCK</servlet-class>
-			</servlet>
-			<servlet-mapping>
-<servlet-name>BYRCAVAILABLESTOCK</servlet-name>
-<url-pattern>/BYRCAVAILABLESTOCK</url-pattern>
-			</servlet-mapping>
-		<servlet>
-<servlet-name>BYRCSUBMIT</servlet-name>
-<servlet-class>servlets.BYRCSUBMIT</servlet-class>
-		</servlet>
-		<servlet-mapping>
-<servlet-name>BYRCSUBMIT</servlet-name>
-<url-pattern>/BYRCSUBMIT</url-pattern>
-		</servlet-mapping>
-	<servlet>
-<servlet-name>AVAILABLECOMPLEMENTARY</servlet-name>
-<servlet-class>servlets.AVAILABLECOMPLEMENTARY</servlet-class>
-	</servlet>
-	<servlet-mapping>
-<servlet-name>AVAILABLECOMPLEMENTARY</servlet-name>
-<url-pattern>/AVAILABLECOMPLEMENTARY</url-pattern>
-	</servlet-mapping>
-	<servlet>
-<servlet-name>CHECKINGCOMPLEMENTARY</servlet-name>
-<servlet-class>servlets.CHECKINGCOMPLEMENTARY</servlet-class>
-	</servlet>
-	<servlet-mapping>
-<servlet-name>CHECKINGCOMPLEMENTARY</servlet-name>
-<url-pattern>/CHECKINGCOMPLEMENTARY</url-pattern>
-	</servlet-mapping>
-			<servlet>
-<servlet-name>RECEIVEMPDD</servlet-name>
-<servlet-class>servlets.RECEIVEMPDD</servlet-class>
-			</servlet>
-			<servlet-mapping>
-<servlet-name>RECEIVEMPDD</servlet-name>
-<url-pattern>/RECEIVEMPDD</url-pattern>
-			</servlet-mapping>
-			<servlet>
-<servlet-name>RECEIVEMPDDPARTIAL</servlet-name>
-<servlet-class>servlets.RECEIVEMPDDPARTIAL</servlet-class>
-			</servlet>
-			<servlet-mapping>
-<servlet-name>RECEIVEMPDDPARTIAL</servlet-name>
-<url-pattern>/RECEIVEMPDDPARTIAL</url-pattern>
-			</servlet-mapping>
-			<servlet>
-<servlet-name>RECEIVERC</servlet-name>
-<servlet-class>servlets.RECEIVERC</servlet-class>
-			</servlet>
-			<servlet-mapping>
-<servlet-name>RECEIVERC</servlet-name>
-<url-pattern>/RECEIVERC</url-pattern>
-			</servlet-mapping>
-			<servlet>
-<servlet-name>RECEIVERCPARTIAL</servlet-name>
-<servlet-class>servlets.RECEIVERCPARTIAL</servlet-class>
-			</servlet>
-			<servlet-mapping>
-<servlet-name>RECEIVERCPARTIAL</servlet-name>
-<url-pattern>/RECEIVERCPARTIAL</url-pattern>
-			</servlet-mapping>
-			<servlet>
-<servlet-name>RECEIVESC</servlet-name>
-<servlet-class>servlets.RECEIVESC</servlet-class>
-			</servlet>
-			<servlet-mapping>
-<servlet-name>RECEIVESC</servlet-name>
-<url-pattern>/RECEIVESC</url-pattern>
-			</servlet-mapping>
-			<servlet>
-<servlet-name>RECEIVESCPARTIAL</servlet-name>
-<servlet-class>servlets.RECEIVESCPARTIAL</servlet-class>
-			</servlet>
-			<servlet-mapping>
-<servlet-name>RECEIVESCPARTIAL</servlet-name>
-<url-pattern>/RECEIVESCPARTIAL</url-pattern>
-			</servlet-mapping>
-			<servlet>
-<servlet-name>RECEIVESTUDENT</servlet-name>
-<servlet-class>servlets.RECEIVESTUDENT</servlet-class>
-			</servlet>
-			<servlet-mapping>
-<servlet-name>RECEIVESTUDENT</servlet-name>
-<url-pattern>/RECEIVESTUDENT</url-pattern>
-			</servlet-mapping>
-			<servlet>
-<servlet-name>RECEIVESTUDENTPARTIAL</servlet-name>
-<servlet-class>servlets.RECEIVESTUDENTPARTIAL</servlet-class>
-			</servlet>
-			<servlet-mapping>
-<servlet-name>RECEIVESTUDENTPARTIAL</servlet-name>
-<url-pattern>/RECEIVESTUDENTPARTIAL</url-pattern>
-			</servlet-mapping>
-			<servlet>
-<servlet-name>RECEIVEOTHERSPARTIAL</servlet-name>
-<servlet-class>servlets.RECEIVEOTHERSPARTIAL</servlet-class>
-			</servlet>
-			<servlet-mapping>
-<servlet-name>RECEIVEOTHERSPARTIAL</servlet-name>
-<url-pattern>/RECEIVEOTHERSPARTIAL</url-pattern>
-			</servlet-mapping>
-			<servlet>
-<servlet-name>RECEIVEOTHERS</servlet-name>
-<servlet-class>servlets.RECEIVEOTHERS</servlet-class>
-			</servlet>
-			<servlet-mapping>
-<servlet-name>RECEIVEOTHERS</servlet-name>
-<url-pattern>/RECEIVEOTHERS</url-pattern>
-			</servlet-mapping>
-			<servlet>
-<servlet-name>RECEIVE_PG_OTHERS</servlet-name>
-<servlet-class>servlets.RECEIVE_PG_OTHERS</servlet-class>
-			</servlet>
-			<servlet-mapping>
-<servlet-name>RECEIVE_PG_OTHERS</servlet-name>
-<url-pattern>/RECEIVE_PG_OTHERS</url-pattern>
-			</servlet-mapping>
-	<servlet>
-<servlet-name>POSTRETURNSEARCH</servlet-name>
-<servlet-class>servlets.POSTRETURNSEARCH</servlet-class>
-	</servlet>
-	<servlet-mapping>
-<servlet-name>POSTRETURNSEARCH</servlet-name>
-<url-pattern>/POSTRETURNSEARCH</url-pattern>
-	</servlet-mapping>
-<servlet>
-<servlet-name>POSTRETURNSUBMIT</servlet-name>
-<servlet-class>servlets.POSTRETURNSUBMIT</servlet-class>
-</servlet>
-<servlet-mapping>
-<servlet-name>POSTRETURNSUBMIT</servlet-name>
-<url-pattern>/POSTRETURNSUBMIT</url-pattern>
-</servlet-mapping>
-	<servlet>
-<servlet-name>LOTUPDATESEARCH</servlet-name>
-<servlet-class>servlets.LOTUPDATESEARCH</servlet-class>
-	</servlet>
-	<servlet-mapping>
-<servlet-name>LOTUPDATESEARCH</servlet-name>
-<url-pattern>/LOTUPDATESEARCH</url-pattern>
-	</servlet-mapping>
-	<servlet>
-<servlet-name>LOTUPDATE</servlet-name>
-<servlet-class>servlets.LOTUPDATE</servlet-class>
-	</servlet>
-	<servlet-mapping>
-<servlet-name>LOTUPDATE</servlet-name>
-<url-pattern>/LOTUPDATE</url-pattern>
-	</servlet-mapping>
-			
-			
+    <welcome-file-list>     
+        <welcome-file>jsp/login.jsp</welcome-file>
+    </welcome-file-list>
+    
+    <servlet>
+        <servlet-name>CheckLogin</servlet-name>
+        <servlet-class>servlets.CheckLogin</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CheckLogin</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>BYE</servlet-name>
+        <servlet-class>servlets.BYE</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BYE</servlet-name>
+        <url-pattern>/BYE</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BYHANDFIRSTSUBMIT</servlet-name>
+        <servlet-class>servlets.BYHANDFIRSTSUBMIT</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BYHANDFIRSTSUBMIT</servlet-name>
+        <url-pattern>/BYHANDFIRSTSUBMIT</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>BYHANDREENTRYSEARCH</servlet-name>
+        <servlet-class>servlets.BYHANDREENTRYSEARCH</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BYHANDREENTRYSEARCH</servlet-name>
+        <url-pattern>/BYHANDREENTRYSEARCH</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BYHANDREENTRYSUBMIT</servlet-name>
+        <servlet-class>servlets.BYHANDREENTRYSUBMIT</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BYHANDREENTRYSUBMIT</servlet-name>
+        <url-pattern>/BYHANDREENTRYSUBMIT</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BYEPOSTSEARCH</servlet-name>
+        <servlet-class>servlets.BYEPOSTSEARCH</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BYEPOSTSEARCH</servlet-name>
+        <url-pattern>/BYEPOSTSEARCH</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BYPOSTSUBMIT</servlet-name>
+        <servlet-class>servlets.BYPOSTSUBMIT</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BYPOSTSUBMIT</servlet-name>
+        <url-pattern>/BYPOSTSUBMIT</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>BYPOSTBULKSEARCH</servlet-name>
+        <servlet-class>servlets.BYPOSTBULKSEARCH</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BYPOSTBULKSEARCH</servlet-name>
+        <url-pattern>/BYPOSTBULKSEARCH</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BYPOSTBULKSUBMIT</servlet-name>
+        <servlet-class>servlets.BYPOSTBULKSUBMIT</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BYPOSTBULKSUBMIT</servlet-name>
+        <url-pattern>/BYPOSTBULKSUBMIT</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BYSCPRIVATE_PG_STOCK</servlet-name>
+        <servlet-class>servlets.BYSCPRIVATE_PG_STOCK</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BYSCPRIVATE_PG_STOCK</servlet-name>
+        <url-pattern>/BYSCPRIVATE_PG_STOCK</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BYSCPRIVATE_PG_SUBMIT</servlet-name>
+        <servlet-class>servlets.BYSCPRIVATE_PG_SUBMIT</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BYSCPRIVATE_PG_SUBMIT</servlet-name>
+        <url-pattern>/BYSCPRIVATE_PG_SUBMIT</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BYSCPRIVATESTOCK</servlet-name>
+        <servlet-class>servlets.BYSCPRIVATESTOCK</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BYSCPRIVATESTOCK</servlet-name>
+        <url-pattern>/BYSCPRIVATESTOCK</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BYSCPRIVATESUBMIT</servlet-name>
+        <servlet-class>servlets.BYSCPRIVATESUBMIT</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BYSCPRIVATESUBMIT</servlet-name>
+        <url-pattern>/BYSCPRIVATESUBMIT</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BYSC_PG_SEARCH</servlet-name>
+        <servlet-class>servlets.BYSC_PG_SEARCH</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BYSC_PG_SEARCH</servlet-name>
+        <url-pattern>/BYSC_PG_SEARCH</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BYSCSTUDENT_PG_SUBMIT</servlet-name>
+        <servlet-class>servlets.BYSCSTUDENT_PG_SUBMIT</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BYSCSTUDENT_PG_SUBMIT</servlet-name>
+        <url-pattern>/BYSCSTUDENT_PG_SUBMIT</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BYSCSEARCH</servlet-name>
+        <servlet-class>servlets.BYSCSEARCH</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BYSCSEARCH</servlet-name>
+        <url-pattern>/BYSCSEARCH</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BYSCSTUDENTSUBMIT</servlet-name>
+        <servlet-class>servlets.BYSCSTUDENTSUBMIT</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BYSCSTUDENTSUBMIT</servlet-name>
+        <url-pattern>/BYSCSTUDENTSUBMIT</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BYRCAVAILABLE_PG_STOCK</servlet-name>
+        <servlet-class>servlets.BYRCAVAILABLE_PG_STOCK</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BYRCAVAILABLE_PG_STOCK</servlet-name>
+        <url-pattern>/BYRCAVAILABLE_PG_STOCK</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BYRC_PG_SUBMIT</servlet-name>
+        <servlet-class>servlets.BYRC_PG_SUBMIT</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BYRC_PG_SUBMIT</servlet-name>
+        <url-pattern>/BYRC_PG_SUBMIT</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BYRCAVAILABLESTOCK</servlet-name>
+        <servlet-class>servlets.BYRCAVAILABLESTOCK</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BYRCAVAILABLESTOCK</servlet-name>
+        <url-pattern>/BYRCAVAILABLESTOCK</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BYRCSUBMIT</servlet-name>
+        <servlet-class>servlets.BYRCSUBMIT</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BYRCSUBMIT</servlet-name>
+        <url-pattern>/BYRCSUBMIT</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AVAILABLECOMPLEMENTARY</servlet-name>
+        <servlet-class>servlets.AVAILABLECOMPLEMENTARY</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AVAILABLECOMPLEMENTARY</servlet-name>
+        <url-pattern>/AVAILABLECOMPLEMENTARY</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CHECKINGCOMPLEMENTARY</servlet-name>
+        <servlet-class>servlets.CHECKINGCOMPLEMENTARY</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CHECKINGCOMPLEMENTARY</servlet-name>
+        <url-pattern>/CHECKINGCOMPLEMENTARY</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RECEIVEMPDD</servlet-name>
+        <servlet-class>servlets.RECEIVEMPDD</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RECEIVEMPDD</servlet-name>
+        <url-pattern>/RECEIVEMPDD</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RECEIVEMPDDPARTIAL</servlet-name>
+        <servlet-class>servlets.RECEIVEMPDDPARTIAL</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RECEIVEMPDDPARTIAL</servlet-name>
+        <url-pattern>/RECEIVEMPDDPARTIAL</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RECEIVERC</servlet-name>
+        <servlet-class>servlets.RECEIVERC</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RECEIVERC</servlet-name>
+        <url-pattern>/RECEIVERC</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RECEIVERCPARTIAL</servlet-name>
+        <servlet-class>servlets.RECEIVERCPARTIAL</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RECEIVERCPARTIAL</servlet-name>
+        <url-pattern>/RECEIVERCPARTIAL</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RECEIVESC</servlet-name>
+        <servlet-class>servlets.RECEIVESC</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RECEIVESC</servlet-name>
+        <url-pattern>/RECEIVESC</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RECEIVESCPARTIAL</servlet-name>
+        <servlet-class>servlets.RECEIVESCPARTIAL</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RECEIVESCPARTIAL</servlet-name>
+        <url-pattern>/RECEIVESCPARTIAL</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RECEIVESTUDENT</servlet-name>
+        <servlet-class>servlets.RECEIVESTUDENT</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RECEIVESTUDENT</servlet-name>
+        <url-pattern>/RECEIVESTUDENT</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RECEIVESTUDENTPARTIAL</servlet-name>
+        <servlet-class>servlets.RECEIVESTUDENTPARTIAL</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RECEIVESTUDENTPARTIAL</servlet-name>
+        <url-pattern>/RECEIVESTUDENTPARTIAL</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RECEIVEOTHERSPARTIAL</servlet-name>
+        <servlet-class>servlets.RECEIVEOTHERSPARTIAL</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RECEIVEOTHERSPARTIAL</servlet-name>
+        <url-pattern>/RECEIVEOTHERSPARTIAL</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RECEIVEOTHERS</servlet-name>
+        <servlet-class>servlets.RECEIVEOTHERS</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RECEIVEOTHERS</servlet-name>
+        <url-pattern>/RECEIVEOTHERS</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RECEIVE_PG_OTHERS</servlet-name>
+        <servlet-class>servlets.RECEIVE_PG_OTHERS</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RECEIVE_PG_OTHERS</servlet-name>
+        <url-pattern>/RECEIVE_PG_OTHERS</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>POSTRETURNSEARCH</servlet-name>
+        <servlet-class>servlets.POSTRETURNSEARCH</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>POSTRETURNSEARCH</servlet-name>
+        <url-pattern>/POSTRETURNSEARCH</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>POSTRETURNSUBMIT</servlet-name>
+        <servlet-class>servlets.POSTRETURNSUBMIT</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>POSTRETURNSUBMIT</servlet-name>
+        <url-pattern>/POSTRETURNSUBMIT</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LOTUPDATESEARCH</servlet-name>
+        <servlet-class>servlets.LOTUPDATESEARCH</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LOTUPDATESEARCH</servlet-name>
+        <url-pattern>/LOTUPDATESEARCH</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LOTUPDATE</servlet-name>
+        <servlet-class>servlets.LOTUPDATE</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LOTUPDATE</servlet-name>
+        <url-pattern>/LOTUPDATE</url-pattern>
+    </servlet-mapping>
 </web-app>

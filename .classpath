@@ -13,7 +13,6 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="E:/Fonantrix_Folder/Canoe_Code/DMP_CANOE_PRODUCTION_LATEST/psy360canoe_ui/lib/antlr.3.2.jar"/>
-	<classpathentry kind="lib" path="E:/apache-tomcat-7.0.55/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="E:/Apache7/lib/servlet-api.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
