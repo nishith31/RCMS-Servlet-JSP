@@ -30,7 +30,7 @@ public class BYHANDREENTRYSEARCH extends HttpServlet {
             request.setAttribute("msg", message);
             request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
         } else {
-            String enrno                =    request.getParameter("text_enr").toUpperCase();
+            String enrollmentNumber                =    request.getParameter("text_enr").toUpperCase();
             String message              =   ""; 
             String programme             =   null;
             String name             =   null;
@@ -66,7 +66,7 @@ public class BYHANDREENTRYSEARCH extends HttpServlet {
                 
                 request.setAttribute("current_session", current_session);
                 /*Complete Logic for fetching the details of the student from the the student database*/
-                rs = statement.executeQuery("select * from student_" + current_session + Constants.UNDERSCORE + regionalCenterCode + " where enrno='" + enrno + "'");
+                rs = statement.executeQuery("select * from student_" + current_session + Constants.UNDERSCORE + regionalCenterCode + " where enrno='" + enrollmentNumber + "'");
             
                 if(rs.next()) {
                     //    if controls enter in if(rs.next()) means records exist for the roll entered in the browser
@@ -103,7 +103,7 @@ public class BYHANDREENTRYSEARCH extends HttpServlet {
                         }
                     }
                     /*Logic for getting all the courses name, no of blocks of them and the serial number associated with the course*/
-                    rs = statement.executeQuery("select * from student_" + current_session + Constants.UNDERSCORE + regionalCenterCode + " where enrno='" + enrno + "'");
+                    rs = statement.executeQuery("select * from student_" + current_session + Constants.UNDERSCORE + regionalCenterCode + " where enrno='" + enrollmentNumber + "'");
                     String course[] = new String[courseNumber];
                     int blocks[] = new int[courseNumber];
                     int blocksShadow[] = new int[courseNumber];
@@ -203,7 +203,7 @@ public class BYHANDREENTRYSEARCH extends HttpServlet {
                     searchCourseCode = searchCourseCode+")";
                 System.out.println("value of search_crs_code " + searchCourseCode);
                 /*Logic for checking the Despatch of Programme guide for the student entered into the system*/      
-                rs=statement.executeQuery("select * from student_dispatch_"+current_session+"_"+regionalCenterCode+" where enrno='"+enrno+"' and "+searchCourseCode+" and block='PG' and reentry='YES'");
+                rs=statement.executeQuery("select * from student_dispatch_"+current_session+"_"+regionalCenterCode+" where enrno='"+enrollmentNumber+"' and "+searchCourseCode+" and block='PG' and reentry='YES'");
                 if(rs.next()) {
                     programmeGuideFlat = "YES";//if program guide is already despatched then flag will be YES
                     programmeGuideDate = rs.getDate(6).toString();   
@@ -213,152 +213,139 @@ public class BYHANDREENTRYSEARCH extends HttpServlet {
                 }
                 /*Logic for getting the available sets of the Programme guide of the program opted by the student*/     
                 rs=statement.executeQuery("select qty from material_"+current_session+"_"+regionalCenterCode+" where "+searchCourseCode+" and block='PG' and medium='"+medium+"'");
-                    while(rs.next())
+                while(rs.next()) {
                     availableProgrammeGuide=rs.getInt(1);
+                }
                     
-                    request.setAttribute("pg_flag",programmeGuideFlat);//sending the pg_flag means despatched or not
-                    request.setAttribute("pg_date",programmeGuideDate);//sending the pg_flag means despatched or not
-            
-                    int dispatch_course_count=0;//variable for holding the number of courses despatched blockwise now
-                    rs=statement.executeQuery("select count(*) from student_dispatch_"+current_session+"_"+regionalCenterCode+" where enrno='"+enrno+"' and block<>'PG' and reentry='YES'");
-                    while(rs.next())
-                    {
-                        dispatch_course_count=rs.getInt(1);
+                request.setAttribute("pg_flag",programmeGuideFlat);//sending the pg_flag means despatched or not
+                request.setAttribute("pg_date",programmeGuideDate);//sending the pg_flag means despatched or not
+        
+                    int dispatchCourseCount=0;//variable for holding the number of courses despatched blockwise now
+                    rs=statement.executeQuery("select count(*) from student_dispatch_"+current_session+"_"+regionalCenterCode+" where enrno='"+enrollmentNumber+"' and block<>'PG' and reentry='YES'");
+                    while(rs.next()) {
+                        dispatchCourseCount=rs.getInt(1);
                     }
                     
-            /*If Not any course opted by student has been Despatched then this logic will create empty Despatch course and date array*/
+                    /*If Not any course opted by student has been Despatched then this logic will create empty Despatch course and date array*/
             
-                    if(dispatch_course_count==0)
-                    {
-                        String dispatch[]               =   new String[dispatch_course_count];//create array of Despatch courses
-                        String dispatch_date[]          =   new String[dispatch_course_count];//create array of Despatch courses date
-                        message=message+"Welcome to the RE-ENTRY By Hand Entry for "+name+".<br/>";
-            /*Sending the Despatch courses and dates empty array with the msg variable with appropriate msg to the Browser*/        
-                        request.setAttribute("dispatch",dispatch);
-                        request.setAttribute("dispatch_date",dispatch_date);
-                        request.setAttribute("blocks_shadow",blocksShadow);                        
-                        request.setAttribute("msg",message);
-                        request.getRequestDispatcher("jsp/By_hand3.jsp?enrno="+enrno+"&prog="+programme+"&year="+year+"&name="+name+"&medium="+medium+"&available_pg="+availableProgrammeGuide+"").forward(request,response); 
-                    }//end of if(dispatch_course_count==0)
-            /*If some courses partially Despatched then this logic will create the Despatched courses and dates array and sent to client*/
+                    if(dispatchCourseCount == 0) {
+                        String dispatch[] = new String[dispatchCourseCount];//create array of Despatch courses
+                        String dispatchDate[] = new String[dispatchCourseCount];//create array of Despatch courses date
+                        message = message + "Welcome to the RE-ENTRY By Hand Entry for " + name + ".<br/>";
+                        /*Sending the Despatch courses and dates empty array with the msg variable with appropriate msg to the Browser*/
+                        request.setAttribute("dispatch", dispatch);
+                        request.setAttribute("dispatch_date", dispatchDate);
+                        request.setAttribute("blocks_shadow", blocksShadow);
+                        request.setAttribute("msg", message);
+                        request.getRequestDispatcher("jsp/By_hand3.jsp?enrno="+enrollmentNumber+"&prog="+programme+"&year="+year+"&name="+name+"&medium="+medium+"&available_pg="+availableProgrammeGuide+"").forward(request, response); 
+                    } else if(dispatchCourseCount<courseBlock.length) {
+                        /*If some courses partially Despatched then this logic will create the Despatched courses and dates array and sent to client*/
+                        String checking = null;
+                        int m = 0, counter = 0;
+                        dispatchCourseCount = 0;
+                        rs=statement.executeQuery("select count(*) from student_dispatch_"+current_session+"_"+regionalCenterCode+" where enrno='"+enrollmentNumber+"' and block<>'PG' and reentry='YES'");
+                        while(rs.next()) {
+                            dispatchCourseCount = rs.getInt(1);
+                        }
             
-                    else if(dispatch_course_count<courseBlock.length)
-                    {
-                    String checking=null;
-                        int m=0,counter=0;
-                        dispatch_course_count=0;
-                        rs=statement.executeQuery("select count(*) from student_dispatch_"+current_session+"_"+regionalCenterCode+" where enrno='"+enrno+"' and block<>'PG' and reentry='YES'");
-                        while(rs.next())
-                        {
-                            dispatch_course_count=rs.getInt(1);
-                        }//end of while loop
-            
-                        String dispatch[]           =   new String[dispatch_course_count];//array for Despatched courses
-                        String dispatch_date[]      =   new String[dispatch_course_count];//array for date of Despatched courses
+                        String dispatch[]           =   new String[dispatchCourseCount];//array for Despatched courses
+                        String dispatchDate[]      =   new String[dispatchCourseCount];//array for date of Despatched courses
                                     
-                        rs=statement.executeQuery("select * from student_dispatch_"+current_session+"_"+regionalCenterCode+" where enrno='"+enrno+"' and block<>'PG' and reentry='YES'");
-                        while(rs.next())
-                        {
-                            checking=rs.getString(3).trim();
-                            for(index=0;index<course.length;index++)
-                            {
-                                if(checking.equals(course[index]))
-                                blocksShadow[index]++;
+                        rs = statement.executeQuery("select * from student_dispatch_" + current_session + Constants.UNDERSCORE + 
+                                    regionalCenterCode + " where enrno='" + enrollmentNumber + "' and block<>'PG' and reentry='YES'");
+                        while(rs.next()) {
+                            checking = rs.getString(3).trim();
+                            for(index = 0; index < course.length; index++) {
+                                if(checking.equals(course[index])) {
+                                    blocksShadow[index]++;
+                                }
                             }
-                            dispatch[m]             =   checking+rs.getString(4).trim();
-                            dispatch_date[m]        =   rs.getDate(6).toString();
+                            dispatch[m] = checking+rs.getString(4).trim();
+                            dispatchDate[m] =   rs.getDate(6).toString();
                             m++;
-                        }//end of while loop
-                        m=0;
-                        message=message+"Partially Despatched Courese of "+name+" are ";
-                        for(int k=0;k<dispatch.length;k++)
-                        {
-                            message=" "+message+" "+dispatch[k];
+                        }
+                        m = 0;
+                        message = message + "Partially Despatched Courese of " + name + " are ";
+                        for(int k = 0; k < dispatch.length; k++) {
+                            message = message + " " + dispatch[k];
                         }
                         /*Sending the Despatch courses and dates array with the msg variable with appropriate msg to the Browser*/  
-                        request.setAttribute("dispatch",dispatch);
-                        request.setAttribute("dispatch_date",dispatch_date);
-                        request.setAttribute("blocks_shadow",blocksShadow);            
-                        request.setAttribute("msg",message);
-                        request.getRequestDispatcher("jsp/By_hand3.jsp?enrno="+enrno+"&prog="+programme+"&year="+year+"&name="+name+"&medium="+medium+"&available_pg="+availableProgrammeGuide+"").forward(request,response);
+                        request.setAttribute("dispatch", dispatch);
+                        request.setAttribute("dispatch_date", dispatchDate);
+                        request.setAttribute("blocks_shadow", blocksShadow);
+                        request.setAttribute("msg", message);
+                        request.getRequestDispatcher("jsp/By_hand3.jsp?enrno="+enrollmentNumber+"&prog="+programme+"&year="+year+"&name="+name+"&medium="+medium+"&available_pg="+availableProgrammeGuide).forward(request, response);
             
-                    }//end of else if
-            
-            /*intermediate logic for Program Guide*/
-            /*If some courses partially Despatched then this logic will create the Despatched courses and dates array and sent to client*/
-            
-                    else if(dispatch_course_count==courseBlock.length && programmeGuideFlat.equals("NO"))
-                    {
-                    String checking=null;
-                    int m=0,counter=0;
-                        dispatch_course_count=0;
-                        rs=statement.executeQuery("select count(*) from student_dispatch_"+current_session+"_"+regionalCenterCode+" where enrno='"+enrno+"' and block<>'PG' and reentry='YES'");
-                        while(rs.next())
-                        {
-                            dispatch_course_count=rs.getInt(1);
-                        }//end of while loop
-                        String dispatch[]           =   new String[dispatch_course_count];//array for dispatched courses
-                        String dispatch_date[]      =   new String[dispatch_course_count];//array for date of Despatched courses
-                                    
-                        rs=statement.executeQuery("select * from student_dispatch_"+current_session+"_"+regionalCenterCode+" where enrno='"+enrno+"' and block<>'PG' and reentry='YES'");
-                        while(rs.next())
-                        {
-                            checking=rs.getString(3).trim();
-                            for(index=0;index<course.length;index++)
-                            {
-                                if(checking.equals(course[index]))
-                                blocksShadow[index]++;
+                    } else if(dispatchCourseCount==courseBlock.length && programmeGuideFlat.equals("NO")) {
+                        /*intermediate logic for Program Guide*/
+                        /*If some courses partially Despatched then this logic will create the Despatched courses and dates array and sent to client*/
+                    String checking = null;
+                    int m = 0, counter = 0;
+                        dispatchCourseCount = 0;
+                        rs = statement.executeQuery("select count(*) from student_dispatch_" + current_session + Constants.UNDERSCORE + 
+                                regionalCenterCode + " where enrno='" + enrollmentNumber + "' and block<>'PG' and reentry='YES'");
+                        while(rs.next()) {
+                            dispatchCourseCount = rs.getInt(1);
+                        }
+                        String dispatch[] = new String[dispatchCourseCount];//array for dispatched courses
+                        String dispatchDate[] = new String[dispatchCourseCount];//array for date of Despatched courses
+
+                        rs=statement.executeQuery("select * from student_dispatch_"+current_session+"_"+regionalCenterCode+" where enrno='"+enrollmentNumber+"' and block<>'PG' and reentry='YES'");
+                        while(rs.next()) {
+                            checking = rs.getString(3).trim();
+                            for(index = 0; index < course.length; index++) {
+                                if(checking.equals(course[index])) {
+                                    blocksShadow[index]++;
+                                }
                             }
-                            dispatch[m]             =   checking+rs.getString(4).trim();
-                            dispatch_date[m]        =   rs.getDate(6).toString();
+                            dispatch[m] = checking+rs.getString(4).trim();
+                            dispatchDate[m] = rs.getDate(6).toString();
                             m++;
-                        }//end of while loop
-                        m=0;
-                        message=message+"Partially Despatched Courses of "+name+" are ";
-                        for(int k=0;k<dispatch.length;k++)
-                        {
-                            message=" "+message+" "+dispatch[k];
+                        }
+                        m = 0;
+                        message = message + "Partially Despatched Courses of " + name + " are ";
+                        for(int k = 0; k < dispatch.length; k++) {
+                            message = message + " " + dispatch[k];
                         }
                         /*Sending the Despatch courses and dates array with the msg variable with appropriate msg to the Browser*/  
-                        request.setAttribute("dispatch",dispatch);
-                        request.setAttribute("dispatch_date",dispatch_date);
-                        request.setAttribute("blocks_shadow",blocksShadow);            
-                        request.setAttribute("msg",message);
-                        request.getRequestDispatcher("jsp/By_hand3.jsp?enrno="+enrno+"&prog="+programme+"&year="+year+"&name="+name+"&medium="+medium+"&available_pg="+availableProgrammeGuide+"").forward(request,response);
-                    }//end of else if
-                    
-                    /*If all the Materials has been despatched successfully then this section will work and sends the message to the browser*/
-                    else
-                    {
-                        int m=0,length_of_dispatch_courses=0;
-                        rs=statement.executeQuery("select count(*) from student_dispatch_"+current_session+"_"+regionalCenterCode+" where enrno='"+enrno+"' and block<>'PG' and reentry='YES'");
+                        request.setAttribute("dispatch", dispatch);
+                        request.setAttribute("dispatch_date", dispatchDate);
+                        request.setAttribute("blocks_shadow", blocksShadow);
+                        request.setAttribute("msg", message);
+                        request.getRequestDispatcher("jsp/By_hand3.jsp?enrno="+enrollmentNumber+"&prog="+programme+"&year="+year+"&name="+name+"&medium="+medium+"&available_pg="+availableProgrammeGuide+"").forward(request,response);
+                    } else {
+                        /*If all the Materials has been despatched successfully then this section will work and sends the message to the browser*/
+                        int m = 0,lengthOfDispatchCourses = 0;
+                        rs = statement.executeQuery("select count(*) from student_dispatch_" + current_session + Constants.UNDERSCORE + regionalCenterCode + 
+                                " where enrno='" + enrollmentNumber + "' and block<>'PG' and reentry='YES'");
                         while(rs.next())
                         {
-                            length_of_dispatch_courses=rs.getInt(1);
+                            lengthOfDispatchCourses=rs.getInt(1);
                         }//end of while loop
                 
-                        String dispatch[]           =   new String[length_of_dispatch_courses];//array of despatched courses block wise
-                        String dispatch_date[]      =   new String[length_of_dispatch_courses];//array of Despatch dates of courses despatched
-                        rs=statement.executeQuery("select * from student_dispatch_"+current_session+"_"+regionalCenterCode+" where enrno='"+enrno+"' and block<>'PG' and reentry='NO'");
+                        String dispatch[] = new String[lengthOfDispatchCourses];//array of despatched courses block wise
+                        String dispatchDate[] = new String[lengthOfDispatchCourses];//array of Despatch dates of courses despatched
+                        rs=statement.executeQuery("select * from student_dispatch_" + current_session + Constants.UNDERSCORE + regionalCenterCode + 
+                                " where enrno='" + enrollmentNumber + "' and block<>'PG' and reentry='NO'");
             
                         while(rs.next()) {
-                            dispatch[m]             =   rs.getString(3).trim()+rs.getString(4).trim();
-                            dispatch_date[m]        =   rs.getDate(6).toString();
-                            dispatchMode           =   rs.getString(7);
+                            dispatch[m] = rs.getString(3).trim() + rs.getString(4).trim();
+                            dispatchDate[m] = rs.getDate(6).toString();
+                            dispatchMode = rs.getString(7);
                             m++;
                         }
-                        request.setAttribute("dispatch",dispatch);//sending the array of Despatch courses block wise to the browser
-                        request.setAttribute("dispatch_date",dispatch_date);//sending the array of Despatch dates to the browser        
+                        request.setAttribute("dispatch", dispatch);//sending the array of Despatch courses block wise to the browser
+                        request.setAttribute("dispatch_date", dispatchDate);//sending the array of Despatch dates to the browser        
                         System.out.println("Sorry books have been Despatched...");
-                        message = message+"Sorry!! Books have been Despatched For<br/>"+name+".";
-                        request.setAttribute("msg",message);//sending the message to the browser
-                        request.getRequestDispatcher("jsp/By_hand.jsp?enrno="+enrno+"&prog="+programme+"&year="+year+"&name="+name+"&medium="+medium+"&date="+date+"&available_pg="+availableProgrammeGuide+"&dispatch_mode="+dispatchMode+"").forward(request,response);
+                        message = message+"Sorry!! Books have been Despatched For<br/>" +name + ".";
+                        request.setAttribute("msg", message);//sending the message to the browser
+                        request.getRequestDispatcher("jsp/By_hand.jsp?enrno=" +enrollmentNumber+"&prog="+programme+"&year="+year+"&name="+name+"&medium="+medium+"&date="+date+"&available_pg="+availableProgrammeGuide+"&dispatch_mode="+dispatchMode+"").forward(request,response);
                     }
                 } else {
                     System.out.println("Sorry!! Roll No not found please contact to registration department..Thank you..");
-                    message="Sorry!! Roll Number not found please contact to Admission Department. Thank You..";
-                    request.setAttribute("msg",message);
-                    request.getRequestDispatcher("jsp/By_hand.jsp").forward(request,response); 
+                    message = "Sorry!! Roll Number not found please contact to Admission Department. Thank You..";
+                    request.setAttribute("msg", message);
+                    request.getRequestDispatcher("jsp/By_hand.jsp").forward(request, response); 
                 }
             } catch(Exception exception) {
                 System.out.println("Exception raised from By_hand.jsp" + exception);
