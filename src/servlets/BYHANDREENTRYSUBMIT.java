@@ -77,7 +77,7 @@ public class BYHANDREENTRYSUBMIT extends HttpServlet {
             String date = request.getParameter("text_date").toUpperCase();//date from the jsp page date field
             String disptachSource = "BY HAND";//for the Despatch source field of the student_Despatch table for post it is BY POST AND BY SC for study centre Despatch moce
             String reentry = "YES";
-            String relativeCourse = null
+            String relativeCourse = null;
             int qunatity = 0;
             int actualQuantity = 0;
             int flagForProgrammeGuide =       0;
