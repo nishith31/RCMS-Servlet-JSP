@@ -5,6 +5,7 @@ CENTRE DATABASE AND
  * ALSO CHECKING THE NUMBER OF COURSES AND DETAILS OF COURSES THOSE HAVE BEEN ALREADY DESPATCHED VIA ANY OTHER DESPATCH MODE OR BY POST MADE.
  * IF ANY COURSE FOUND DESPATCHED THEN DATA OF THOSE COURSES WILL BE SHOWN IN DISABLED FORM IN THE BROWSER
 CALLED JSP:-By_post.jsp*/
+import static utility.CommonUtility.isNull;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -32,10 +33,10 @@ public class BYEPOSTSEARCH extends HttpServlet {
     }
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session=request.getSession(false);//getting and checking the availability of session of java
-        if(session == null) {
+        if(isNull(session)) {
             String message = Constants.LOGIN_ACCESS_MESSAGE;
             request.setAttribute("msg", message);
-            request.getRequestDispatcher("jsp/login.jsp").forward(request,response);
+            request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
         } else {
             String enrno = request.getParameter("txt_enr");//getting the Enrolment Number of the student from the browser
             String message = "";//message for sending message to the browser for printing purpose

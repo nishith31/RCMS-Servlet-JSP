@@ -4,6 +4,7 @@ SERVLET SYSTEM SAVE THE DATA OF THOSE STUDENTS TO WHOM MATERIALS ARE DISTRIBUTED
 FOR THE PRIMARY KEY VOILATION IN THE TWO DESPATCH TABLES, IF NO VIOALTION FOUND THEN SAVES THE DATA TO THE CORRESPONDING TABLES
 AND GENERATE APPROPRIATE MSGS.
 CALLED JSP:-To_sc_students1.jsp*/
+import static utility.CommonUtility.isNull;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -29,10 +30,10 @@ public class BYSCSTUDENTSUBMIT extends HttpServlet {
     } 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
-        if(session==null) {
+        if(isNull(session)) {
             String message = Constants.LOGIN_ACCESS_MESSAGE;
             request.setAttribute("msg", message);
-            request.getRequestDispatcher("jsp/login.jsp").forward(request,response);
+            request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
         } else {
             String studyCenterCode              =    request.getParameter("txt_sc_code").toUpperCase();//FIELD FOR STORING THE STUDY CENTRE CODE OF THE STUDENT
             String programmeCode             =    request.getParameter("txt_prog_code").toUpperCase();//FIELD FOR STORING THE PROGRAM CODE OF THE STUDENT

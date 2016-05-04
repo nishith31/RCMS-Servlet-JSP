@@ -3,6 +3,7 @@ package servlets;
 THIS SERVLET TAKES THE DETAILS OF THE DESPATCHED COURSES FROM THE BROWSER AND THEN UPDATE THE NEW EXPRESS PARCEL NUMBER FOR
 THE SELECTED COURSES.
 CALLED JSP:-Lot_Update.jsp*/
+import static utility.CommonUtility.isNull;
 import java.io.IOException;
 
 import javax.servlet.ServletConfig;
@@ -28,10 +29,10 @@ public class LOTUPDATESEARCH extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session=request.getSession(false);//getting and checking the availability of session of java
     
-        if(session == null) {
+        if(isNull(session)) {
             String message = Constants.LOGIN_ACCESS_MESSAGE;
             request.setAttribute("msg", message);
-            request.getRequestDispatcher("jsp/login.jsp").forward(request,response);
+            request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
         } else {
             /*LOGIC FOR GETTING THE PARAMETERS FROM THE BROWSER LIKE NAME ROLL NO*/
             String message="";

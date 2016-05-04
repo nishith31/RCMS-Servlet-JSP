@@ -1,12 +1,17 @@
 package servlets;
 /*THIS SERVLET IS RESPONSIBLE FOR CHECKING THE AVAILABLE STOCK OF THE PROGRAMME GUIDE OF PROGRAMME SELECTED BY THE USER AND SENDS THE INFORMATION TO THE BROWSER ABOUT THE AVAILABILITY AND IT ALSO SENDS THE RC NAME OF THE SELECTED RC WITH ITS NECESSARY DETAILS OF THE RC.S
 CALLED JSP:-To_rc_pg.jsp*/
+import static utility.CommonUtility.isNull;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
 import java.util.*; 
+
 import javax.servlet.*;
 import javax.servlet.http.*; 
+
+import utility.Constants;
 public class BYRCAVAILABLE_PG_STOCK extends HttpServlet
  {
 	public void init(ServletConfig config) throws ServletException 
@@ -17,11 +22,10 @@ public class BYRCAVAILABLE_PG_STOCK extends HttpServlet
 public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 {
 	HttpSession session=request.getSession(false);//getting and checking the availability of session of java
-	if(session==null)
-	{
-		String msg="Please Login to Access MDU System";
-		request.setAttribute("msg",msg);
-		request.getRequestDispatcher("jsp/login.jsp").forward(request,response);
+	if(isNull(session)) {
+		String message = Constants.LOGIN_ACCESS_MESSAGE;
+		request.setAttribute("msg", message);
+		request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
 	}
 	else
 	{

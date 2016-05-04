@@ -3,6 +3,7 @@ package servlets;
  * IF USER WANTS TO RECEIVE MATERIALS PARTIALLY THEN THIS SERVLET WILL REDIRECTS THE PAGE TO FROM_MPDD1.JSP AND 
  * THERE WE RECEIVE PARTIALLY .THIS SERVLET TAKES THE COURSE CODE,DATE,MEDIUM AS INPUT AND DISPLAY THE RESULT INTO NEXT PAGE
 CALLED JSP:-From_mpdd.jsp*/
+import static utility.CommonUtility.isNull;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -28,9 +29,9 @@ public class RECEIVEMPDD extends HttpServlet {
     } 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
-        if(session==null) {
-            String msg = Constants.LOGIN_ACCESS_MESSAGE;
-            request.setAttribute("msg", msg);
+        if(isNull(session)) {
+            String message = Constants.LOGIN_ACCESS_MESSAGE;
+            request.setAttribute("msg", message);
             request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
         } else {
     

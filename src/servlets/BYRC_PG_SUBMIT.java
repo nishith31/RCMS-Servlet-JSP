@@ -3,6 +3,7 @@ package servlets;
 THE PRIMARY KEY FIRST IF NO VIOLATION FOUND IN THE RC DESPATCH TABLE THEN WILL SAVE THE REQUESTED DATA TO THE CORRESPONDING
 TABLES AND GENERATE APPROPRIATE MESSAGE.
 CALLED JSP:-By_rc_pg1.jsp*/
+import static utility.CommonUtility.isNull;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -30,7 +31,7 @@ public class BYRC_PG_SUBMIT extends HttpServlet {
  
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
-        if(session == null) {
+        if(isNull(session)) {
             String message = Constants.LOGIN_ACCESS_MESSAGE;
             request.setAttribute("msg", message);
             request.getRequestDispatcher("jsp/login.jsp").forward(request, response);

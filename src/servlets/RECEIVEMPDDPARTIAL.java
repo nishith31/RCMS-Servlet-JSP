@@ -4,6 +4,8 @@ IT ALSO CHECKS THE VIOLATION OF PRIMARY KEY MEANS DUPLICATE DATA CAN NOT BE
 ENTER IN THE STUDENT DESPATCH TABLE.THIS SERVLET GETS ALL THE REQUIRED FIELDS FROM THE BROWSER AND AFTER CHECKING 
 ALL THE CONSTRAINTS INSERT AND UPDATE THE CORRESPONDING TABLES
 CALLED JSP:-From_mpdd1.jsp*/
+import static utility.CommonUtility.isNull;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,33 +17,29 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import utility.Constants;
  
-public class RECEIVEMPDDPARTIAL extends HttpServlet
-{
-public void init(ServletConfig config) throws ServletException 
-{
+public class RECEIVEMPDDPARTIAL extends HttpServlet {
+    public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("BYHANDFIRSTSUBMIT SERVLET STARTED TO EXECUTE");
-} 
-public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
-{
-    HttpSession session=request.getSession(false);//getting and checking the availability of session of java
-    if(session==null)
-    {
-        String msg="Please Login to Access MDU System";
-        request.setAttribute("msg",msg);
-        request.getRequestDispatcher("jsp/login.jsp").forward(request,response);
     }
-    else
-    {
-    String currentSession  =    request.getParameter("txt_session").toLowerCase();//getting the value of current session
-    String prg_code         =    request.getParameter("mnu_prg_code").toUpperCase();//gettting the prgram code
-    String[] course         =    request.getParameterValues("crs_code");//all the course codes from the jsp page
-    int block_count         =    0;//int variable for number of blocks available with the course
-    int count               =    0;//int variable for multiple use
-    String[] temp           =    new String[0];//array of String for multiple use
-    int crs_select=0;//variable used to store number of courses selected to be dispatched
-    int index               =       0;
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);//getting and checking the availability of session of java
+        if(isNull(session)) {
+            String message = Constants.LOGIN_ACCESS_MESSAGE;
+            request.setAttribute("msg", message);
+            request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
+        } else {
+            String currentSession = request.getParameter("txt_session").toLowerCase();//getting the value of current session
+            String programmeCode = request.getParameter("mnu_prg_code").toUpperCase();//gettting the prgram code
+            String[] course =    request.getParameterValues("crs_code");//all the course codes from the jsp page
+            int blockCount         =    0;//int variable for number of blocks available with the course
+            int count               =    0;//int variable for multiple use
+            String[] temp           =    new String[0];//array of String for multiple use
+            int crs_select=0;//variable used to store number of courses selected to be dispatched
+            int index               =       0;
     /*logic for getting the number of total courses selected by user*/
     for(index=0;index<course.length;index++)
     {
@@ -49,12 +47,12 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
         if(temp!=null)
         {
             crs_select++;
-            block_count=block_count+temp.length;
+            blockCount=blockCount+temp.length;
         }
     }//end of loop for int c
     /*logic ends here*/
-    String[] course_dispatch    =    new String[block_count];//array for holding the blocks to be receieved
-    String[] blk_qty            =    new String[block_count];//array for holding the quantity of the blocks to be received
+    String[] course_dispatch    =    new String[blockCount];//array for holding the blocks to be receieved
+    String[] blk_qty            =    new String[blockCount];//array for holding the quantity of the blocks to be received
     /*logic for getting all the courses selected by the user*/
     for(index=0;index<course.length;index++)
     {
@@ -87,9 +85,9 @@ try
     Connection con=connections.ConnectionProvider.conn();//creating the connection object for the database
     Statement stmt=con.createStatement();//fetching the refernce of the statement from the connection object.
     int result=5,result1=5;
-    if (block_count != 0) 
+    if (blockCount != 0) 
     {
-        qty=block_count;
+        qty=blockCount;
         msg="Entry Already Exist for Course: <br/>";
         for(int z=0;z<course.length;z++)
         {

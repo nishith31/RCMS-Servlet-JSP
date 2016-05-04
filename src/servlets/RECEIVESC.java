@@ -4,6 +4,7 @@ THEN PARTIALLY LOGIC WILL SENDS ALL THE SELECTED COURSES AND OTHER SELECTIONS LI
 IN READ ONLY MODE WITH APPROPRIATE MESSAGE.
 CALLED JSP:-From_sc.jsp*/
 import java.io.IOException;
+import static utility.CommonUtility.isNull;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -28,12 +29,12 @@ public class RECEIVESC extends HttpServlet {
     } 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session=request.getSession(false);//getting and checking the availability of session of java
-        if(session==null){
-            String msg="Please Login to Access MDU System";
-            request.setAttribute("msg",msg);
-            request.getRequestDispatcher("jsp/login.jsp").forward(request,response);
+        if(isNull(session)) {
+            String message = Constants.LOGIN_ACCESS_MESSAGE;
+            request.setAttribute("msg", message);
+            request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
         } else {
-            String  sc_code             =    request.getParameter("mnu_sc_code").toUpperCase();
+            String  studyCenterCode             =    request.getParameter("mnu_sc_code").toUpperCase();
             String  courseCode                =    request.getParameter("mnu_crs_code").toUpperCase();
             String  courseCode2               =        request.getParameter("mnu_crs_code2").toUpperCase();
             String  courseCode3               =    request.getParameter("mnu_crs_code3").toUpperCase();
@@ -180,7 +181,7 @@ try
         {
             count=j+1;
             blocks[j]="B"+count;
-            first=stmt.executeQuery("select * from sc_receive_"+currentSession+"_"+rc_code+" where sc_code='"+sc_code+"' and crs_code='"+courses[i]+"' and block='"+blocks[j]+"' and medium='"+medium+"' and date='"+date+"'");
+            first=stmt.executeQuery("select * from sc_receive_"+currentSession+"_"+rc_code+" where sc_code='"+studyCenterCode+"' and crs_code='"+courses[i]+"' and block='"+blocks[j]+"' and medium='"+medium+"' and date='"+date+"'");
             if(first.next())
             {   
                 flag=1;
@@ -201,7 +202,7 @@ try
                 count=j+1;
                 blocks=new String[no_of_blocks[i]];
                 blocks[j] = "B" + count;//creating the block names of the courses
-                resultReceive = stmt.executeUpdate("insert into sc_receive_" + currentSession + "_"+rc_code+"(sc_code,crs_code,block,qty,medium,date) values('"+sc_code+"','"+courses[i]+"','"+blocks[j]+"',"+qtys[i]+",'"+medium+"','"+date+"')");
+                resultReceive = stmt.executeUpdate("insert into sc_receive_" + currentSession + "_"+rc_code+"(sc_code,crs_code,block,qty,medium,date) values('"+studyCenterCode+"','"+courses[i]+"','"+blocks[j]+"',"+qtys[i]+",'"+medium+"','"+date+"')");
                 resultMaterial=stmt.executeUpdate("update material_"+currentSession+"_"+rc_code+" set qty=qty+"+qtys[i]+" where crs_code='"+courses[i]+"' and block='"+blocks[j]+"' and medium='"+medium+"'");
                 message=message+courses[i]+" Block "+blocks[j]+" for date "+date+" in medium "+medium+"<br/>";
             }//end of inner for loop
@@ -228,7 +229,7 @@ try
             }
             no_of_blocks[i]=blk_count;
         }
-        request.setAttribute("sc_code",sc_code);//sending the sc code to the broswser
+        request.setAttribute("sc_code",studyCenterCode);//sending the sc code to the broswser
         request.setAttribute("prg_code",prg_code);//sending the programme code to the browser
         request.setAttribute("courses",courses);//sending the courses selected by user to the browser
         request.setAttribute("qtys",qtys);//sending the quantities entered by the user to the browser

@@ -6,6 +6,9 @@ AND UPDATE DATA TO THE REQUIRED TABLES.TAKES SC CODE,PROGRAMME CODE,COURSE CODE,
 SENDS APPROPRIATE OUTPUT TO THE RESULTANT PAGE.
 CALLED JSP:-From_sc1.jsp*/
 import java.io.IOException;
+
+import static utility.CommonUtility.isNull;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -16,6 +19,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import utility.Constants;
 public class RECEIVESCPARTIAL extends HttpServlet {
     /**
      * 
@@ -25,17 +30,13 @@ public class RECEIVESCPARTIAL extends HttpServlet {
         super.init(config);
         System.out.println("BYHANDFIRSTSUBMIT SERVLET STARTED TO EXECUTE");
     } 
- public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
-{
-    HttpSession session=request.getSession(false);//getting and checking the availability of session of java
-    if(session==null)
-    {
-        String msg="Please Login to Access MDU System";
-        request.setAttribute("msg",msg);
-        request.getRequestDispatcher("jsp/login.jsp").forward(request,response);
-    }
-    else
-    {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);//getting and checking the availability of session of java
+        if(isNull(session)) {
+            String message = Constants.LOGIN_ACCESS_MESSAGE;
+            request.setAttribute("msg", message);
+            request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
+        } else {
     String currentSession  =    request.getParameter("txt_session").toLowerCase();//getting the value of current session
     String studyCenterCode          =    request.getParameter("mnu_sc_code").toUpperCase();//gettting the prgram code
     String programmeCode         =    request.getParameter("mnu_prg_code").toUpperCase();//gettting the prgram code

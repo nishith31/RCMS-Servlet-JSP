@@ -3,8 +3,9 @@ package servlets;
 THIS SERVLET TAKES THE COURSE CODES SELECTED BY THE
 USER AS INPUT AND THEN CHECKS THE AVAILABILITY OF THE COURSES IN THE MATERIAL DATABASE,AVAILABILITY OF THE COURSES SENT TO THE BORWSER AS OUTPUT.
 CALLED JSP:-Complementary.jsp*/
+import static utility.CommonUtility.isNull;
+
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -19,13 +20,17 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class AVAILABLECOMPLEMENTARY extends HttpServlet {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("AVAILABLECOMPLEMENTARY SERVLET STARTED TO EXECUTE");
     } 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session=request.getSession(false);//getting and checking the availability of session of java
-        if(session == null) {
+        if(isNull(session)) {
             String message = Constants.LOGIN_ACCESS_MESSAGE;
             request.setAttribute("msg", message);
             request.getRequestDispatcher("jsp/login.jsp").forward(request,response);
@@ -43,11 +48,7 @@ public class AVAILABLECOMPLEMENTARY extends HttpServlet {
             /*LOGIC ENDS FOR GETTING THE PARAMETERS FROM THE BROWSER*/  
             String message = "";
             request.setAttribute("current_session", currentSession);//sending the value of the current session to the browser
-            int one = 0, two = 0, three = 0, four = 0;
             int index = 0;
-            int actualQuantity = 0;//VARIABLE FOR STORING THE ACTUAL NUMBER OF BOOKS ON THE STORE FROM THE MATERIAL TABLE
-            int flagForReturn = 0;
-
             if(!courseCode.equals(Constants.NONE)) {
                 index++;
             }
@@ -87,8 +88,7 @@ public class AVAILABLECOMPLEMENTARY extends HttpServlet {
             }
     
             response.setContentType(Constants.HEADER_TYPE_HTML);
-            PrintWriter out = response.getWriter();
-            ResultSet first = null, rs = null;
+            ResultSet rs = null;
             try {
                 Connection con = connections.ConnectionProvider.conn();
                 Statement stmt = con.createStatement();

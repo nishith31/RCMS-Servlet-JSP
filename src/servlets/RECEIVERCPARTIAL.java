@@ -4,6 +4,7 @@ IT ALSO CHECKS THE VIOLATION OF PRIMARY KEY MEANS DUPLICATE DATA CAN NOT BE ENTE
 THIS SERVLET GETS ALL THE REQUIRED FIELDS FROM THE BROWSER AND AFTER CHECKING ALL THE CONSTRAINTS INSERT AND UPDATE THE CORRESPONDING TABLES.
 CALLED JSP:-From_rc1.jsp*/
 import java.io.IOException;
+import static utility.CommonUtility.isNull;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -28,9 +29,9 @@ public class RECEIVERCPARTIAL extends HttpServlet {
     } 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session=request.getSession(false);
-        if(session == null) {
+        if(isNull(session)) {
             String message = Constants.LOGIN_ACCESS_MESSAGE;
-            request.setAttribute("msg",message);
+            request.setAttribute("msg", message);
             request.getRequestDispatcher("jsp/login.jsp").forward(request,response);
         } else {
 

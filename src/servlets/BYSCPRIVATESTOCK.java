@@ -4,15 +4,28 @@ PAGE WHERE USER SELECT THE STUDY CENTRE CODE,PROGRAM CODE,SEMESTER OR YEAR NUMBE
 SENDS THE TOTAL LIST OF STUDENTS TO SECOND PAGE WITH THE FACILITY OF DISABLED STUDENTS MEANS THOSE DATA WILL BE DISABLED WHICH
  WERE ALREADY DESPATCHED.
 CALLED JSP:-To_sc_office.jsp*/
+import static utility.CommonUtility.isNull;
+
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.*;
-import java.util.*; 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import utility.Constants;
  
 public class BYSCPRIVATESTOCK extends HttpServlet
 {
+/**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 public void init(ServletConfig config) throws ServletException 
 {
 	super.init(config);
@@ -21,11 +34,10 @@ public void init(ServletConfig config) throws ServletException
 public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 {
 	HttpSession session=request.getSession(false);//getting and checking the availability of session of java
-	if(session==null)
-	{
-		String msg="Please Login to Access MDU System";
-		request.setAttribute("msg",msg);
-		request.getRequestDispatcher("jsp/login.jsp").forward(request,response);
+	if(isNull(session))	{
+		String message = Constants.LOGIN_ACCESS_MESSAGE;
+		request.setAttribute("msg", message);
+		request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
 	}
 	else
 	{

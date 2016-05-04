@@ -2,8 +2,9 @@ package servlets;
 /*This Servlet is Responsible for inserting data to student Despatch table and updating material table.
  * It also checks the violation of primary key means duplicate data can not be enter in the student Despatch table.
  * This servlet gets all the required fields from the browser and after checking all the constraints insert and update the corresponding tables*/
+import static utility.CommonUtility.isNull;
+
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -29,9 +30,9 @@ public class BYHANDFIRSTSUBMIT extends HttpServlet {
     } 
  
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session=request.getSession(false);//getting the reference of the session of the system to the session variable
-        if(session == null) {
-            String message = "Please Login to Access MDU System";
+        HttpSession session = request.getSession(false);//getting the reference of the session of the system to the session variable
+        if(isNull(session)) {
+            String message = Constants.LOGIN_ACCESS_MESSAGE;
             request.setAttribute("msg", message);
             request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
         } else {
@@ -39,18 +40,15 @@ public class BYHANDFIRSTSUBMIT extends HttpServlet {
             String name             =    request.getParameter("text_name").toUpperCase();//getting the name of the student
             String currentSession  =    request.getParameter("text_session").toLowerCase();//getting the value of current session
             String programmeCode         =    request.getParameter("text_prog_code").toUpperCase();//gettting the prgram code
-            String year             =    request.getParameter("text_year");//getting the year or semester code
             String[] course         =    request.getParameterValues("crs_code");//all the course codes from the jsp page
             int blockCount         =    0;//int variable for number of blocks available with the course
             int count               =    0;//int variable for multiple use
             String[] temp           =    new String[0];//array of String for multiple use
-            int courseSelect = 0;//variable used to store number of courses selected to be Despatched
             int index               =       0;
             /*logic for getting the number of total courses selected by user*/
             for(index=0;index<course.length;index++) {
                 temp        =    request.getParameterValues(course[index]);
                 if(temp != null) {
-                    courseSelect++;
                     blockCount = blockCount + temp.length;
                 }
             }

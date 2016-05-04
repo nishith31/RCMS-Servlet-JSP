@@ -1,12 +1,21 @@
 package servlets;
 /*THIS SERVLET IS RESPONSIBLE FOR INSERTING THE DATA INTO SC DESPATCH TABLE AND UPDATING THE MATERIAL TABLE OF RC LOGGED IN.HERE WE GET THE NUMBER OF SETS OF SELECTED COURSE AND THE NAME OF THE COURSE TO BE DESPATCHED TO THE THE STUDY CENTRES AND WITH THE REASON OF DESPATCH MEANS PURPOSE OF DESPATCH OF MATERIAL. 
 CALLED JSP:-To_sc_office1.jsp*/
+import static utility.CommonUtility.isNull;
+
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.*;
-import java.util.*; 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import utility.Constants;
  
 public class BYSCPRIVATE_PG_SUBMIT extends HttpServlet
 {
@@ -18,10 +27,9 @@ public void init(ServletConfig config) throws ServletException
 public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 {
 	HttpSession session=request.getSession(false);//getting and checking the availability of session of java
-	if(session==null)
-	{
-		String msg="Please Login to Access MDU System";
-		request.setAttribute("msg",msg);
+	if(isNull(session)) {
+		String message = Constants.LOGIN_ACCESS_MESSAGE;
+		request.setAttribute("msg",message);
 		request.getRequestDispatcher("jsp/login.jsp").forward(request,response);
 	}
 	else

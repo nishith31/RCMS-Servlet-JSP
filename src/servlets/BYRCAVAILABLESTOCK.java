@@ -2,6 +2,7 @@ package servlets;
 /*THIS SERVLET IS RESPONSIBLE FOR CHECKING THE AVAILABILITY OF THE COURSE CODE SELECTED BY THE USER FOR DESPATCHING TO THE RC ,
 THIS SERVLET TAKES THE PROGRAMME CODE,COURSE CODE,RC NAME,MEDIUM AS INPUT FROM THE DATA AND DISPLAYS THE RESULT IN THE NEXT PAGE WITH APPROPRIATE MESSAGE.
 CALLED JSP:-To_rc.jsp*/
+import static utility.CommonUtility.isNull;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -27,10 +28,10 @@ public class BYRCAVAILABLESTOCK extends HttpServlet {
     
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
-        if(session == null) {
-            String message="Please Login to Access MDU System";
+        if(isNull(session)) {
+            String message = Constants.LOGIN_ACCESS_MESSAGE;
             request.setAttribute("msg", message);
-            request.getRequestDispatcher("jsp/login.jsp").forward(request,response);
+            request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
         } else {
             /*LOGIC FOR GETTING ALL THE PARAMETERS FROM THE REQUEST SELECTED BY THE CLIENT*/
             String reg_code         =    request.getParameter("mnu_reg_code").toUpperCase();//FIELD FOR HOLDING THE REGIONAL CENTRE CODE

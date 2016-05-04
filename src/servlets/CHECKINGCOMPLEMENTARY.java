@@ -2,6 +2,7 @@ package servlets;
 /*THIS SERVLET IS RESPONSIBLE FOR DISTRIBUTNG STUDY MATERIALS AS COMPLEMENTARY COPIES WITH SOME REFERENCE. 
  * HERE WE DISPTRIBUTE MATERIALS BLOCK WISE MEANS NUMBER OF BLOCKS AND IF ANY BLOCK IS NOT AVAILABLE THEN WE CAN DISTRIBUTE EXPECT THAT BLOCKS.
 CALLED JSP:-Complementary1.jsp*/    
+import static utility.CommonUtility.isNull;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -28,11 +29,11 @@ public class CHECKINGCOMPLEMENTARY extends HttpServlet {
     } 
  
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session=request.getSession(false);//getting and checking the availability of session of java
-        if(session == null) {
-            String msg="Please Login to Access MDU System";
-            request.setAttribute("msg",msg);
-            request.getRequestDispatcher("jsp/login.jsp").forward(request,response);
+        HttpSession session = request.getSession(false);//getting and checking the availability of session of java
+        if(isNull(session)) {
+            String message = Constants.LOGIN_ACCESS_MESSAGE;
+            request.setAttribute("msg", message);
+            request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
             } else {
     
                 String prg_code         =    request.getParameter("mnu_prg_code").toUpperCase();//FIELD FOR HOLDING THE REGIONAL CENTRE CODE

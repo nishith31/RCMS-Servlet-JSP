@@ -1,12 +1,17 @@
 package servlets;
 /*THIS SERVLET IS RESPONSIBLE FOR SEARCHING THE TOTAL NUMBER OF STUDENTS WITH THE COURSE SELECTED BY THE USER IN THE FIRST PAGE WHERE USER SELECT THE STUDY CENTRE CODE,PROGRAM CODE,SEMESTER OR YEAR NUMBER AND THE COURSE CODE.AS A RESULT THIS PAGE SENDS THE TOTAL LIST OF STUDENTS TO SECOND PAGE WITH THE FACILITY OF DISABLED STUDENTS MEANS THOSE DATA WILL BE DISABLED WHICH WERE ALREADY DESPATCHED.
 CALLED JSP:-To_sc_office_pg.jsp*/
+import static utility.CommonUtility.isNull;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
 import java.util.*; 
+
 import javax.servlet.*;
 import javax.servlet.http.*;
+
+import utility.Constants;
  
 public class BYSCPRIVATE_PG_STOCK extends HttpServlet
  {
@@ -19,10 +24,9 @@ public void init(ServletConfig config) throws ServletException
 public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 {
 	HttpSession session=request.getSession(false);//getting and checking the availability of session of java
-	if(session==null)
-	{
-		String msg="Please Login to Access MDU System";
-		request.setAttribute("msg",msg);
+	if(isNull(session))	{
+		String message = Constants.LOGIN_ACCESS_MESSAGE;
+		request.setAttribute("msg",message);
 		request.getRequestDispatcher("jsp/login.jsp").forward(request,response);
 	}
 	else

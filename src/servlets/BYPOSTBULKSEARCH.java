@@ -1,6 +1,7 @@
 package servlets;
 /*THIS SERVLET IS RESPONSIBLE FOR SEARCHING THE STUDENTS FOR THE COURSE CODE,PROGRAMME CODE,MEDIUM AND LOT NUMBER PROVIDED BY THE USER ON THE BROWSER AND IN THAT RANGE OF STUDENTS ALSO CHECKS THE STUDENTS TO WHOM MATERIALS HAS BEEN ALREADY SENT AND SENDS THOSE STUDENTS AS DISABLED FOR DESPATCHING,IT ALSO CHECKS AND DISPLAY THE AVAILABLE QUANTITY OF THE STUDY MATERIAL SELECETED FOR DESPATCHING.
 CALLED JSP;-By_post_bulk1.jsp*/
+import static utility.CommonUtility.isNull;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -24,7 +25,7 @@ public class BYPOSTBULKSEARCH extends HttpServlet {
  
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
-        if(session == null) {
+        if(isNull(session)) {
             String message = Constants.LOGIN_ACCESS_MESSAGE;
             request.setAttribute("msg", message);
             request.getRequestDispatcher("jsp/login.jsp").forward(request, response);

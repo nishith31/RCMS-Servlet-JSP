@@ -5,34 +5,41 @@ FOR THE PRIMARY KEY VOILATION IN THE TWO DESPATCH TABLES, IF NO VIOALTION FOUND 
 AND GENERATE APPROPRIATE MSGS.
 CALLED JSP:-To_sc_students_pg1.jsp*/
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.*;
-import java.util.*; 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import static utility.CommonUtility.isNull;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import utility.Constants;
  
-public class BYSCSTUDENT_PG_SUBMIT extends HttpServlet
-{
-public void init(ServletConfig config) throws ServletException 
-{
-	super.init(config);
-	System.out.println("BYSCSTUDENT_PG_SUBMIT SERVLET STARTED TO EXECUTE");
-} 
-public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
-{
-	HttpSession session=request.getSession(false);//getting and checking the availability of session of java
-	if(session==null)
-	{
-		String msg="Please Login to Access MDU System";
-		request.setAttribute("msg",msg);
-		request.getRequestDispatcher("jsp/login.jsp").forward(request,response);
-	}
-	else
-	{
-		String button_value				=	 request.getParameter("enter").toUpperCase();			
-		button_value				=	 button_value.trim();			
-/*LOGIC FOR CHECKING THAT IF USER HAS CLICKED ON BACK BUTTON IF THERE IS NO WAY TO DESPATCH THEN*/	
-	if(button_value.equals("BACK"))
+public class BYSCSTUDENT_PG_SUBMIT extends HttpServlet {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        System.out.println("BYSCSTUDENT_PG_SUBMIT SERVLET STARTED TO EXECUTE");
+    } 
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);//getting and checking the availability of session of java   
+        if(isNull(session)) {
+            String msg = Constants.LOGIN_ACCESS_MESSAGE;
+            request.setAttribute("msg",msg);
+            request.getRequestDispatcher("jsp/login.jsp").forward(request,response);
+        } else {
+            String buttonValue				=	 request.getParameter("enter").toUpperCase();			
+            buttonValue				=	 buttonValue.trim();			
+            /*LOGIC FOR CHECKING THAT IF USER HAS CLICKED ON BACK BUTTON IF THERE IS NO WAY TO DESPATCH THEN*/	
+	if(buttonValue.equals("BACK"))
 	{
 			String msg="Welcome Back to the Searching Page";
 			request.setAttribute("msg",msg);

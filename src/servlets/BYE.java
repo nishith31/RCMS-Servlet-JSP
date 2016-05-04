@@ -4,6 +4,8 @@ CLIEN PAGE
 AND SENDING THE DETAILS TO THE BROWSER WITH THE COURSES SELECTED BY THE USER AND THE ABAILABLE STOCK OF THOSE COURSES BLOCK
 WISE AND ALSO THE STATUS OF DESPATCH OF MATERIAL TO THAT STUDENT FROM ANY OTHER MODE
 CALLED JSP:-By_hand.jsp*/
+import static utility.CommonUtility.isNull;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -31,13 +33,13 @@ public class BYE extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
-        if(session == null) {
+        if(isNull(session)) {
             String message = Constants.LOGIN_ACCESS_MESSAGE;
             request.setAttribute("msg", message);
             request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
         } else {
             String regionalCenterCode = (String)session.getAttribute("rc");//getting the rc code of the logged in rc in the system
-            String enrno            =    request.getParameter("txt_enr");//variable for getting the roll no of the student
+            String enrollmentNumber            =    request.getParameter("txt_enr");//variable for getting the roll no of the student
             String message              =   ""; 
             String programme             =   null;
             String name             =   null;
@@ -74,7 +76,7 @@ public class BYE extends HttpServlet {
                 /*Logic Ends here for getting the current session value from the sessions table of regional centres*/   
                 /*Complete Logic for fetching the details of the student from the the student database*/
                 rs = statement.executeQuery("select * from student_" + current_session + Constants.UNDERSCORE 
-                        + regionalCenterCode + " where enrno='" + enrno + "'");
+                        + regionalCenterCode + " where enrno='" + enrollmentNumber + "'");
                 if(rs.next()) {
                     //if controls enter in if(rs.next()) means records exist for the roll entered in the browser
                     programme = rs.getString(2);//getting the prg_code from the table
@@ -87,13 +89,13 @@ public class BYE extends HttpServlet {
                 
                     }
                     /*Logic for separating the year or semester number from the program code*/
-                    if(pr[length - 1] == '1' || pr[length - 1] == '2' || pr[length - 1] == '3'|| pr[length - 1] == '4'|| pr[length - 1] == '5'|| pr[length - 1] == '6') {
+                    if(pr[length - 1] == '1' || pr[length - 1] == '2' || pr[length - 1] == '3'||
+                            pr[length - 1] == '4'|| pr[length - 1] == '5'|| pr[length - 1] == '6') {
                         programme = programme.substring(0, length - 1);
                         year = pr[length - 1];
                     } else {
                         year = '1';
-                    }      
-                    /*Logic ends here of separating the year or semester number from program code*/
+                    }
                     name = rs.getString(5);//getting the name of the student from the ResultSet
                     medium = rs.getString(7);//getting the medium opted by the student from the student registration table
                     int courseNumber = 0;
@@ -112,14 +114,14 @@ public class BYE extends HttpServlet {
                     }
                     /*Logic ends here for getting the total number of courses opted byt the student*/
                     /*Logic for getting all the courses name, no of blocks of them and the serial number associated with the course*/
-                    rs = statement.executeQuery("select * from student_" + current_session + Constants.UNDERSCORE + regionalCenterCode + " where enrno='" + enrno + "'");
+                    rs = statement.executeQuery("select * from student_" + current_session + Constants.UNDERSCORE + regionalCenterCode + " where enrno='" + enrollmentNumber + "'");
                     String course[]                 =   new String[courseNumber];
                     int blocks[]                    =   new int[courseNumber];
                     int blocksShadow[]             =   new int[courseNumber];
                     String serialNumber[] =   new String[courseNumber];
                     int i = 17, j = 18;
                     int totalLength = 0, count = 0;
-                    ResultSet rs1 = null, rs2 = null;
+                    ResultSet rs1 = null;
                     String relativeCourse = null;
                     while(rs.next()) {
                         for(index = 0; index < courseNumber; index++) {
@@ -143,18 +145,16 @@ public class BYE extends HttpServlet {
                                 while(rs1.next()) {
                                     blocks[index]           =   rs1.getInt(1);
                                 }
-                                
+
                                 i = i + 2;
                                 j = j + 2;
                             }
                         }
                     }
-                    /*Logic end here for getting all the course name,serial numbers and blocks*/
                     /*Logic for counting the total number of courses with block like MCSB1*/
                     for(index = 0; index < course.length; index++) {
                         totalLength = totalLength + blocks[index];
                     }
-                    /*Logic ends here for counting the total number of courses with block like MCSB1*/
         
                     int[] stock             =   new int[totalLength];//int array for holding the stock available for all courses blockwise
                     String courseBlock[]   =   new String[totalLength];//array for holding all the courses block wise
@@ -210,9 +210,9 @@ public class BYE extends HttpServlet {
                     System.out.println("value of search_crs_code "+searchCourseCode);
     
             
-                    /*Logic for checking the Despatch of Programme guide for the student entered into the system*/      
+                    /*Logic for checking the Despatch of Programme guide for the student entered into the system*/
                     rs = statement.executeQuery("select * from student_dispatch_"+current_session + Constants.UNDERSCORE + regionalCenterCode + 
-                            " where enrno='" + enrno + "' and " + searchCourseCode + " and block='PG' and reentry='NO'");
+                            " where enrno='" + enrollmentNumber + "' and " + searchCourseCode + " and block='PG' and reentry='NO'");
                     if(rs.next()) {
                         programmeGuideFlag = Constants.YES;//if entered already then flag will be yes
                         programmeGuideDate = rs.getDate(6).toString();   
@@ -231,7 +231,7 @@ public class BYE extends HttpServlet {
                     request.setAttribute("pg_date", programmeGuideDate);//sending the pg_flag means despatched or not
                     int dispatchCourseCount = 0;//variable for holding the number of courses despatched blockwise now
                     rs = statement.executeQuery("select count(*) from student_dispatch_" + current_session + Constants.UNDERSCORE + regionalCenterCode
-                            + " where enrno='" + enrno + "' and block<>'PG' and reentry='NO' ");
+                            + " where enrno='" + enrollmentNumber + "' and block<>'PG' and reentry='NO' ");
                     while(rs.next()) {
                         dispatchCourseCount = rs.getInt(1);
                     }
@@ -247,21 +247,21 @@ public class BYE extends HttpServlet {
                         request.setAttribute("dispatch_date", dispatchDate);
                         request.setAttribute("blocks_shadow", blocksShadow);                        
                         request.setAttribute("msg", message);
-                        request.getRequestDispatcher("jsp/By_hand1.jsp?enrno="+enrno+"&prog="+programme+"&year="+year+"&name="+name+"&medium="+medium+"&available_pg="+availableProgrammeGuide+"").forward(request,response); 
+                        request.getRequestDispatcher("jsp/By_hand1.jsp?enrno="+enrollmentNumber+"&prog="+programme+"&year="+year+"&name="+name+"&medium="+medium+"&available_pg="+availableProgrammeGuide+"").forward(request,response); 
                     } else if(dispatchCourseCount < courseBlock.length) {
                         /*If some courses partially Despatched then this logic will create the Despatched courses and dates array and sent to client*/
                         String checking = null;
-                        int m = 0, counter = 0;
+                        int m = 0;
                         dispatchCourseCount = 0;
-                        rs = statement.executeQuery("select count(*) from student_dispatch_"+current_session+"_"+regionalCenterCode+" where enrno='"+enrno+"' and reentry='NO' and block<>'PG'");
+                        rs = statement.executeQuery("select count(*) from student_dispatch_"+current_session+"_"+regionalCenterCode+" where enrno='"+enrollmentNumber+"' and reentry='NO' and block<>'PG'");
                         while(rs.next()) {
                             dispatchCourseCount=rs.getInt(1);
                         }
     
                         String dispatch[]           =   new String[dispatchCourseCount];//array for dispatched courses
                         String dispatch_date[]      =   new String[dispatchCourseCount];//array for date of Despatched courses
-                                    
-                        rs = statement.executeQuery("select * from student_dispatch_"+current_session+"_"+regionalCenterCode+" where enrno='"+enrno+"'  and reentry='NO' and block<>'PG'");
+
+                        rs = statement.executeQuery("select * from student_dispatch_"+current_session+"_"+regionalCenterCode+" where enrno='"+enrollmentNumber+"'  and reentry='NO' and block<>'PG'");
                         while(rs.next()) {
                             checking=rs.getString(3).trim();
                             for(index=0;index<course.length;index++) {
@@ -284,37 +284,41 @@ public class BYE extends HttpServlet {
                         request.setAttribute("dispatch_date",dispatch_date);
                         request.setAttribute("blocks_shadow",blocksShadow);            
                         request.setAttribute("msg",message);
-                        request.getRequestDispatcher("jsp/By_hand1.jsp?enrno="+enrno+"&prog="+programme+"&year="+year+"&name="+name+"&medium="+medium+"&available_pg="+availableProgrammeGuide+"").forward(request,response);
+                        request.getRequestDispatcher("jsp/By_hand1.jsp?enrno="+enrollmentNumber+"&prog="+programme+"&year="+year+"&name="+name+"&medium="+medium+"&available_pg="+availableProgrammeGuide+"").forward(request,response);
                     } else {
                         //if all materials Despatched
                         int m = 0, lengthOfDispatchCourse = 0;
-                        rs = statement.executeQuery("select count(*) from student_dispatch_"+current_session+"_"+regionalCenterCode+" where enrno='"+enrno+"' and reentry='NO' and block<>'PG'");
+                        rs = statement.executeQuery("select count(*) from student_dispatch_"+current_session + Constants.UNDERSCORE + 
+                                regionalCenterCode + " where enrno='" + enrollmentNumber + "' and reentry='NO' and block<>'PG'");
                         while(rs.next()) {
                             lengthOfDispatchCourse = rs.getInt(1);
                         }
         
-                        String dispatch[]           =   new String[lengthOfDispatchCourse];//array of despatched courses block wise
-                        String dispatchDate[]      =   new String[lengthOfDispatchCourse];//array of Despatch dates of courses despatched
-                        rs = statement.executeQuery("select * from student_dispatch_"+current_session+"_"+regionalCenterCode+" where enrno='"+enrno+"'  and reentry='NO' and block<>'PG'");
+                        String dispatch[] = new String[lengthOfDispatchCourse];//array of despatched courses block wise
+                        String dispatchDate[] = new String[lengthOfDispatchCourse];//array of Despatch dates of courses despatched
+
+                        rs = statement.executeQuery("select * from student_dispatch_"+current_session + Constants.UNDERSCORE + regionalCenterCode + 
+                                " where enrno='" + enrollmentNumber + "'  and reentry='NO' and block<>'PG'");
     
                         while(rs.next()) {
-                            dispatch[m]             =   rs.getString(3).trim()+rs.getString(4).trim();
-                            dispatchDate[m]        =   rs.getDate(6).toString();
-                            dispatchMode           =   rs.getString(7);
+                            dispatch[m] = rs.getString(3).trim() + rs.getString(4).trim();
+                            dispatchDate[m] = rs.getDate(6).toString();
+                            dispatchMode = rs.getString(7);
                             m++;
                         }
                         request.setAttribute("dispatch", dispatch);//sending the array of Despatch courses block wise to the browser
                         request.setAttribute("dispatch_date", dispatchDate);//sending the array of Despatch dates to the browser        
                         System.out.println("Sorry books have been Despatched...");
-                        message = message + "Sorry!! Books have been Despatched For <br/>"+name+".";
+                        message = message + "Sorry!! Books have been Despatched For <br/>" + name + ".";
                         request.setAttribute("msg", message);//Sending the message to the Browser
-                        request.getRequestDispatcher("jsp/By_hand2_reentry.jsp?enrno="+enrno+"&prog="+programme+"&year="+year+"&name="+name+"&medium="+medium+"&date="+date+"&dispatch_mode="+dispatchMode+"&available_pg="+availableProgrammeGuide+"").forward(request,response);
+                        request.getRequestDispatcher("jsp/By_hand2_reentry.jsp?enrno=" + enrollmentNumber + "&prog=" + programme + "&year=" + year + 
+                                "&name=" + name + "&medium=" + medium + "&date=" + date + "&dispatch_mode=" + dispatchMode + "&available_pg=" + availableProgrammeGuide).forward(request,response);
                     }
                 } else {
                     System.out.println("Sorry!! Roll No not found please contact to Registration Department..Thank you..");
                     message="Sorry!! Roll Number not found Please Contact to Admission Department. Thank You..";
-                    request.setAttribute("msg",message);//sending the message to the browser
-                    request.getRequestDispatcher("jsp/By_hand.jsp").forward(request,response); 
+                    request.setAttribute("msg", message);//sending the message to the browser
+                    request.getRequestDispatcher("jsp/By_hand.jsp").forward(request, response); 
                 }   
             } catch(Exception exception) {
                 System.out.println("Exception raised from By_hand.jsp" + exception);

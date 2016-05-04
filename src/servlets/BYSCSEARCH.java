@@ -3,6 +3,7 @@ package servlets;
 AND PROGRAMME CODE SELECTED AND AMONG THOSE STUDENTS ALSO CHECKS THE STUDENTS TO WHOM MATERIALS HAVE BEEN ALREADY 
 SENT,THIS SERVLET TAKES SC CODE,PROGRAMME CODE,SEMESTER,COURSE CODE FROM THE BROWSER AND SENDS APPROPORIATE RESULTS IN THE NEXT PAGE.
 CALLED JSP:-To_sc_students.jsp*/
+import static utility.CommonUtility.isNull;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -18,6 +19,11 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class BYSCSEARCH extends HttpServlet {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("BYSCSEARCH SERVLET STARTED");
@@ -25,13 +31,13 @@ public class BYSCSEARCH extends HttpServlet {
  
 public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     HttpSession session=request.getSession(false);//getting and checking the availability of session of java
-    if(session==null) {
-        String msg="Please Login to Access MDU System";
-        request.setAttribute("msg",msg);
-        request.getRequestDispatcher("jsp/login.jsp").forward(request,response);
+    if(isNull(session)) {
+        String message = Constants.LOGIN_ACCESS_MESSAGE;
+        request.setAttribute("msg", message);
+        request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
     } else {
-        String msg=null;
-        String sc_code              =    request.getParameter("mnu_sc_code").toUpperCase();//variable for holding the study centre code from the browser
+        String message = null;
+        String studyCenterCode              =    request.getParameter("mnu_sc_code").toUpperCase();//variable for holding the study centre code from the browser
         String programmeCode             =    request.getParameter("mnu_prg_code").toUpperCase();//variable for holding the programe code from the browser
         String courseCode             =    request.getParameter("mnu_crs_code").toUpperCase();//variable for holding the course code from the browser
         String year                 =    request.getParameter("textyear").toUpperCase();//variable for holding the year from the browser
@@ -126,12 +132,12 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
             request.setAttribute("number_of_blocks",numberOfBlocks);      
             request.setAttribute("first_timer",first_timer);        
         int result=5,result1=5;
-            rs=statement.executeQuery("select *  from student_"+currentSession+"_"+regionalCenterCode+" where sc_code='"+sc_code+"' and "+search_prg_code+"");
+            rs=statement.executeQuery("select *  from student_"+currentSession+"_"+regionalCenterCode+" where sc_code='"+studyCenterCode+"' and "+search_prg_code+"");
         String check=null;
         int ll=1;
         if(rs.next()) 
         {
-            rs=statement.executeQuery("select *  from student_"+currentSession+"_"+regionalCenterCode+" where sc_code='"+sc_code+"' and "+search_prg_code+"");
+            rs=statement.executeQuery("select *  from student_"+currentSession+"_"+regionalCenterCode+" where sc_code='"+studyCenterCode+"' and "+search_prg_code+"");
             while(rs.next())
             {
                 for(int j=17;j<=35;)
@@ -155,7 +161,7 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
                 String student[]            =   new String[length];
                 String name[]               =   new String[length];
                 String hidden_course[]      =   new String[length];
-            rs=statement.executeQuery("select *  from student_"+currentSession+"_"+regionalCenterCode+" where sc_code='"+sc_code+"' and "+search_prg_code+"");
+            rs=statement.executeQuery("select *  from student_"+currentSession+"_"+regionalCenterCode+" where sc_code='"+studyCenterCode+"' and "+search_prg_code+"");
             i=0;
                 String naam=null;
                 String roll=null;
@@ -249,27 +255,27 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
                         request.setAttribute("dispatch_mode",dispatch_mode);
                     request.setAttribute("dispatch_name",dispatch_name);
                         
-                try{msg=(String)request.getAttribute("alternate_msg");}catch(Exception ees){msg=null;}
+                try{message=(String)request.getAttribute("alternate_msg");}catch(Exception ees){message=null;}
                 System.out.println("msg get kiya alternate msg se");
-                if(msg==null)
-                msg="";
+                if(message==null)
+                message="";
     
-                msg=msg+student.length+" Students Found For the Study Center Selected";
-                request.setAttribute("msg",msg);
-                request.getRequestDispatcher("jsp/To_sc_students1.jsp?sc_code="+sc_code+"&prg_code="+programmeCode+"&crs_code="+courseCode+"&year="+year+"&medium="+medium+"&sets="+student.length+"").forward(request,response);
+                message=message+student.length+" Students Found For the Study Center Selected";
+                request.setAttribute("msg",message);
+                request.getRequestDispatcher("jsp/To_sc_students1.jsp?sc_code="+studyCenterCode+"&prg_code="+programmeCode+"&crs_code="+courseCode+"&year="+year+"&medium="+medium+"&sets="+student.length+"").forward(request,response);
                 System.out.println("forward kiya aur exception nahi hai");
         }//end of if        
         else
         {
-            msg="No Students for Study Centre "+sc_code+"<br/>  Of Program "+programmeCode+" <br/> Of Course"+courseCode;
-            request.setAttribute("msg",msg);
+            message="No Students for Study Centre "+studyCenterCode+"<br/>  Of Program "+programmeCode+" <br/> Of Course"+courseCode;
+            request.setAttribute("msg",message);
             request.getRequestDispatcher("jsp/To_sc_students.jsp").forward(request,response);
-            System.out.println("No Student for Study Centre "+sc_code+" for program "+programmeCode+" Course "+courseCode+"");
+            System.out.println("No Student for Study Centre "+studyCenterCode+" for program "+programmeCode+" Course "+courseCode+"");
         }//end of else of first if
     } catch(Exception exception) {
             System.out.println("exception mila rey from BYSCSEARCH.java"+exception);
-            msg="Some Serious exception hitted the page.Please check on the server console for more details";
-            request.setAttribute("msg",msg);
+            message="Some Serious exception hitted the page.Please check on the server console for more details";
+            request.setAttribute("msg",message);
             request.getRequestDispatcher("jsp/To_sc_students.jsp").forward(request,response);
         }
     }//end of else of session checking

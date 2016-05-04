@@ -5,6 +5,9 @@ BE ENTER IN THE OTHERS RECEIVE TABLE.THIS SERVLET GETS ALL THE REQUIRED FIELDS F
 CHECKING ALL THE CONSTRAINTS INSERT AND UPDATE THE CORRESPONDING TABLES
 CALLED JSP:-From_others1.jsp*/
 import java.io.IOException;
+
+import static utility.CommonUtility.isNull;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -15,6 +18,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import utility.Constants;
  
 public class RECEIVEOTHERSPARTIAL extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
@@ -22,17 +27,13 @@ public class RECEIVEOTHERSPARTIAL extends HttpServlet {
             System.out.println("RECEIVEOTHERSPARTIAL SERVLET STARTED TO EXECUTE");
     } 
  
-public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
-{
-    HttpSession session=request.getSession(false);//getting and checking the availability of session of java
-    if(session==null)
-    {
-        String msg="Please Login to Access MDU System";
-        request.setAttribute("msg",msg);
-        request.getRequestDispatcher("jsp/login.jsp").forward(request,response);
-    }
-    else
-    {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session=request.getSession(false);//getting and checking the availability of session of java
+        if(isNull(session)) {
+            String message = Constants.LOGIN_ACCESS_MESSAGE;
+            request.setAttribute("msg", message);
+            request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
+        } else {
     String currentSession  =    request.getParameter("txt_session").toLowerCase();//getting the value of current session
     String courseCode         =    request.getParameter("mnu_crs_code").toUpperCase();//gettting the course code
     int blockCount         =    0;//int variable for number of blocks available with the course

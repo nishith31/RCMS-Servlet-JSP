@@ -4,6 +4,8 @@ BLOCKWISE THEN THIS SERVLET SENDS THE REQUESTED DETAILS TO THE NEXT PAGE FOR THE
 TAKES THE ENROLMENT NO,NAME,PROGRAMME CODE,COURSE CODES,QUANTITIES,DATE,MEDIUM AND CURRENT SESSION AND SENDS THE APPROPRIATE
 MESSAGE TO THE BROWSER
 CALLED JSP:-From_student.jsp*/
+import static utility.CommonUtility.isNull;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,120 +17,125 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import utility.Constants;
  
 public class RECEIVESTUDENT extends HttpServlet {
 
-public void init(ServletConfig config) throws ServletException 
-{
-  super.init(config);  
-  System.out.println("RECEIVESTUDENT SERVLET STARTED.....");
-}
- public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
-{
-    HttpSession session=request.getSession(false);//getting and checking the availability of session of java
-    if(session==null)
-    {
-        String msg="Please Login to Access MDU System";
-        request.setAttribute("msg",msg);
-        request.getRequestDispatcher("jsp/login.jsp").forward(request,response);
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        System.out.println("RECEIVESTUDENT SERVLET STARTED.....");
     }
-    else
-    {
-    String  enrno               =    request.getParameter("txt_enr").toUpperCase();//String variable for holding the roll number inpur on the browser
-    String  name                =    request.getParameter("txt_name").toUpperCase();//String variable for holding the name of the student input on the browser
-    String  prg_code                =    request.getParameter("mnu_prg_code").toUpperCase();
-    String  crs_code                =    request.getParameter("mnu_crs_code").toUpperCase();
-        String  crs_code2               =    request.getParameter("mnu_crs_code2").toUpperCase();
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);//getting and checking the availability of session of java
+        if(isNull(session)) {
+            String message = Constants.LOGIN_ACCESS_MESSAGE;
+            request.setAttribute("msg", message);
+            request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
+        } else {
+            String  enrno               =    request.getParameter("txt_enr").toUpperCase();//String variable for holding the roll number inpur on the browser
+            String  name                =    request.getParameter("txt_name").toUpperCase();//String variable for holding the name of the student input on the browser
+            String  prg_code                =    request.getParameter("mnu_prg_code").toUpperCase();
+            String  crs_code                =    request.getParameter("mnu_crs_code").toUpperCase();
+            String  crs_code2               =    request.getParameter("mnu_crs_code2").toUpperCase();
             String  crs_code3               =    request.getParameter("mnu_crs_code3").toUpperCase();
-                String  crs_code4               =    request.getParameter("mnu_crs_code4").toUpperCase();
-                    String  crs_code5               =    request.getParameter("mnu_crs_code5").toUpperCase();
-                    String  crs_code6               =    request.getParameter("mnu_crs_code6").toUpperCase();
-                String  crs_code7               =    request.getParameter("mnu_crs_code7").toUpperCase();       
+            String  crs_code4               =    request.getParameter("mnu_crs_code4").toUpperCase();
+            String  crs_code5               =    request.getParameter("mnu_crs_code5").toUpperCase();
+            String  crs_code6               =    request.getParameter("mnu_crs_code6").toUpperCase();
+            String  crs_code7               =    request.getParameter("mnu_crs_code7").toUpperCase();       
             String  crs_code8               =    request.getParameter("mnu_crs_code8").toUpperCase();
-        String  crs_code9               =    request.getParameter("mnu_crs_code9").toUpperCase();
-    String  crs_code10              =    request.getParameter("mnu_crs_code10").toUpperCase();      
+            String  crs_code9               =    request.getParameter("mnu_crs_code9").toUpperCase();
+            String  crs_code10              =    request.getParameter("mnu_crs_code10").toUpperCase();      
 
-    int        qty                  =    Integer.parseInt(request.getParameter("txt_no_of_set"));   
-        int        qty2                 =    Integer.parseInt(request.getParameter("txt_no_of_set2"));      
+            int        qty                  =    Integer.parseInt(request.getParameter("txt_no_of_set"));   
+            int        qty2                 =    Integer.parseInt(request.getParameter("txt_no_of_set2"));      
             int        qty3                 =    Integer.parseInt(request.getParameter("txt_no_of_set3"));  
-                int        qty4                 =    Integer.parseInt(request.getParameter("txt_no_of_set4"));  
-                    int        qty5                 =    Integer.parseInt(request.getParameter("txt_no_of_set5"));  
-                    int        qty6                 =    Integer.parseInt(request.getParameter("txt_no_of_set6"));  
-                int        qty7                 =    Integer.parseInt(request.getParameter("txt_no_of_set7"));  
+            int        qty4                 =    Integer.parseInt(request.getParameter("txt_no_of_set4"));  
+            int        qty5                 =    Integer.parseInt(request.getParameter("txt_no_of_set5"));  
+            int        qty6                 =    Integer.parseInt(request.getParameter("txt_no_of_set6"));  
+            int        qty7                 =    Integer.parseInt(request.getParameter("txt_no_of_set7"));  
             int        qty8                 =    Integer.parseInt(request.getParameter("txt_no_of_set8"));  
-        int        qty9                 =    Integer.parseInt(request.getParameter("txt_no_of_set9"));  
-    int       qty10                 =    Integer.parseInt(request.getParameter("txt_no_of_set10"));         
+            int        qty9                 =    Integer.parseInt(request.getParameter("txt_no_of_set9"));  
+            int       qty10                 =    Integer.parseInt(request.getParameter("txt_no_of_set10"));         
 
-    String  medium              =    request.getParameter("txt_medium").toUpperCase();
-    String  date                =    request.getParameter("txt_date").toUpperCase();
-    String currentSession      =    request.getParameter("txt_session").toLowerCase();
-    String receiptType             =    request.getParameter("receipt_type");
-    String receiveSource       =   "BY HAND";
-    System.out.println("fields from From_student.jsp received Successfully");
-    String message=null;    
-    String regionalCenterCode = (String)session.getAttribute("rc");
-    int index=0,flag=0,result_material=0,result_receive=0,flag_for_return=0;
-        int actual_qty=0;//VARIABLE FOR STORING THE ACTUAL NUMBER OF BOOKS ON THE STORE FROM THE MATERIAL TABLE
-        if(!crs_code.equals("NONE"))    
-        index++;
-        if(!crs_code2.equals("NONE"))   
-        index++;
-        if(!crs_code3.equals("NONE"))   
-        index++;
-        if(!crs_code4.equals("NONE"))   
-        index++;
-        if(!crs_code5.equals("NONE"))   
-        index++;
-        if(!crs_code6.equals("NONE"))   
-        index++;
-        if(!crs_code7.equals("NONE"))   
-        index++;
-        if(!crs_code8.equals("NONE"))   
-        index++;
-        if(!crs_code9.equals("NONE"))   
-        index++;
-        if(!crs_code10.equals("NONE"))  
-        index++;
+            String  medium              =    request.getParameter("txt_medium").toUpperCase();
+            String  date                =    request.getParameter("txt_date").toUpperCase();
+            String currentSession      =    request.getParameter("txt_session").toLowerCase();
+            String receiptType             =    request.getParameter("receipt_type");
+            System.out.println("fields from From_student.jsp received Successfully");
+            String message = null;    
+            String regionalCenterCode = (String)session.getAttribute("rc");
+            int index = 0, flag = 0;
+            if(!crs_code.equals("NONE")) {
+                index++;
+            }
+        
+            if(!crs_code2.equals("NONE")) {
+                index++; 
+            }
+            if(!crs_code3.equals("NONE")) {
+                index++;
+            }
+            if(!crs_code4.equals("NONE")) {
+                index++;
+            }
+        
+            if(!crs_code5.equals("NONE")) {
+                index++;
+            }
+            if(!crs_code6.equals("NONE")) {
+                index++;
+            }
+            if(!crs_code7.equals("NONE")) {
+                index++;
+            }
+            if(!crs_code8.equals("NONE")) {
+                index++;
+            }
+            if(!crs_code9.equals("NONE")) {
+                index++;
+            }
+            if(!crs_code10.equals("NONE")) {
+                index++;
+            }
             String courses[]        =   new String[index];
             int qtys[]              =   new int[index];         
             int insert              =   0;
-    if(!crs_code.equals("NONE"))    
-    {
-        courses[insert]=crs_code;
-        qtys[insert]=qty;       
-        insert++;
-    }
-    if(!crs_code2.equals("NONE"))   
-    {
-        courses[insert]=crs_code2;
-        qtys[insert]=qty2;              
-        insert++;
-    }
-    if(!crs_code3.equals("NONE"))   
-    {
-        courses[insert]=crs_code3;
-        qtys[insert]=qty3;              
-        insert++;
-    }
-    if(!crs_code4.equals("NONE"))   
-    {
-        courses[insert]=crs_code4;
-        qtys[insert]=qty4;              
-        insert++;
-    }
-    if(!crs_code5.equals("NONE"))   
-    {
-        courses[insert]=crs_code5;
-        qtys[insert]=qty5;              
-        insert++;
-    }
-    if(!crs_code6.equals("NONE"))   
-    {
-        courses[insert]=crs_code6;
-        qtys[insert]=qty6;              
-        insert++;
-    }
-    if(!crs_code7.equals("NONE"))   
+            if(!crs_code.equals("NONE")) {
+                courses[insert]=crs_code;
+                qtys[insert]=qty;       
+                insert++;
+            }
+            if(!crs_code2.equals("NONE")) {
+                courses[insert]=crs_code2;
+                qtys[insert]=qty2;              
+                insert++;
+            }
+            if(!crs_code3.equals("NONE")) {
+                courses[insert]=crs_code3;
+                qtys[insert]=qty3;              
+                insert++;
+            }
+            if(!crs_code4.equals("NONE")) {
+                courses[insert]=crs_code4;
+                qtys[insert]=qty4;              
+                insert++;
+            }
+            if(!crs_code5.equals("NONE")) {
+                courses[insert]=crs_code5;
+                qtys[insert]=qty5;              
+                insert++;
+            }
+            if(!crs_code6.equals("NONE")) {
+                courses[insert]=crs_code6;
+                qtys[insert]=qty6;              
+                insert++;
+            }
+            if(!crs_code7.equals("NONE"))   
     {
         courses[insert]=crs_code7;
         qtys[insert]=qty7;              
@@ -206,8 +213,6 @@ String bbb="B";
                 count=j+1;
                 blocks=new String[no_of_blocks[i]];
                 blocks[j]="B"+count;
-                result_receive=stmt.executeUpdate("insert into student_receive_"+currentSession+"_"+regionalCenterCode+"(enrno,prg_code,crs_code,block,qty,medium,date,receive_source) values('"+enrno+"','"+prg_code+"','"+courses[i]+"','"+blocks[j]+"',"+qtys[i]+",'"+medium+"','"+date+"','"+receiveSource+"')");
-                result_material=stmt.executeUpdate("update material_"+currentSession+"_"+regionalCenterCode+" set qty=qty+"+qtys[i]+" where crs_code='"+courses[i]+"' and block='"+blocks[j]+"' and medium='"+medium+"'");
                 message=message+courses[i]+" Block "+blocks[j]+" for date "+date+" in medium "+medium+"<br/>";
             }//end of inner for loop of j
             System.out.println("Received Succesfully from STUDENT: "+enrno+" Course code "+courses[i]+"");

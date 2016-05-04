@@ -3,6 +3,7 @@ package servlets;
  * MATERIALS SENT BY POST THEN WE CAN GIVE HIM/HER AGAIN THE MATERIALS AND MARKED AS REENTRY, AND UPDATING THE MATERIAL TABLE.AFTER RECEIVING
  *  DATA SUCCESSFULLY FROM THE BROWSER IT CHECKS FOR PRIMARY KEY VIOLATION AND IF EVERYTHING IS OK THEN IT SAVES ALL THE DATA TO CORESSPONDING TABLES.   
 CALLED JSP:- By_hand3.jsp*/
+import static utility.CommonUtility.isNull;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -31,8 +32,8 @@ public class BYHANDREENTRYSUBMIT extends HttpServlet {
  
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
-        if(session == null) {
-            String message = "Please Login to Access MDU System";
+        if(isNull(session)) {
+            String message = Constants.LOGIN_ACCESS_MESSAGE;
             request.setAttribute("msg", message);
             request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
         } else {
@@ -77,9 +78,9 @@ public class BYHANDREENTRYSUBMIT extends HttpServlet {
             String date = request.getParameter("text_date").toUpperCase();//date from the jsp page date field
             String disptachSource = "BY HAND";//for the Despatch source field of the student_Despatch table for post it is BY POST AND BY SC for study centre Despatch moce
             String reentry = "YES";
-            String relativeCourse = null;
             int qunatity = 0;
             int actualQuantity = 0;
+            String relativeCourse = null;
             int flagForProgrammeGuide =       0;
             int flagForReturn =       0;
             int index =       0;

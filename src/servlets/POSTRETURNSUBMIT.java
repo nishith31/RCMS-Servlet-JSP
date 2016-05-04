@@ -2,6 +2,7 @@ package servlets;
 /*THIS SERVLET IS RESPONSIBLE FOR RECEIVING THOSE STUDY MATERIAL WHICH ARE RETURNED BY THE POSTAL DEPARTMENT. 
 THIS SERVLET DELETES THE ENTRY FROM THE STUDENT DESPATCH TABLE,INSERT THE ENTRY INTO THE STUDENT RECEIVE TABLE AND ALSO UPDATES THE MATERIAL INVENTORY TABLE.
 CALLED JSP:-From_post1.jsp*/
+import static utility.CommonUtility.isNull;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -28,9 +29,9 @@ public class POSTRETURNSUBMIT extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session=request.getSession(false);//getting and checking the availability of session of java
-        if(session == null) {
-            String message = "Please Login to Access MDU System";
+        HttpSession session = request.getSession(false);//getting and checking the availability of session of java
+        if(isNull(session)) {
+            String message = Constants.LOGIN_ACCESS_MESSAGE;
             request.setAttribute("msg", message);
             request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
         } else {

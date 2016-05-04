@@ -2,6 +2,7 @@ package servlets;
 /*THIS SERVLET IS RESPONSIBLE FOR SEARCHING ALL THE DETAILS OF THE STUDENT FROM THE STUDENT DATABASE AND DISPLAY THEM TO THE NEXT PAGE.
  * IF ANY COURSE HAS NOT BEEN DESPATCHED THEN ALL THE CECKBOXES WILL BE ACTIVE AND IF SOME COURSES ALREADY DESPATCHED THEN THOSE COURSES WILL 
  * BE SHOWN IN DISABLED FORMAT IN THE BROWSER.*/
+import static utility.CommonUtility.isNull;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
@@ -25,7 +26,7 @@ public class BYHANDREENTRYSEARCH extends HttpServlet {
  
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
-        if(session == null) {
+        if(isNull(session)) {
             String message = Constants.LOGIN_ACCESS_MESSAGE;
             request.setAttribute("msg", message);
             request.getRequestDispatcher("jsp/login.jsp").forward(request, response);

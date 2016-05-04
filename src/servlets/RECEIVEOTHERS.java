@@ -3,6 +3,9 @@ package servlets;
 IF WE HAVE TO RECEIVE PARTIALLY THEN THIS SERVLET WILL REDIRECTS PAGE TO From_others1.jsp AND THERE IT WILL RECEIVE PARTIALLY.
 CALLED JSP:-From_others.jsp*/
 import java.io.IOException;
+
+import static utility.CommonUtility.isNull;
+
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -14,26 +17,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import utility.Constants;
  
 public class RECEIVEOTHERS extends HttpServlet {
 
-public void init(ServletConfig config) throws ServletException 
-{
+    public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("RECEIVEOTHERS SERVLET STARTED TO EXECUTE");
-} 
- public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
-{
-    HttpSession session=request.getSession(false);//getting and checking the availability of session of java
-    if(session==null)
-    {
-        String msg="Please Login to Access MDU System";
-        request.setAttribute("msg",msg);
-        request.getRequestDispatcher("jsp/login.jsp").forward(request,response);
-    }
-    else
-    {
-/*LOGIC FOR GETTING ALL THE PARAMETERS FROM THE REQUEST SELECTED BY THE CLIENT*/    
+    } 
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session=request.getSession(false);//getting and checking the availability of session of java
+        if(isNull(session)) {
+            String message = Constants.LOGIN_ACCESS_MESSAGE;
+            request.setAttribute("msg", message);
+            request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
+        } else {
+            /*LOGIC FOR GETTING ALL THE PARAMETERS FROM THE REQUEST SELECTED BY THE CLIENT*/    
     String  flag                =    request.getParameter("flag").toUpperCase();
     String  courseCode            =    request.getParameter("course_code").toUpperCase();
     String  newCourseCode        =    request.getParameter("new_course_code").toUpperCase(); 

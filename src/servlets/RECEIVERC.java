@@ -4,6 +4,7 @@ package servlets;
  PAGE WHERE WE RECEIVE THE MATERIAL PARTIALLY.
 CALLED JSP:-From_rc.jsp*/
 import java.io.IOException;
+import static utility.CommonUtility.isNull;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -27,8 +28,8 @@ public class RECEIVERC extends HttpServlet {
         System.out.println("RECEIVERC SERVLET STARTED TO EXECUTE");
     } 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session=request.getSession(false);//getting and checking the availability of session of java
-        if(session == null) {
+        HttpSession session = request.getSession(false);//getting and checking the availability of session of java
+        if(isNull(session)) {
             String message = "Please Login to Access MDU System";
             request.setAttribute("msg", message);
             request.getRequestDispatcher("jsp/login.jsp").forward(request,response);

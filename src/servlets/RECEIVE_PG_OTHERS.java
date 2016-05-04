@@ -2,6 +2,7 @@ package servlets;
 /*THIS SERVLET IS RESPONSIBLE FOR RECEIVING PROGRAMME GUIDE FROM OTHERS,MEANS PROGRAMME GUIDE RECEIVED FROM ANY OTHER SOURCE EXCEPT 
 THE REGULAR SOURCE AND THE TRANSACTION RECORDED INTO OTHERS RECEIVE TABLE AND MATERIAL TABLE IS ALSO UPDATED ON SUCCESSUFUL TRANSACTION.
 CALLED JSP:-From_others_pg.jsp*/
+import static utility.CommonUtility.isNull;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -28,7 +29,7 @@ public class RECEIVE_PG_OTHERS extends HttpServlet {
     } 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
-        if(session == null) {
+        if(isNull(session)) {
             String message = Constants.LOGIN_ACCESS_MESSAGE;
             request.setAttribute("msg", message);
             request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
