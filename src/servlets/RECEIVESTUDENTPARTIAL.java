@@ -35,32 +35,32 @@ public class RECEIVESTUDENTPARTIAL extends HttpServlet {
             request.setAttribute("msg", message);
             request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
         } else {
-            String currentSession  =    request.getParameter("txt_session").toLowerCase();//getting the value of current session
-            String enrollmentNumber            =    request.getParameter("txt_enr").toLowerCase();//getting the value of enrollment number
-            String programmeCode         =    request.getParameter("mnu_prg_code").toUpperCase();//gettting the prgram code
-            String[] course         =    request.getParameterValues("crs_code");//all the course codes from the jsp page
-            int blockCount         =    0;//int variable for number of blocks available with the course
-            int count               =    0;//int variable for multiple use
-            String[] temp           =    new String[0];//array of String for multiple use
-            String receiveSource   =   "BY HAND";
-            int index               =       0;
+            String currentSession = request.getParameter("txt_session").toLowerCase();//getting the value of current session
+            String enrollmentNumber = request.getParameter("txt_enr").toLowerCase();//getting the value of enrollment number
+            String programmeCode = request.getParameter("mnu_prg_code").toUpperCase();//gettting the prgram code
+            String[] course = request.getParameterValues("crs_code");//all the course codes from the jsp page
+            int blockCount = 0;//int variable for number of blocks available with the course
+            int count = 0;//int variable for multiple use
+            String[] temporaryVar = new String[0];//array of String for multiple use
+            String receiveSource = "BY HAND";
+            int index = 0;
             /*logic for getting the number of total courses selected by user*/
             for(index = 0; index < course.length; index++) {
-                temp = request.getParameterValues(course[index]);
-                if(!isNull(temp)) {
-                    blockCount = blockCount+temp.length;
+                temporaryVar = request.getParameterValues(course[index]);
+                if(!isNull(temporaryVar)) {
+                    blockCount = blockCount+temporaryVar.length;
                 }
             }
             String[] courseDispatch = new String[blockCount];//array for holding the blocks to be receieved
             String[] blockQuantity = new String[blockCount];//array for holding the quantity of the blocks to be received
             /*logic for getting all the courses selected by the user*/
-            for(index=0;index<course.length;index++) {
+            for(index = 0; index < course.length; index++) {
                 String[] courseBlock = request.getParameterValues(course[index]);
                 if(courseBlock != null) {
-                    int len = courseBlock.length;
-                    for(int e=0;e<len;e++) {
-                        courseDispatch[count]=courseBlock[e];
-                        blockQuantity[count]=request.getParameter(courseBlock[e]);
+                    int length = courseBlock.length;
+                    for(int e = 0; e < length; e++) {
+                        courseDispatch[count] = courseBlock[e];
+                        blockQuantity[count] = request.getParameter(courseBlock[e]);
                         count++;
                     }
                 }
@@ -82,7 +82,7 @@ public class RECEIVESTUDENTPARTIAL extends HttpServlet {
                     message = "Entry Already Exist for Enrollment No " + enrollmentNumber + " for Course: <br/>";
                     for(int z = 0; z < course.length; z++) {
                         int length = course[z].length();
-                        for(int y=0;y<courseDispatch.length;y++) {
+                        for(int y = 0; y < courseDispatch.length; y++) {
                             String courseCheck = courseDispatch[y].substring(0, length);
                             String blockCheck = courseDispatch[y].substring(length);
                             String initial = blockCheck.substring(0, 1);
@@ -142,7 +142,7 @@ public class RECEIVESTUDENTPARTIAL extends HttpServlet {
                     System.out.println("Sorry !!Not any courses Selected...");
                     message = "Sorry!! Not any courses selected..";
                     request.setAttribute("alternate_msg", message);
-                    request.getRequestDispatcher("jsp/From_student.jsp").forward(request,response);
+                    request.getRequestDispatcher("jsp/From_student.jsp").forward(request, response);
                 }
             } catch(Exception exception) {
                 System.out.println("Exception raised from RECEIVESTUDENTPARTIAL.java and exception is " + exception);

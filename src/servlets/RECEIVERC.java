@@ -40,12 +40,12 @@ public class RECEIVERC extends HttpServlet {
             String courseCode2 = request.getParameter("mnu_crs_code2").toUpperCase();
             String courseCode3 = request.getParameter("mnu_crs_code3").toUpperCase();
             String courseCode4 = request.getParameter("mnu_crs_code4").toUpperCase();
-            String  courseCode5 = request.getParameter("mnu_crs_code5").toUpperCase();
-            String  courseCode6 = request.getParameter("mnu_crs_code6").toUpperCase();
-            String  courseCode7 = request.getParameter("mnu_crs_code7").toUpperCase();       
-            String  courseCode8 = request.getParameter("mnu_crs_code8").toUpperCase();
-            String  courseCode9 = request.getParameter("mnu_crs_code9").toUpperCase();
-            String  courseCode10 = request.getParameter("mnu_crs_code10").toUpperCase();      
+            String courseCode5 = request.getParameter("mnu_crs_code5").toUpperCase();
+            String courseCode6 = request.getParameter("mnu_crs_code6").toUpperCase();
+            String courseCode7 = request.getParameter("mnu_crs_code7").toUpperCase();       
+            String courseCode8 = request.getParameter("mnu_crs_code8").toUpperCase();
+            String courseCode9 = request.getParameter("mnu_crs_code9").toUpperCase();
+            String courseCode10 = request.getParameter("mnu_crs_code10").toUpperCase();      
             
             int quantity = Integer.parseInt(request.getParameter("txt_no_of_set"));   
             int quantity2 = Integer.parseInt(request.getParameter("txt_no_of_set2"));      
@@ -56,11 +56,11 @@ public class RECEIVERC extends HttpServlet {
             int quantity7 = Integer.parseInt(request.getParameter("txt_no_of_set7"));  
             int quantity8 = Integer.parseInt(request.getParameter("txt_no_of_set8"));  
             int quantity9 = Integer.parseInt(request.getParameter("txt_no_of_set9"));  
-            int quantity10 = Integer.parseInt(request.getParameter("txt_no_of_set10"));         
+            int quantity10 = Integer.parseInt(request.getParameter("txt_no_of_set10"));
             String medium = request.getParameter("txt_medium").toUpperCase();
             String  date = request.getParameter("txt_date").toUpperCase();
             String currentSession = request.getParameter("txt_session").toLowerCase();
-            String receipt_type = request.getParameter("receipt_type");
+            String receiptType = request.getParameter("receipt_type");
             String regionalCentreCode = (String)session.getAttribute("rc");
             /*LOGIC ENDS HERE FOR GETTING THE PARAMETERS FORM THE REQUEST*/ 
             System.out.println("fields from From_rc.jsp received Successfully");
@@ -170,8 +170,7 @@ public class RECEIVERC extends HttpServlet {
             try {
                 Connection con = connections.ConnectionProvider.conn();
                 Statement stmt = con.createStatement();
-                if(receipt_type.equals(Constants.COMPLETE)) {
-                    int result = 5,result1 = 5;
+                if(receiptType.equals(Constants.COMPLETE)) {
                     /*LOGIC FOR CHECKING THE EXISTENCE OF THE ENTRIES TO BE MADE IN DATABSE ALREADY*/   
                     message = "Entry Already Exist for Course: <br/>";
                     String[] blocks = new String[0];
@@ -219,7 +218,7 @@ public class RECEIVERC extends HttpServlet {
                         request.getRequestDispatcher("jsp/From_rc.jsp").forward(request,response);
                     }
                 }
-                if(receipt_type.equals(Constants.PARTIAL)) {
+                if(receiptType.equals(Constants.PARTIAL)) {
                     String  programmeCode = request.getParameter("mnu_prg_code").toUpperCase();
                     for(int i = 0; i < courses.length; i++) {
                         block = stmt.executeQuery("select no_of_blocks from course where crs_code='" + courses[i] + "'");

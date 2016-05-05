@@ -22,12 +22,16 @@ import utility.Constants;
  
 public class RECEIVEOTHERS extends HttpServlet {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("RECEIVEOTHERS SERVLET STARTED TO EXECUTE");
     } 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session=request.getSession(false);//getting and checking the availability of session of java
+        HttpSession session = request.getSession(false);//getting and checking the availability of session of java
         if(isNull(session)) {
             String message = Constants.LOGIN_ACCESS_MESSAGE;
             request.setAttribute("msg", message);
