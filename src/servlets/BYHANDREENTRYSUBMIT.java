@@ -42,18 +42,16 @@ public class BYHANDREENTRYSUBMIT extends HttpServlet {
             String name = request.getParameter("text_name").toUpperCase();//name of the student
             String currentSession = request.getParameter("text_session").toLowerCase();//value of the current session of the rc
             String programmeCode = request.getParameter("text_prog_code").toUpperCase();//program code of the student
-            String yea = request.getParameter("text_year");//semester/year code of the student
+            request.getParameter("text_year");
             String[] course = request.getParameterValues("crs_code");//all the course codes from the jsp page
             String reentryMessage = request.getParameter("mnuremarks").toUpperCase();//reentry message of for the transaction
             int blockCount = 0;
             int count = 0;
             String[] temporaryVar = new String[0];
-            int courseSelect = 0;//variable used to store number of courses selected to be Despatched
             /*logic for getting the number of total courses selected by user*/
             for(int c = 0; c < course.length; c++) {
                 temporaryVar = request.getParameterValues(course[c]);
                 if(temporaryVar != null) {
-                    courseSelect++;
                     blockCount = blockCount + temporaryVar.length;
                 }
             }
@@ -78,12 +76,11 @@ public class BYHANDREENTRYSUBMIT extends HttpServlet {
             String date = request.getParameter("text_date").toUpperCase();//date from the jsp page date field
             String disptachSource = "BY HAND";//for the Despatch source field of the student_Despatch table for post it is BY POST AND BY SC for study centre Despatch moce
             String reentry = "YES";
-            int qunatity = 0;
             int actualQuantity = 0;
             String relativeCourse = null;
-            int flagForProgrammeGuide =       0;
-            int flagForReturn =       0;
-            int index =       0;
+            int flagForProgrammeGuide = 0;
+            int flagForReturn = 0;
+            int index = 0;
             ResultSet rs;
             ResultSet rs1;
             request.setAttribute("current_session", currentSession);
@@ -92,7 +89,6 @@ public class BYHANDREENTRYSUBMIT extends HttpServlet {
             String regionalCenterCode = (String)session.getAttribute("rc");
 
             response.setContentType(Constants.HEADER_TYPE_HTML);
-            PrintWriter out = response.getWriter();
             try {
                 Connection connection = connections.ConnectionProvider.conn();//creating connection object for the Database
                 Statement statement = connection.createStatement();//creating object of Statement and getting the reference of the statement
@@ -145,8 +141,6 @@ public class BYHANDREENTRYSUBMIT extends HttpServlet {
                 }
     
                 if (blockCount != 0) {
-                    //if any course is not selected then this will not work...atleast one check box should be selected
-                    qunatity = blockCount;
                     for(int z = 0; z < course.length; z++) {
                         int len = course[z].length();
                         for(int y = 0; y < courseDispatch.length; y++) {
