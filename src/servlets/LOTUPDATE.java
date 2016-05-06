@@ -20,7 +20,7 @@ import utility.Constants;
  
 public class LOTUPDATE extends HttpServlet {
 
-/**
+    /**
      * 
      */
     private static final long serialVersionUID = 1L;
@@ -31,7 +31,7 @@ public class LOTUPDATE extends HttpServlet {
     } 
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session=request.getSession(false);//getting and checking the availability of session of java
+        HttpSession session = request.getSession(false);//getting and checking the availability of session of java
     
         if(isNull(session)) {
             String message = Constants.LOGIN_ACCESS_MESSAGE;
@@ -44,9 +44,9 @@ public class LOTUPDATE extends HttpServlet {
             String currentSession = null;
             try {
                 String lots[] = request.getParameterValues("lot_name");//all the lot name from the jsp page
-                String lotsName[]          =   new String[lots.length];
+                String lotsName[] = new String[lots.length];
                 
-                int index               =       0;
+                int index = 0;
                 for(index = 0; index < lots.length; index++) {
                     lotsName[index] = request.getParameter(lots[index]);
                 }
@@ -61,10 +61,9 @@ public class LOTUPDATE extends HttpServlet {
                     currentSession = rs.getString(1).toLowerCase();
                 }
                 
-                /*Logic ends here*/     
-                for(index=0;index<lots.length;index++) {
-                    programmeGuideResult+=statement.executeUpdate("update student_" + currentSession + Constants.UNDERSCORE + 
-                            regionalCenterCode + " set lot='" + lotsName[index] + "' where lot_name='" + lots[index]+"'");        
+                for(index = 0; index < lots.length; index++) {
+                    programmeGuideResult += statement.executeUpdate("update student_" + currentSession + Constants.UNDERSCORE + 
+                            regionalCenterCode + " set lot='" + lotsName[index] + "' where lot_name='" + lots[index] + "'");        
                 }
                 if(programmeGuideResult > 0) {
                     message = "Successfully Updates " + lots.length + " Lots Name.<br/>Total Updated Student are : " + programmeGuideResult + ".<br/>";

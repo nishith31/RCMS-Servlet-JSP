@@ -38,10 +38,8 @@ public class RECEIVE_PG_OTHERS extends HttpServlet {
             String  programmeCode = request.getParameter("mnu_prg_code").toUpperCase();
             String  programmeCode2 = request.getParameter("mnu_prg_code2").toUpperCase();
     
-            
             String  medium = request.getParameter("txt_medium").toUpperCase();
             String  medium2 = request.getParameter("txt_medium2").toUpperCase();
-    
     
             String  date = request.getParameter("txt_date").toUpperCase();
             String currentSession = request.getParameter("txt_session").toLowerCase();
@@ -59,10 +57,11 @@ public class RECEIVE_PG_OTHERS extends HttpServlet {
             if(!programmeCode2.equals(Constants.NONE)) {
                 index++;
             }
+
             String courses[] = new String[index];
             String mediums[] = new String[index];
             int quantities[] = new int[index];
-            int insert =   0;
+            int insert = 0;
             if(!programmeCode.equals(Constants.NONE)) {
                 courses[insert] = programmeCode;
                 mediums[insert] = medium;
@@ -72,10 +71,11 @@ public class RECEIVE_PG_OTHERS extends HttpServlet {
     
             if(!programmeCode2.equals(Constants.NONE)) {
                 courses[insert] = programmeCode2;
-                mediums[insert] = medium2;        
+                mediums[insert] = medium2;
                 quantities[insert] = Integer.parseInt(request.getParameter("text_qty2"));
                 insert++;
             }
+
             ResultSet first = null;//RESULTSET VARIABLE FOR FETCHING DATA FROM THE DATABASE
             response.setContentType(Constants.HEADER_TYPE_HTML);
             try {
@@ -96,7 +96,7 @@ public class RECEIVE_PG_OTHERS extends HttpServlet {
                 if(flag == 0) {
                     message = "Received Successfully PROGRAMME GUIDES OF <br/>";
                     for(int i = 0; i < courses.length; i++) {
-                        message = message+courses[i] + "  For Date " + date + " in Medium " + mediums[i] + "<br/>";
+                        message = message + courses[i] + "  For Date " + date + " in Medium " + mediums[i] + "<br/>";
                     }
                     request.setAttribute("msg", message);
                     request.getRequestDispatcher("jsp/From_others_pg.jsp").forward(request, response);  

@@ -27,7 +27,7 @@ public class LOTUPDATESEARCH extends HttpServlet {
     } 
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session=request.getSession(false);//getting and checking the availability of session of java
+        HttpSession session = request.getSession(false);//getting and checking the availability of session of java
     
         if(isNull(session)) {
             String message = Constants.LOGIN_ACCESS_MESSAGE;
@@ -35,22 +35,20 @@ public class LOTUPDATESEARCH extends HttpServlet {
             request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
         } else {
             /*LOGIC FOR GETTING THE PARAMETERS FROM THE BROWSER LIKE NAME ROLL NO*/
-            String message="";
-            String buttonValue             =    request.getParameter("enter").toUpperCase();           
-            buttonValue                =    buttonValue.trim();           
-            System.out.println("Value of Button: "+buttonValue);   
+            String message = "";
+            String buttonValue = request.getParameter("enter").toUpperCase();
+            buttonValue = buttonValue.trim();
+            System.out.println("Value of Button: " + buttonValue);   
             if(buttonValue.equals("REFRESH")) {
                 System.out.println("Entered into REFRESH block");
-                request.getRequestDispatcher("jsp/Lot_Update.jsp").forward(request,response);
+                request.getRequestDispatcher("jsp/Lot_Update.jsp").forward(request, response);
             } else {      
                 try {
-                    String lots[]           =    request.getParameterValues("lot_name");//all the lot name from the jsp page
-                    int index=0,len=0;
-                    int pg_result=0,pg_result1=0,pg_result2=0;
-                    if(lots==null ) {
-                        message="Please Select Any One Lot Name to Update.<br/>";
-                        request.setAttribute("msg",message);            
-                        request.getRequestDispatcher("jsp/Lot_Update.jsp").forward(request,response);
+                    String lots[] = request.getParameterValues("lot_name");//all the lot name from the jsp page
+                    if(isNull(lots) ) {
+                        message = "Please Select Any One Lot Name to Update.<br/>";
+                        request.setAttribute("msg", message);            
+                        request.getRequestDispatcher("jsp/Lot_Update.jsp").forward(request, response);
                     } else {
                         message=lots.length+" Lots Selected For Updation.<br/>";
                         request.setAttribute("lots", lots);
