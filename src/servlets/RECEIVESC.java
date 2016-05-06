@@ -211,6 +211,13 @@ public class RECEIVESC extends HttpServlet {
                                 count = j + 1;
                                 blocks = new String[numberOfBlocks[i]];
                                 blocks[j] = "B" + count;//creating the block names of the courses
+                                statement.executeUpdate("insert into sc_receive_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
+                                        "(sc_code,crs_code,block,qty,medium,date) values('" + studyCenterCode + "','" + courses[i] + "','" + 
+                                        blocks[j]+"'," + quantities[i] + ",'" + medium + "','" + date + "')");
+
+                                statement.executeUpdate("update material_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
+                                        " set qty=qty+" + quantities[i] + " where crs_code='" + courses[i] + "' and block='" + blocks[j] + "' and medium='" + medium + "'");
+                                
                                 message = message + courses[i] + " Block " + blocks[j] + " for date " + date + " in medium " + medium + "<br/>";
                             }
                         }

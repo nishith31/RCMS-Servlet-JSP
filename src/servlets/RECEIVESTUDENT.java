@@ -66,6 +66,7 @@ public class RECEIVESTUDENT extends HttpServlet {
             String  date                =    request.getParameter("txt_date").toUpperCase();
             String currentSession      =    request.getParameter("txt_session").toLowerCase();
             String receiptType             =    request.getParameter("receipt_type");
+            String receive_source = "BY HAND";
             System.out.println("fields from From_student.jsp received Successfully");
             String message = null;    
             String regionalCenterCode = (String)session.getAttribute("rc");
@@ -212,6 +213,12 @@ public class RECEIVESTUDENT extends HttpServlet {
                                 count = j + 1;
                                 blocks = new String[numberOfBlocks[i]];
                                 blocks[j] = "B" + count;
+                                statement.executeUpdate("insert into student_receive_" + currentSession + Constants.UNDERSCORE + regionalCenterCode 
+                                        + "(enrno,prg_code,crs_code,block,qty,medium,date,receive_source) values('" + enrollmentNumber + "','" + programmeCode 
+                                        + "','" + courses[i] + "','" + blocks[j] + "',"+qtys[i]+",'"+medium+"','"+date+"','"+receive_source+"')");
+                                statement.executeUpdate("update material_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + " set qty=qty+" + qtys[i]
+                                        +" where crs_code='" + courses[i] + "' and block='" + blocks[j] + "' and medium='" + medium + "'");
+
                                 message = message + courses[i] + " Block " + blocks[j] + " for date " + date + " in medium " + medium + "<br/>";
                             }
                             System.out.println("Received Succesfully from STUDENT: " + enrollmentNumber + " Course code " + courses[i]);
