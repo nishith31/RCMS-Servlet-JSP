@@ -31,6 +31,7 @@ public class BYE extends HttpServlet {
         System.out.println("BYE SERVLET STARTED TO EXECUTE");
     }
 
+    @SuppressWarnings("resource")
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
         if(isNull(session)) {
@@ -39,14 +40,14 @@ public class BYE extends HttpServlet {
             request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
         } else {
             String regionalCenterCode = (String)session.getAttribute("rc");//getting the rc code of the logged in rc in the system
-            String enrollmentNumber            =    request.getParameter("txt_enr");//variable for getting the roll no of the student
-            String message              =   ""; 
-            String programme             =   null;
-            String name             =   null;
+            String enrollmentNumber = request.getParameter("txt_enr");//variable for getting the roll no of the student
+            String message = ""; 
+            String programme = null;
+            String name = null;
             char year;
-            String medium           =   null;   
-            String date             =   null;   
-            String dispatchMode    =   null;
+            String medium = null;
+            String date = null;   
+            String dispatchMode = null;
             try {
                 message = (String)request.getAttribute("alternate_msg");
             } catch(Exception exception) {
@@ -73,7 +74,6 @@ public class BYE extends HttpServlet {
                 }
         
                 request.setAttribute("current_session", current_session);
-                /*Logic Ends here for getting the current session value from the sessions table of regional centres*/   
                 /*Complete Logic for fetching the details of the student from the the student database*/
                 rs = statement.executeQuery("select * from student_" + current_session + Constants.UNDERSCORE 
                         + regionalCenterCode + " where enrno='" + enrollmentNumber + "'");
@@ -81,7 +81,7 @@ public class BYE extends HttpServlet {
                     //if controls enter in if(rs.next()) means records exist for the roll entered in the browser
                     programme = rs.getString(2);//getting the prg_code from the table
                     char pr[] = programme.toCharArray();//converting the program to character array
-                    for(int ii=0;ii<pr.length;ii++) {
+                    for(int ii = 0; ii < pr.length; ii++) {
                         //getting the actual length of the program code fetched from the student table
                         if(pr[ii] != ' ') {
                             length++;
@@ -112,38 +112,39 @@ public class BYE extends HttpServlet {
                             courseNumber++;
                         }
                     }
-                    /*Logic ends here for getting the total number of courses opted byt the student*/
                     /*Logic for getting all the courses name, no of blocks of them and the serial number associated with the course*/
-                    rs = statement.executeQuery("select * from student_" + current_session + Constants.UNDERSCORE + regionalCenterCode + " where enrno='" + enrollmentNumber + "'");
-                    String course[]                 =   new String[courseNumber];
-                    int blocks[]                    =   new int[courseNumber];
-                    int blocksShadow[]             =   new int[courseNumber];
-                    String serialNumber[] =   new String[courseNumber];
+                    rs = statement.executeQuery("select * from student_" + current_session + Constants.UNDERSCORE + regionalCenterCode 
+                            + " where enrno='" + enrollmentNumber + "'");
+                    String course[] = new String[courseNumber];
+                    int blocks[] = new int[courseNumber];
+                    int blocksShadow[] = new int[courseNumber];
+                    String serialNumber[] = new String[courseNumber];
                     int i = 17, j = 18;
                     int totalLength = 0, count = 0;
                     ResultSet rs1 = null;
                     String relativeCourse = null;
                     while(rs.next()) {
                         for(index = 0; index < courseNumber; index++) {
-                            course[index]       =   rs.getString(i).trim();
-                            serialNumber[index]=   rs.getString(j);
+                            course[index] = rs.getString(i).trim();
+                            serialNumber[index] = rs.getString(j);
                             
-                            rs1     =   statement1.executeQuery("Select * from course where crs_code='" + course[index] + "'");
+                            rs1 = statement1.executeQuery("Select * from course where crs_code='" + course[index] + "'");
                             if(rs1.next()) {   
-                                rs1     =   statement1 .executeQuery("Select no_of_blocks from course where crs_code='"+course[index]+"'");
+                                rs1 = statement1 .executeQuery("Select no_of_blocks from course where crs_code='" + course[index] + "'");
                                 while(rs1.next()) {
-                                    blocks[index]           =   rs1.getInt(1);
+                                    blocks[index] = rs1.getInt(1);
                                 }
                                 i = i + 2;
                                 j = j + 2;
                             } else {
-                                rs1 =   statement1.executeQuery("select absolute_crs_code from course_course where relative_crs_code='"+course[index]+"' and rc_code='"+regionalCenterCode+"'");
+                                rs1 = statement1.executeQuery("select absolute_crs_code from course_course where relative_crs_code='" + course[index] + 
+                                        "' and rc_code='" + regionalCenterCode + "'");
                                 while(rs1.next()) {
                                     relativeCourse = rs1.getString(1);
                                 }
-                                rs1     =   statement1 .executeQuery("Select no_of_blocks from course where crs_code='"+relativeCourse+"'");
+                                rs1 = statement1 .executeQuery("Select no_of_blocks from course where crs_code='" + relativeCourse + "'");
                                 while(rs1.next()) {
-                                    blocks[index]           =   rs1.getInt(1);
+                                    blocks[index] = rs1.getInt(1);
                                 }
 
                                 i = i + 2;
@@ -156,27 +157,28 @@ public class BYE extends HttpServlet {
                         totalLength = totalLength + blocks[index];
                     }
         
-                    int[] stock             =   new int[totalLength];//int array for holding the stock available for all courses blockwise
-                    String courseBlock[]   =   new String[totalLength];//array for holding all the courses block wise
+                    int[] stock = new int[totalLength];//int array for holding the stock available for all courses blockwise
+                    String courseBlock[] = new String[totalLength];//array for holding all the courses block wise
                     /*logic for creating array of course_block & stock availability*/
                     String blockName = null;
                     for(index = 0; index < course.length; index++) {
                         for(int b = 1; b <= blocks[index]; b++) {
                             courseBlock[count] = course[index] + "B" + b;
-                            rs1     =   statement1 .executeQuery("Select * from course where crs_code='"+course[index]+"'");//checking the course in course table
+                            rs1 = statement1 .executeQuery("Select * from course where crs_code='" + course[index] + "'");//checking the course in course table
                             if(rs1.next()) {
                                 relativeCourse=course[index];
                             } else {
-                                rs1 =   statement1.executeQuery("select absolute_crs_code from course_course where relative_crs_code='"+course[index]+"' and rc_code='"+regionalCenterCode+"'");
+                                rs1 = statement1.executeQuery("select absolute_crs_code from course_course where relative_crs_code='" + 
+                                        course[index] + "' and rc_code='" + regionalCenterCode + "'");
                                 while(rs1.next()) {
-                                    relativeCourse=rs1.getString(1);
+                                    relativeCourse = rs1.getString(1);
                                 }
                             }
                             blockName = "B" + b;
                             rs = statement.executeQuery("select qty from material_"+current_session + Constants.UNDERSCORE + 
                                     regionalCenterCode + " where crs_code='" + relativeCourse + "' and block='" + blockName + "' and medium='" + medium + "'");
                             while(rs.next()) {
-                                stock[count]=rs.getInt(1);
+                                stock[count] = rs.getInt(1);
                             }
                             count++;
                         }
@@ -194,9 +196,9 @@ public class BYE extends HttpServlet {
                     if(rs.next()) {
                         relativeProgrammeCode = new String[rs.getInt(1)];
                     }
-                    index=0;
+                    index = 0;
                     rs = statement.executeQuery("select absolute_prg_code from program_program where relative_prg_code='" + programme + "' and rc_code='"
-                    + regionalCenterCode + "'");
+                            + regionalCenterCode + "'");
                     while(rs.next()) {
                         relativeProgrammeCode[index] = rs.getString(1);
                         index++;
@@ -207,29 +209,30 @@ public class BYE extends HttpServlet {
                     }
     
                     searchCourseCode = searchCourseCode + ")";
-                    System.out.println("value of search_crs_code "+searchCourseCode);
+                    System.out.println("value of search_crs_code " + searchCourseCode);
     
             
                     /*Logic for checking the Despatch of Programme guide for the student entered into the system*/
                     rs = statement.executeQuery("select * from student_dispatch_"+current_session + Constants.UNDERSCORE + regionalCenterCode + 
                             " where enrno='" + enrollmentNumber + "' and " + searchCourseCode + " and block='PG' and reentry='NO'");
                     if(rs.next()) {
-                        programmeGuideFlag = Constants.YES;//if entered already then flag will be yes
                         programmeGuideDate = rs.getDate(6).toString();   
+                        programmeGuideFlag = Constants.YES;//if entered already then flag will be yes
                     } else {
                         programmeGuideFlag = Constants.NO;//if not entered earlier then flag will be no
                         programmeGuideDate = "XX/XX/XXXX";
                     }
                     /*Logic for getting the available sets of the Programme guide of the program opted by the student*/     
     
-                    rs=statement.executeQuery("select qty from material_"+current_session+"_"+regionalCenterCode+" where "+searchCourseCode+" and block='PG' and medium='"+medium+"'");
+                    rs = statement.executeQuery("select qty from material_"+current_session + Constants.UNDERSCORE + regionalCenterCode 
+                            + " where " + searchCourseCode + " and block='PG' and medium='" + medium + "'");
                     while(rs.next()) {
                         availableProgrammeGuide = rs.getInt(1);
                     }
             
                     request.setAttribute("pg_flag", programmeGuideFlag);//sending the pg_flag means despatched or not
                     request.setAttribute("pg_date", programmeGuideDate);//sending the pg_flag means despatched or not
-                    int dispatchCourseCount = 0;//variable for holding the number of courses despatched blockwise now
+                    int dispatchCourseCount = 0;//variable for holding the number of courses despatched block wise now
                     rs = statement.executeQuery("select count(*) from student_dispatch_" + current_session + Constants.UNDERSCORE + regionalCenterCode
                             + " where enrno='" + enrollmentNumber + "' and block<>'PG' and reentry='NO' ");
                     while(rs.next()) {
@@ -238,53 +241,57 @@ public class BYE extends HttpServlet {
             
                     /*If Not any course opted by student has been Despatched then this logic will create empty Despatch course and date array*/
     
-                    if(dispatchCourseCount==0) {
-                        String dispatch[]               =   new String[dispatchCourseCount];//create array of Despatch courses
-                        String dispatchDate[]          =   new String[dispatchCourseCount];//create array of Despatch courses date
+                    if(dispatchCourseCount == 0) {
+                        String dispatch[] = new String[dispatchCourseCount];//create array of Despatch courses
+                        String dispatchDate[] = new String[dispatchCourseCount];//create array of Despatch courses date
                         message = message + "Welcome to the By Hand Entry for " + name + " First Time.";
                         /*Sending the Despatch courses and dates empty array with the msg variable with appropriate msg to the Browser*/        
                         request.setAttribute("dispatch", dispatch);
                         request.setAttribute("dispatch_date", dispatchDate);
-                        request.setAttribute("blocks_shadow", blocksShadow);                        
+                        request.setAttribute("blocks_shadow", blocksShadow);
                         request.setAttribute("msg", message);
-                        request.getRequestDispatcher("jsp/By_hand1.jsp?enrno="+enrollmentNumber+"&prog="+programme+"&year="+year+"&name="+name+"&medium="+medium+"&available_pg="+availableProgrammeGuide+"").forward(request,response); 
+                        request.getRequestDispatcher("jsp/By_hand1.jsp?enrno=" + enrollmentNumber + "&prog=" + programme + "&year=" + year + "&name=" + 
+                                name + "&medium=" + medium + "&available_pg=" + availableProgrammeGuide).forward(request, response); 
                     } else if(dispatchCourseCount < courseBlock.length) {
                         /*If some courses partially Despatched then this logic will create the Despatched courses and dates array and sent to client*/
                         String checking = null;
                         int m = 0;
                         dispatchCourseCount = 0;
-                        rs = statement.executeQuery("select count(*) from student_dispatch_"+current_session+"_"+regionalCenterCode+" where enrno='"+enrollmentNumber+"' and reentry='NO' and block<>'PG'");
+                        rs = statement.executeQuery("select count(*) from student_dispatch_"+current_session + Constants.UNDERSCORE + regionalCenterCode 
+                                + " where enrno='" + enrollmentNumber + "' and reentry='NO' and block<>'PG'");
                         while(rs.next()) {
                             dispatchCourseCount=rs.getInt(1);
                         }
     
-                        String dispatch[]           =   new String[dispatchCourseCount];//array for dispatched courses
-                        String dispatch_date[]      =   new String[dispatchCourseCount];//array for date of Despatched courses
+                        String dispatch[] = new String[dispatchCourseCount];//array for dispatched courses
+                        String dispatchDate[] = new String[dispatchCourseCount];//array for date of Despatched courses
 
-                        rs = statement.executeQuery("select * from student_dispatch_"+current_session+"_"+regionalCenterCode+" where enrno='"+enrollmentNumber+"'  and reentry='NO' and block<>'PG'");
+                        rs = statement.executeQuery("select * from student_dispatch_" + current_session + Constants.UNDERSCORE + 
+                                regionalCenterCode + " where enrno='" + enrollmentNumber + "'  and reentry='NO' and block<>'PG'");
                         while(rs.next()) {
-                            checking=rs.getString(3).trim();
-                            for(index=0;index<course.length;index++) {
+                            checking = rs.getString(3).trim();
+                            for(index = 0; index < course.length; index++) {
                                 if(checking.equals(course[index])) {
                                     blocksShadow[index]++;
                                 }
                             }
-                            dispatch[m]             =   checking+rs.getString(4).trim();//rs.getString(3).trim()+rs.getString(4).trim();
-                            dispatch_date[m]        =   rs.getDate(6).toString();
+                            dispatch[m] = checking+rs.getString(4).trim();//rs.getString(3).trim()+rs.getString(4).trim();
+                            dispatchDate[m] = rs.getDate(6).toString();
                             m++;
                         }
                         m = 0;
                 
                         message = message + "Partially Despatched Courese of " + name + " are ";
-                        for(index=0;index<dispatch.length;index++) {
+                        for(index = 0; index < dispatch.length; index++) {
                             message = " " + message + " " + dispatch[index];
                         }
                         /*Sending the Despatch courses and dates array with the msg variable with appropriate msg to the Browser*/  
-                        request.setAttribute("dispatch",dispatch);
-                        request.setAttribute("dispatch_date",dispatch_date);
-                        request.setAttribute("blocks_shadow",blocksShadow);            
-                        request.setAttribute("msg",message);
-                        request.getRequestDispatcher("jsp/By_hand1.jsp?enrno="+enrollmentNumber+"&prog="+programme+"&year="+year+"&name="+name+"&medium="+medium+"&available_pg="+availableProgrammeGuide+"").forward(request,response);
+                        request.setAttribute("dispatch", dispatch);
+                        request.setAttribute("dispatch_date", dispatchDate);
+                        request.setAttribute("blocks_shadow", blocksShadow);
+                        request.setAttribute("msg", message);
+                        request.getRequestDispatcher("jsp/By_hand1.jsp?enrno=" + enrollmentNumber + "&prog=" + programme + "&year=" + year +
+                                "&name=" + name + "&medium=" + medium + "&available_pg=" + availableProgrammeGuide).forward(request, response);
                     } else {
                         //if all materials Despatched
                         int m = 0, lengthOfDispatchCourse = 0;
@@ -316,13 +323,13 @@ public class BYE extends HttpServlet {
                     }
                 } else {
                     System.out.println("Sorry!! Roll No not found please contact to Registration Department..Thank you..");
-                    message="Sorry!! Roll Number not found Please Contact to Admission Department. Thank You..";
+                    message = "Sorry!! Roll Number not found Please Contact to Admission Department. Thank You..";
                     request.setAttribute("msg", message);//sending the message to the browser
                     request.getRequestDispatcher("jsp/By_hand.jsp").forward(request, response); 
                 }   
             } catch(Exception exception) {
                 System.out.println("Exception raised from By_hand.jsp" + exception);
-                message="Some Serious Exception Hitted the Page. Please Check on Server Console For Details.";
+                message = "Some Serious Exception Hitted the Page. Please Check on Server Console For Details.";
                 request.setAttribute("msg", message);
                 request.getRequestDispatcher("jsp/By_hand.jsp").forward(request, response);
             }
