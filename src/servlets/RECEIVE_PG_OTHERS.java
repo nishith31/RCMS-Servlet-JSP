@@ -43,6 +43,7 @@ public class RECEIVE_PG_OTHERS extends HttpServlet {
     
             String  date = request.getParameter("txt_date").toUpperCase();
             String currentSession = request.getParameter("txt_session").toLowerCase();
+            String receiveFrom = request.getParameter("receive_from").toLowerCase();
             String regionalCenterCode = (String)session.getAttribute("rc");
         
             /*LOGIC ENDS HERE FOR GETTING THE PARAMETERS FORM THE REQUEST*/ 
@@ -96,6 +97,12 @@ public class RECEIVE_PG_OTHERS extends HttpServlet {
                 if(flag == 0) {
                     message = "Received Successfully PROGRAMME GUIDES OF <br/>";
                     for(int i = 0; i < courses.length; i++) {
+                        statement.executeUpdate("insert into others_receive_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
+                                "(crs_code,block,qty,medium,date,receive_from) values('" + courses[i] + "','PG'," + quantities[i] + ",'" + mediums[i] + "','"
+                                + date+"','" + receiveFrom +"')");
+
+                        statement.executeUpdate("update material_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + " set qty=qty+" + 
+                                quantities[i] + " where crs_code='" + courses[i] + "' and block='PG' and medium='" + mediums[i] + "'");
                         message = message + courses[i] + "  For Date " + date + " in Medium " + mediums[i] + "<br/>";
                     }
                     request.setAttribute("msg", message);

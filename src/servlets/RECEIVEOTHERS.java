@@ -93,6 +93,12 @@ public class RECEIVEOTHERS extends HttpServlet {
                             for(index = 0; index < blocks; index++) {
                                 no = index + 1;
                                 blockName =  "B" + no;
+                                statement.executeUpdate("insert into others_receive_" + currentSession + Constants.UNDERSCORE + regionalCenterCode+" values('"
+                                + courseCode + "','" + blockName + "'," + quantity + ",'" + medium + "','" + date + "','" + receiveFrom + "')");
+
+                                statement.executeUpdate("update material_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
+                                        " set qty=qty+" + quantity + " where crs_code='" + courseCode + "' and block='" + blockName + "' and medium='" + medium + "'");     
+
                                 message = message + courseCode + blockName + " for date " + date + " in medium " + medium + "<br/>";
                             }
                             request.setAttribute("msg", message);
@@ -133,6 +139,9 @@ public class RECEIVEOTHERS extends HttpServlet {
                     }
                     if(flagForReturn==0) {
                         message = "Received Successfully  Course <br/>";
+                        statement.executeUpdate("insert into others_receive_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + " values('" + newCourseCode
+                                + "','BLOCK'," + quantity + ",'" + medium + "','" + date + "','" + receiveFrom + "')");
+
                         message = "Successfully received " + quantity + " Sets of " + newCourseCode + ".";
                         System.out.println("Successfully receive materials...");
                         request.setAttribute("msg", message);
