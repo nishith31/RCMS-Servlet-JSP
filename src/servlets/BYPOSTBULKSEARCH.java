@@ -2,8 +2,8 @@ package servlets;
 /*THIS SERVLET IS RESPONSIBLE FOR SEARCHING THE STUDENTS FOR THE COURSE CODE,PROGRAMME CODE,MEDIUM AND LOT NUMBER PROVIDED BY THE USER ON THE BROWSER AND IN THAT RANGE OF STUDENTS ALSO CHECKS THE STUDENTS TO WHOM MATERIALS HAS BEEN ALREADY SENT AND SENDS THOSE STUDENTS AS DISABLED FOR DESPATCHING,IT ALSO CHECKS AND DISPLAY THE AVAILABLE QUANTITY OF THE STUDY MATERIAL SELECETED FOR DESPATCHING.
 CALLED JSP;-By_post_bulk1.jsp*/
 import static utility.CommonUtility.isNull;
+
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -18,6 +18,11 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class BYPOSTBULKSEARCH extends HttpServlet {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("BYPOSTBULKSEARCH SERVLET STARTED TO EXECUTE");
@@ -172,230 +177,219 @@ public class BYPOSTBULKSEARCH extends HttpServlet {
                     relativeProgrammeCode = new String[rs.getInt(1)];
                 }
                 index = 0;
-                rs = statement.executeQuery("select relative_prg_code from program_program where absolute_prg_code='"  +programmeCode + "' and rc_code='"+regionalCenterCode+"'");
-    while(rs.next())
-    {
-        relativeProgrammeCode[index] = rs.getString(1);
-        index++;
-    }
-    String search_prg_code = "(prg_code like '"+programmeCode+"%'";        
-    for(index = 0;index<relativeProgrammeCode.length;index++)
-    {
-        search_prg_code = search_prg_code+" or prg_code like '"+relativeProgrammeCode[index]+"%'";
-    }//end of for loop
-    search_prg_code = search_prg_code+")";        
-/*LOGIC ENDS HERE FOR CREATING RELATIVE PROGRAMME CODE FROM THE ACTUAL CODE*/   
-    System.out.println("value of despatch course "+dispatchSearchCourseCode);
-    System.out.println("select * from student_"+currentSession+"_"+regionalCenterCode+" where medium='"+medium+"' and "+course1+" and lot='"+lot+"' or medium='"+medium+"' and "+course2+" and lot='"+lot+"' or medium='"+medium+"' and "+course3+" and lot='"+lot+"' or medium='"+medium+"' and "+course4+" and lot='"+lot+"' or medium='"+medium+"' and "+course5+" and lot='"+lot+"' or medium='"+medium+"' and "+course6+" and lot='"+lot+"' or medium='"+medium+"' and "+course7+" and lot='"+lot+"' or medium='"+medium+"' and "+course8+" and lot='"+lot+"' or medium='"+medium+"' and "+course9+" and lot='"+lot+"' or medium='"+medium+"' and "+course10+" and lot='"+lot+"' or medium='"+medium+"' and "+course11+" and lot='"+lot+"' or medium='"+medium+"' and "+course12+" and lot='"+lot+"' or medium='"+medium+"' and "+course13+" and lot='"+lot+"' or medium='"+medium+"' and "+course14+" and lot='"+lot+"' or medium='"+medium+"' and "+course15+" and lot='"+lot+"' or medium='"+medium+"' and "+course16+" and lot='"+lot+"' or medium='"+medium+"' and "+course17+" and lot='"+lot+"' or medium='"+medium+"' and "+course18+" and lot='"+lot+"' or medium='"+medium+"' and "+course19+" and lot='"+lot+"' or medium='"+medium+"' and "+course20+" and lot='"+lot+"'");
-    if(programmeCode.equals("ALL"))
-    {
-//  query="select * from student_"+current_session+"_"+rc_code+" where medium='"+medium+"' and crs1='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs2='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs3='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs4='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs5='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs6='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs7='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs8='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs9='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs10='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs11='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs12='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs13='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs14='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs15='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs16='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs17='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs18='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs19='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs20='"+crs_code+"' and lot='"+lot+"'";
-        query="select * from student_"+currentSession+"_"+regionalCenterCode+" where medium='"+medium+"' and "+course1+" and lot='"+lot+"' or medium='"+medium+"' and "+course2+" and lot='"+lot+"' or medium='"+medium+"' and "+course3+" and lot='"+lot+"' or medium='"+medium+"' and "+course4+" and lot='"+lot+"' or medium='"+medium+"' and "+course5+" and lot='"+lot+"' or medium='"+medium+"' and "+course6+" and lot='"+lot+"' or medium='"+medium+"' and "+course7+" and lot='"+lot+"' or medium='"+medium+"' and "+course8+" and lot='"+lot+"' or medium='"+medium+"' and "+course9+" and lot='"+lot+"' or medium='"+medium+"' and "+course10+" and lot='"+lot+"' or medium='"+medium+"' and "+course11+" and lot='"+lot+"' or medium='"+medium+"' and "+course12+" and lot='"+lot+"' or medium='"+medium+"' and "+course13+" and lot='"+lot+"' or medium='"+medium+"' and "+course14+" and lot='"+lot+"' or medium='"+medium+"' and "+course15+" and lot='"+lot+"' or medium='"+medium+"' and "+course16+" and lot='"+lot+"' or medium='"+medium+"' and "+course17+" and lot='"+lot+"' or medium='"+medium+"' and "+course18+" and lot='"+lot+"' or medium='"+medium+"' and "+course19+" and lot='"+lot+"' or medium='"+medium+"' and "+course20+" and lot='"+lot+"'";
-    }
+                rs = statement.executeQuery("select relative_prg_code from program_program where absolute_prg_code='"  +programmeCode + "' and rc_code='" +
+                                regionalCenterCode + "'");
+                while(rs.next()) {
+                    relativeProgrammeCode[index] = rs.getString(1);
+                    index++;
+                }
+                String searchProgrammeCode = "(prg_code like '" + programmeCode + "%'";
+                for(index = 0; index < relativeProgrammeCode.length; index++) {
+                    searchProgrammeCode = searchProgrammeCode + " or prg_code like '" + relativeProgrammeCode[index] + "%'";
+                }
+                searchProgrammeCode = searchProgrammeCode + ")";
+                System.out.println("value of despatch course " + dispatchSearchCourseCode);
+                if(programmeCode.equals("ALL")) {
+                    //      query="select * from student_"+current_session+"_"+rc_code+" where medium='"+medium+"' and crs1='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs2='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs3='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs4='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs5='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs6='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs7='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs8='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs9='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs10='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs11='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs12='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs13='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs14='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs15='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs16='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs17='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs18='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs19='"+crs_code+"' and lot='"+lot+"' or medium='"+medium+"' and crs20='"+crs_code+"' and lot='"+lot+"'";
+                    query = "select * from student_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + " where medium='" + 
+                            medium + "' and " + course1 + " and lot='" + lot + "' or medium='" + medium + "' and " + course2 + " and lot='" + lot + 
+                            "' or medium='" + medium + "' and " + course3 + " and lot='" + lot + "' or medium='" + medium + "' and " + course4 + " and lot='" + 
+                            lot + "' or medium='" + medium + "' and " + course5 + " and lot='" + lot + "' or medium='" + medium + "' and " + course6 + " and lot='" + 
+                            lot + "' or medium='" + medium + "' and " + course7 + " and lot='" + lot + "' or medium='" + medium + "' and " + course8 + " and lot='" + 
+                            lot + "' or medium='" + medium + "' and " + course9 + " and lot='" + lot + "' or medium='" + medium + "' and " + course10 + " and lot='" + 
+                            lot + "' or medium='" + medium + "' and " + course11 + " and lot='" + lot + "' or medium='" + medium + "' and " + course12 + " and lot='" + 
+                            lot + "' or medium='" + medium + "' and " + course13 + " and lot='" + lot + "' or medium='" + medium + "' and " + course14 + " and lot='" + 
+                            lot + "' or medium='" + medium + "' and " + course15 + " and lot='" + lot + "' or medium='" + medium + "' and " + course16 + " and lot='" + 
+                            lot + "' or medium='" + medium + "' and " + course17 + " and lot='" + lot + "' or medium='" + medium + "' and " + course18 + " and lot='" + 
+                            lot + "' or medium='" + medium + "' and " + course19 + " and lot='" + lot + "' or medium='" + medium + "' and " + course20 + " and lot='" + lot + "'";
+                } else {
+                    query = "select * from student_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + " where " + searchProgrammeCode + " and medium='" + 
+                            medium + "' and " + course1 + " and lot='" + lot + "' or " + searchProgrammeCode + " and medium='" + medium + "' and " + course2 + " and lot='" 
+                            + lot + "' or " + searchProgrammeCode + " and medium='" + medium + "' and " + course3 + " and lot='" + lot + "' or " + searchProgrammeCode + 
+                            " and medium='" + medium + "' and " + course4 + " and lot='" + lot + "' or " + searchProgrammeCode + " and medium='" + medium + "' and " + 
+                            course5 + " and lot='" + lot + "' or " + searchProgrammeCode + " and medium='" + medium + "' and " + course6 + " and lot='" + lot + "' or " + 
+                            searchProgrammeCode + " and medium='" + medium + "' and " + course7 + " and lot='" + lot + "' or " + searchProgrammeCode + " and medium='" + 
+                            medium + "' and " + course8 + " and lot='" + lot + "' or " + searchProgrammeCode + " and medium='" + medium + "' and " + course9 + " and lot='" + 
+                            lot + "' or " + searchProgrammeCode + " and medium='" + medium + "' and " + course10 + " and lot='" + lot + "' or " + searchProgrammeCode + 
+                            " and medium='" + medium + "' and " + course11 + " and lot='" + lot + "' or " + searchProgrammeCode + " and medium='" + medium + "' and " + 
+                            course12 + " and lot='" + lot + "' or " + searchProgrammeCode + " and medium='" + medium + "' and " + course13 + " and lot='" + lot + "' or " + 
+                            searchProgrammeCode + " and medium='" + medium + "' and " + course14 + " and lot='" + lot + "' or " + searchProgrammeCode + " and medium='" + medium 
+                            + "' and " + course15 + " and lot='" + lot + "' or " + searchProgrammeCode + " and medium='" + medium + "' and " + course16 + " and lot='" + lot + 
+                            "' or " + searchProgrammeCode + " and medium='" + medium + "' and " + course17 + " and lot='" + lot + "' or " + searchProgrammeCode + " and medium='" 
+                            + medium + "' and " + course18 + " and lot='" + lot + "' or " + searchProgrammeCode + " and medium='" + medium + "' and " + course19 + " and lot='" + 
+                            lot + "' or " + searchProgrammeCode + " and medium='" + medium + "' and " + course20 + " and lot='" + lot + "'";
+                }
+                rs = statement.executeQuery(query);
+                if(rs.next()) {
+                    rs = statement.executeQuery(query);
+                    while(rs.next()) {
+                        for(int j = 17; j <= 35;) {
+                            check = rs.getString(j);
+                            check = check.trim();
+                            if(check.equals(courseCode)) {
+                                length++;
+                            } else {
+                                for(index = 0; index < relativeCourseCode.length; index++) {
+                                    if(check.equals(relativeCourseCode[index])) {
+                                        length++;
+                                    }
+                        
+                                }
+                            }
+                            j = j + 2;
+                        }  
+                    }
+                    System.out.println("Number of students " + length);
+                    String student[] = new String[length];
+                    System.out.println("length of student array in servlet " + student.length);
+                    String name[] = new String[length];
+                    System.out.println("length of student's name array in servlet " + name.length);
+                    String serialNumber[] = new String[length];
+                    System.out.println("length of student's serial number array in servlet " + serialNumber.length);
+                    String hiddenCourse[] = new String[length];
+                    System.out.println("length of hidden course array in servlet " + hiddenCourse.length);
 
-    else
-    {
-        query="select * from student_"+currentSession+"_"+regionalCenterCode+" where "+search_prg_code+" and medium='"+medium+"' and "+course1+" and lot='"+lot+"' or "+search_prg_code+" and medium='"+medium+"' and "+course2+" and lot='"+lot+"' or "+search_prg_code+" and medium='"+medium+"' and "+course3+" and lot='"+lot+"' or "+search_prg_code+" and medium='"+medium+"' and "+course4+" and lot='"+lot+"' or "+search_prg_code+" and medium='"+medium+"' and "+course5+" and lot='"+lot+"' or "+search_prg_code+" and medium='"+medium+"' and "+course6+" and lot='"+lot+"' or "+search_prg_code+" and medium='"+medium+"' and "+course7+" and lot='"+lot+"' or "+search_prg_code+" and medium='"+medium+"' and "+course8+" and lot='"+lot+"' or "+search_prg_code+" and medium='"+medium+"' and "+course9+" and lot='"+lot+"' or "+search_prg_code+" and medium='"+medium+"' and "+course10+" and lot='"+lot+"' or "+search_prg_code+" and medium='"+medium+"' and "+course11+" and lot='"+lot+"' or "+search_prg_code+" and medium='"+medium+"' and "+course12+" and lot='"+lot+"' or "+search_prg_code+" and medium='"+medium+"' and "+course13+" and lot='"+lot+"' or "+search_prg_code+" and medium='"+medium+"' and "+course14+" and lot='"+lot+"' or "+search_prg_code+" and medium='"+medium+"' and "+course15+" and lot='"+lot+"' or "+search_prg_code+" and medium='"+medium+"' and "+course16+" and lot='"+lot+"' or "+search_prg_code+" and medium='"+medium+"' and "+course17+" and lot='"+lot+"' or "+search_prg_code+" and medium='"+medium+"' and "+course18+" and lot='"+lot+"' or "+search_prg_code+" and medium='"+medium+"' and "+course19+" and lot='"+lot+"' or "+search_prg_code+" and medium='"+medium+"' and "+course20+" and lot='"+lot+"'";
-    }
-    rs=statement.executeQuery(query);
-    int ll=1;
-    if(rs.next()) 
-    {
-        rs=statement.executeQuery(query);
-        while(rs.next())
-        {
-            for(int j=17;j<=35;)
-            {
-                check=rs.getString(j);
-                check=check.trim();
-                if(check.equals(courseCode))
-                    length++;
-                else
-                {
-                    for(index=0;index<relativeCourseCode.length;index++)
-                    {
-                        if(check.equals(relativeCourseCode[index]))
-                        length++;
-                    }//end of for loop
-                }//end of else
-                j=j+2;                  
-            }//end of for loop  
-        }//end of while loop
-        ll=1;
-            System.out.println("Number of students "+length);
-        String student[]=new String[length];
-            System.out.println("length of student array in servlet "+student.length);
-        String name[]=new String[length];
-            System.out.println("length of student's name array in servlet "+name.length);
-        String serial_number[]=new String[length];
-            System.out.println("length of student's serial number array in servlet "+serial_number.length);
-        String hidden_course[]=new String[length];
-            System.out.println("length of hidden course array in servlet "+hidden_course.length);
+                    rs = statement.executeQuery(query);
+                    i = 0;
+                    String naam = null;
+                    String roll = null;
+                    while(rs.next()) {
+                        roll = rs.getString(1);
+                        naam = rs.getString(5);   
+                        for(int k = 17; k <= 35; k = k + 2) {
+                            check = rs.getString(k);
+                            check = check.trim();
+                            if(check.equals(courseCode)) {
+                                student[i] = roll;
+                                name[i] = naam;
+                                serialNumber[i] = rs.getString(k+1);
+                                hiddenCourse[i] = courseCode;
+                                i++;
+                            } else {
+                                for(index = 0; index < relativeCourseCode.length; index++) {
+                                    if(check.equals(relativeCourseCode[index])) {
+                                        student[i] = roll;
+                                        name[i] = naam;
+                                        serialNumber[i] = rs.getString(k+1);
+                                        hiddenCourse[i] = relativeCourseCode[index];
+                                        i++;
+                                    }
+                                }
+                            }
+                        }  
+                    }    
+                    naam = null;
+                    roll = null;
+                    String number = null;
+                    String hideCourse = null;
+                    int first = 0;
+                    int second = 0;
+                    if(programmeCode.equals("ALL")) {
+                    } else {
+                    }
+                    int finalLength = 0;
+                    for(i = 0; i <serialNumber.length; i++) {
+                        if(serialNumber[i] != null) {
+                            finalLength++;
+                        }
+            
+                    }
+                    System.out.println("final length is " + finalLength);
+                    /*LOGIC FOR SORTING THE ARRAY OF SERIAL NUMBER ON THE ASCENDING ORDER*/
+                    for(i = 0; i < finalLength; i++) {
+                        for(int j = i + 1; j < finalLength; j++) {
+                            first = Integer.parseInt(serialNumber[i].trim());
+                            second = Integer.parseInt(serialNumber[j].trim());
+                            if(first > second) {
+                                number = serialNumber[i];
+                                serialNumber[i] = serialNumber[j];
+                                serialNumber[j] = number;
+                                naam = name[i];
+                                name[i] = name[j];
+                                name[j] = naam;
 
-        rs=statement.executeQuery(query);
-        i=0;
-        String naam=null;
-        String roll=null;
-        while(rs.next())
-        {
-            roll=rs.getString(1);
-            naam=rs.getString(5);   
-            for(int k=17;k<=35;k=k+2)
-            {   
-                check=rs.getString(k);
-                check=check.trim();
-                if(check.equals(courseCode))
-                {   
-                    student[i]              =   roll;
-                    name[i]                 =   naam;
-                    serial_number[i]        =   rs.getString(k+1);
-                    hidden_course[i]        =   courseCode;
-                    i++;
-                }//end of if            
-                else
-                {
-                    for(index=0;index<relativeCourseCode.length;index++)
-                    {
-                        if(check.equals(relativeCourseCode[index]))
-                        {
-                            //System.out.println("inserted  in roll no "+roll );
-                            student[i]  =   roll;
-                            //System.out.println("inserted  in name "+naam );
-                            name[i]     =   naam;
-                            //System.out.println("inserted  in serial number " );
-                            serial_number[i]        =   rs.getString(k+1);
-                            //System.out.println("inserted  in hidden course " );
-                            hidden_course[i]        =   relativeCourseCode[index];
-                            i++;                        
-                        }//end of if
-                    }//end of for loop              
-                }//end of else
-            }//end of for loop  
-        }//end of while loop    
-        naam=null;
-        roll=null;
-        String number=null;
-        String hide_course=null;
-        int first=0;
-        int second=0;
-        int lenn=0;
-        if(programmeCode.equals("ALL"))
-        lenn=serial_number.length;
-        else 
-        lenn=serial_number.length;
-        int final_length=0;
-        for(i=0;i<serial_number.length;i++)
-        {
-            if(serial_number[i]!=null)
-            final_length++;
+                                roll  =student[i];
+                                student[i] = student[j];
+                                student[j] = roll;
+
+                                hideCourse = hiddenCourse[i];
+                                hiddenCourse[i] = hiddenCourse[j];
+                                hiddenCourse[j] = hideCourse;
+                            }
+                        }
+                    }
+                    /*Logic for creating int variable of available sets of the course selected*/
+                    rs = statement.executeQuery("select qty from material_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + " where crs_code='" + 
+                            courseCode + "' and block='B1' and medium='" + medium + "' ");
+                    while(rs.next()) {
+                        availableQuantity = rs.getInt(1);
+                    }
+
+                    request.setAttribute("available_qty", availableQuantity);
+
+                    /*logic for checking the students filtered above in the Despatch table*/
+                    int[] dispatchIndex;
+                    int j = 0;
+                    for(i = 0; i < finalLength; i++) {
+                        try {
+                            rs = statement.executeQuery("select distinct enrno from student_dispatch_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
+                                    " where enrno='" + student[i] + "' and " + dispatchSearchCourseCode + " and block='B1' and medium='" + medium + "'");
+                            if(rs.next()) {
+                                j++;
+                            }
+                        } catch(Exception exception) {
+                            System.out.print("nahi hai " + student[i] + ".." + exception);
+                        }
+                    }
+                    System.out.println("length of Despatch students " + j);
+                    dispatchIndex = new int[j];
+                    j = 0;
+                    for(i = 0; i < finalLength; i++) {
+                        try {
+                            rs = statement.executeQuery("select distinct enrno from student_dispatch_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
+                                    " where enrno='" + student[i] + "' and " + dispatchSearchCourseCode + " and block='B1' and medium='" + medium + "'");
+                            if(rs.next()) {   
+                                dispatchIndex[j] = i;
+                                j++;
+                            }
+                        } catch(Exception exception) {
+                            System.out.print("nahi hai " + exception);
+                        }
+                    }
+                    request.setAttribute("student", student);
+                    request.setAttribute("name", name);
+                    request.setAttribute("serial_number", serialNumber);
+                    request.setAttribute("hidden_course", hiddenCourse);
+                    request.setAttribute("dispatch_index", dispatchIndex);
+                    if(finalLength == 0) {
+                        System.out.println("No Student found...");
+                        message = message + "No Student Found";
+                        request.setAttribute("msg", message);
+                        request.getRequestDispatcher("jsp/By_post_bulk1.jsp").forward(request, response);
+                    } else if(end > finalLength) {
+                        System.out.println("Your Selection is out of Range:- Total Student " + finalLength + " and Range is " + start + " to " + end);
+                        message = message + "Your Selection is out of Range:- Total Student " + finalLength + " and Range is " + start + " to " + end; 
+                        request.setAttribute("msg", message);
+                        request.getRequestDispatcher("jsp/By_post_bulk1.jsp").forward(request, response);
+                    } else {
+                        System.out.println("NO OF STUDENTS ARE " + finalLength);
+                        message = message + "No Of Students Are " + finalLength;
+                        request.setAttribute("msg", message);
+                        request.getRequestDispatcher("jsp/By_post_bulk2.jsp?prg_code=" + programmeCode + "&crs_code=" + courseCode + "&medium=" + medium 
+                                + "&lot=" + lot + "&start=" + start + "&end=" + end + "&length=" + finalLength).forward(request, response);
+                    }  
+                } else {
+                    System.out.println("No Student found...");
+                    message = message + "No Student Found";
+                    request.setAttribute("msg", message);
+                    request.getRequestDispatcher("jsp/By_post_bulk1.jsp").forward(request, response);
+                }
+            } catch(Exception exception) {
+                System.out.println("Exception raised from BYPOSTBULKSEARCH.java " + exception);
+                message = message + "Some Serious Exception Hitted the Page.Please check on the Server Console for More Details";
+                request.setAttribute("msg", message);
+                request.getRequestDispatcher("jsp/By_post_bulk1.jsp").forward(request, response);
+            }
         }
-            System.out.println("final length is "+final_length);
-/*LOGIC FOR SORTING THE ARRAY OF SERIAL NUMBER ON THE ASCENDING ORDER*/
-        for(i=0;i<final_length;i++)
-        {
-            for(int j=i+1;j<final_length;j++)
-            {
-                first=Integer.parseInt(serial_number[i].trim());
-                second=Integer.parseInt(serial_number[j].trim());
-                //System.out.println("value of serial number in number is "+first);
-                if(first>second)
-                {
-                    number=serial_number[i];
-                    serial_number[i]=serial_number[j];
-                    serial_number[j]=number;
-    
-                    naam=name[i];
-                    name[i]=name[j];
-                    name[j]=naam;
-
-                    roll=student[i];
-                    student[i]=student[j];
-                    student[j]=roll;
-
-                    hide_course=hidden_course[i];
-                    hidden_course[i]=hidden_course[j];
-                    hidden_course[j]=hide_course;
-                }//end of if
-            }//end of j for loop
-        }//end of for loop
-/*Logic for creating int variable of available sets of the course selected*/
-rs=statement.executeQuery("select qty from material_"+currentSession+"_"+regionalCenterCode+" where crs_code='"+courseCode+"' and block='B1' and medium='"+medium+"' ");
-while(rs.next())
-availableQuantity=rs.getInt(1);
-request.setAttribute("available_qty",availableQuantity);
-
-        /*logic for checking the students filtered above in the Despatch table*/
-        int[] dispatch_index;
-        int j=0;
-        for(i=0;i<final_length;i++)
-        {
-            try
-            {
-                rs=statement.executeQuery("select distinct enrno from student_dispatch_"+currentSession+"_"+regionalCenterCode+" where enrno='"+student[i]+"' and "+dispatchSearchCourseCode+" and block='B1' and medium='"+medium+"'");
-                if(rs.next())
-                {j++;}
-            }catch(Exception ecc){System.out.print("nahi hai "+student[i]+" "+ecc);}
-        }//end of for loop
-        System.out.println("length of Despatch students "+j);
-        dispatch_index=new int[j];
-        j=0;
-        for(i=0;i<final_length;i++)
-        {
-            try
-            {
-                rs=statement.executeQuery("select distinct enrno from student_dispatch_"+currentSession+"_"+regionalCenterCode+" where enrno='"+student[i]+"' and "+dispatchSearchCourseCode+" and block='B1' and medium='"+medium+"'");
-                    if(rs.next())
-                    {   
-                    dispatch_index[j]=i;
-                    j++;
-                    }//end of if
-            }catch(Exception jd){System.out.print("nahi hai "+jd);}
-        }//end of for loop
-        //for(i=0;i<dispatch_index.length;i++)System.out.println("index of Despatched students "+dispatch_index[i]);
-    ///////////////////////////////////////////////////////////////////////////////
-            request.setAttribute("student",student);
-                request.setAttribute("name",name);
-                    request.setAttribute("serial_number",serial_number);
-                request.setAttribute("hidden_course",hidden_course);
-            request.setAttribute("dispatch_index",dispatch_index);
-        if(final_length==0)
-        {
-            System.out.println("No Student found...");
-            message=message+"No Student Found";
-            request.setAttribute("msg",message);
-            request.getRequestDispatcher("jsp/By_post_bulk1.jsp").forward(request,response);
-        }
-        else if(end>final_length)
-        {
-            System.out.println("Your Selection is out of Range:- Total Student "+final_length+" and Range is "+start+" to "+end+"");
-            message=message+"Your Selection is out of Range:- Total Student "+final_length+" and Range is "+start+" to "+end+" "; 
-            request.setAttribute("msg",message);
-            request.getRequestDispatcher("jsp/By_post_bulk1.jsp").forward(request,response);
-        }
-        else
-        {
-            System.out.println("NO OF STUDENTS ARE "+final_length+"");
-            message=message+"No Of Students Are "+final_length+" ";
-            request.setAttribute("msg",message);
-            request.getRequestDispatcher("jsp/By_post_bulk2.jsp?prg_code="+programmeCode+"&crs_code="+courseCode+"&medium="+medium+"&lot="+lot+"&start="+start+"&end="+end+"&length="+final_length+"").forward(request,response);
-        }//end of else  
-    }//end of main if(rs.next())    
-    else
-    {
-        System.out.println("No Student found...");
-        message=message+"No Student Found";
-        request.setAttribute("msg",message);
-        request.getRequestDispatcher("jsp/By_post_bulk1.jsp").forward(request,response);
-    }//end of main else of if(rs.next())
-}//end of try blocks
-catch(Exception exe)
-{
-    System.out.println("exception mila rey from BYPOSTBULKSEARCH.java "+exe);
-    message=message+"Some Serious Exception Hitted the Page.Please check on the Server Console for More Details";
-    request.setAttribute("msg",message);
-    request.getRequestDispatcher("jsp/By_post_bulk1.jsp").forward(request,response);        
-}//end of catch blocks
-finally{}//end of finally blocks
-}//end of else of session checking
-}//end of method 
-}//end of class BYPOSTBULKSEARCH
+    } 
+}

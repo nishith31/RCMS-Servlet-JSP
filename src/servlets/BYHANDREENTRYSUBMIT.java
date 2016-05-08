@@ -4,8 +4,8 @@ package servlets;
  *  DATA SUCCESSFULLY FROM THE BROWSER IT CHECKS FOR PRIMARY KEY VIOLATION AND IF EVERYTHING IS OK THEN IT SAVES ALL THE DATA TO CORESSPONDING TABLES.   
 CALLED JSP:- By_hand3.jsp*/
 import static utility.CommonUtility.isNull;
+
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -129,12 +129,12 @@ public class BYHANDREENTRYSUBMIT extends HttpServlet {
 
 
                 if(programmeGuideFlag.equals("NO") && programmeGuideValue != null ) {
-                    int o = statement.executeUpdate("insert into student_dispatch_" + currentSession + Constants.UNDERSCORE + 
+                    statement.executeUpdate("insert into student_dispatch_" + currentSession + Constants.UNDERSCORE + 
                             regionalCenterCode + "(enrno,prg_code,crs_code,block,qty,date,dispatch_source,medium,reentry,reentry_msg)values('" + 
                             enrollmentNumber + "','" + programmeCode + "','" + programmeCode + "','PG',1,'" + date + "','" + disptachSource + "','" + 
                             medium + "','" + reentry + "','" + reentryMessage + "')");
 
-                    int p = statement.executeUpdate("update material_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
+                    statement.executeUpdate("update material_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
                             " set qty=qty-1 where " + searchCourseCode + " and block='PG' and medium='" + medium + "'");
 
                     flagForProgrammeGuide = 1;
