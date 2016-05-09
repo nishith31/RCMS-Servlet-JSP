@@ -4,6 +4,7 @@ THE PRIMARY KEY FIRST IF NO VIOLATION FOUND IN THE RC DESPATCH TABLE THEN WILL S
 TABLES AND GENERATE APPROPRIATE MESSAGE.
 CALLED JSP:-By_rc_pg1.jsp*/
 import static utility.CommonUtility.isNull;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -29,6 +30,7 @@ public class BYRC_PG_SUBMIT extends HttpServlet {
         super.init(config);
     } 
  
+    @SuppressWarnings("unused")
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
         if(isNull(session)) {
@@ -36,14 +38,14 @@ public class BYRC_PG_SUBMIT extends HttpServlet {
             request.setAttribute("msg", message);
             request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
         } else {
-            String reg_code         =       request.getParameter("mnu_reg_code").toUpperCase();//FIELD FOR HOLDING THE REGIONAL CENTRE CODE
-            String reg_name         =       request.getParameter("mnu_reg_name").toUpperCase();//FIELD FOR HOLDING THE REGIONAL CENTRE CODE
-            String programmeCode         =    request.getParameter("mnu_prg_code").toUpperCase();//FIELD FOR HOLDING THE REGIONAL CENTRE CODE
-            int quantity                 =    Integer.parseInt(request.getParameter("text_qty"));
-            String medium           =    request.getParameter("txtmedium").toUpperCase();//FIELD FOR HOLDING THE MEDIUM SELECTED BY THE STUDENT
-            String date             =    request.getParameter("txtdate");//FIELD FOR HOLDING THE DATE SELECTED BY THE STUDENT
-            String remarks          =    request.getParameter("txtrsn").toUpperCase();//FIELD FOR HOLDING THE REASON FOR Despatch OF MATERIAL TO REGIONAL CENTRE
-            String currentSession  =    request.getParameter("txtsession").toLowerCase();//FIELD FOR HOLDING THE NAME OF THE CURRENT SESSION THAT IS BEING CREATED
+            String reg_code = request.getParameter("mnu_reg_code").toUpperCase();//FIELD FOR HOLDING THE REGIONAL CENTRE CODE
+            String reg_name = request.getParameter("mnu_reg_name").toUpperCase();//FIELD FOR HOLDING THE REGIONAL CENTRE CODE
+            String programmeCode = request.getParameter("mnu_prg_code").toUpperCase();//FIELD FOR HOLDING THE REGIONAL CENTRE CODE
+            int quantity = Integer.parseInt(request.getParameter("text_qty"));
+            String medium = request.getParameter("txtmedium").toUpperCase();//FIELD FOR HOLDING THE MEDIUM SELECTED BY THE STUDENT
+            String date = request.getParameter("txtdate");//FIELD FOR HOLDING THE DATE SELECTED BY THE STUDENT
+            String remarks = request.getParameter("txtrsn").toUpperCase();//FIELD FOR HOLDING THE REASON FOR Despatch OF MATERIAL TO REGIONAL CENTRE
+            String currentSession = request.getParameter("txtsession").toLowerCase();//FIELD FOR HOLDING THE NAME OF THE CURRENT SESSION THAT IS BEING CREATED
             int remainingQuantity = 0;                                                               //FIELD FOR HOLDING THE REMAINING QUANTITY AFTER Despatch
             int actualQuantity = 0;                                                           //FIELD FOR HOLDING THE AVAILABLE QUANTITY OF MATERIALS BEFORE Despatch IN STOCK
             int result = 5, result1 = 5;
@@ -53,32 +55,39 @@ public class BYRC_PG_SUBMIT extends HttpServlet {
             
             response.setContentType(Constants.HEADER_TYPE_HTML);
             try {
-                Connection connection =   connections.ConnectionProvider.conn();
-                Statement stmt      =   connection.createStatement();
-                int flagForReturn =   0,  flagForDuplicate = 0;
+                Connection connection = connections.ConnectionProvider.conn();
+                Statement statement = connection.createStatement();
+                int flagForReturn = 0, flagForDuplicate = 0;
                 String quantityRemain = ""; 
             
-                rs = stmt.executeQuery("select * from rc_dispatch_" + currentSession + Constants.UNDERSCORE + regionalCenterCode +
+                rs = statement.executeQuery("select * from rc_dispatch_" + currentSession + Constants.UNDERSCORE + regionalCenterCode +
                         " where reg_code='" + reg_code + "' and crs_code='" + programmeCode + "' and block='PG' and date='" + date + "'");
                 if(!rs.next()) {
                     //IF DUPLICATE RECORDS NOT FOUND THEN ENTER ON THIS SECTION FOR FURTHER ACTIONS OTHERWISE TO ELSE BLOCK.
-                    rs = stmt.executeQuery("select qty from material_"+currentSession+"_"+regionalCenterCode+" where crs_code='"+programmeCode+"' and block='PG' and medium='"+medium+"'");
+                    rs = statement.executeQuery("select qty from material_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
+                            " where crs_code='" + programmeCode + "' and block='PG' and medium='" + medium + "'");
                     while(rs.next()) {
-                        actualQuantity=rs.getInt(1);
+                        actualQuantity = rs.getInt(1);
                     }
                     
-                    if(actualQuantity-quantity>-1) {
-                        result=stmt.executeUpdate("insert into rc_dispatch_"+currentSession+"_"+regionalCenterCode+" values('"+reg_code+"','"+programmeCode+"','PG',"+quantity+",'"+medium+"','"+date+"','"+remarks+"')");   
-                        result1=stmt.executeUpdate("update material_"+currentSession+"_"+regionalCenterCode+" set qty=qty-"+quantity+" where crs_code='"+programmeCode+"' and block='PG' and medium='"+medium+"'");
-                        rs=stmt.executeQuery("select qty from material_"+currentSession+"_"+regionalCenterCode+" where crs_code='"+programmeCode+"' and block='PG' and medium='"+medium+"'");
+                    if(actualQuantity - quantity > -1) {
+                        result = statement.executeUpdate("insert into rc_dispatch_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
+                                " values('" + reg_code + "','" + programmeCode + "','PG'," + quantity + ",'" + medium + "','" + date + "','" + remarks + "')");
+
+                        result1 = statement.executeUpdate("update material_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + " set qty=qty-" + 
+                        quantity + " where crs_code='" + programmeCode + "' and block='PG' and medium='" + medium + "'");
+
+                        rs = statement.executeQuery("select qty from material_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + " where crs_code='" + 
+                        programmeCode + "' and block='PG' and medium='" + medium + "'");
+
                         while(rs.next()) {
-                            remainingQuantity=rs.getInt(1);
-                            quantityRemain=quantityRemain+remainingQuantity+" set remained of PROGRAMME GUIDE OF "+programmeCode+" <br/>";
+                            remainingQuantity = rs.getInt(1);
+                            quantityRemain = quantityRemain + remainingQuantity + " set remained of PROGRAMME GUIDE OF " + programmeCode + " <br/>";
                         }
             
-                        if(result==1 && result1==1){   
-                            message = "" + quantity + " PRGRAMME GUIDE OF " + programmeCode + " Despatched to " + reg_name + "("+reg_code+").<br/>"+quantityRemain;
-                        } else if(result==1 && result1 !=1) {
+                        if(result == 1 && result1 == 1){   
+                            message = "" + quantity + " PRGRAMME GUIDE OF " + programmeCode + " Despatched to " + reg_name + "(" + reg_code + ").<br/>" + quantityRemain;
+                        } else if(result == 1 && result1 != 1) {
                             message = "Despatch table Hitted but material Table not Affected!!!";
                         } else {
                             message = "No Operation Performed..!!";

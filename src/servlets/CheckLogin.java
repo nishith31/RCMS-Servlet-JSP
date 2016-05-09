@@ -147,7 +147,7 @@ public class CheckLogin extends HttpServlet {
                 session.setAttribute("login_ip_address", ipAddress);
                 session.setAttribute("login_start_time", startTime);
             
-                int result = statement.executeUpdate("insert into master_log_details(reg_code,user_role,username,login_time,browser_name,browser_version,ip_address,start_time)values('"
+                statement.executeUpdate("insert into master_log_details(reg_code,user_role,username,login_time,browser_name,browser_version,ip_address,start_time)values('"
                         + regionalCenterCode + "','" + role + "','" + userName+"','" + loginTime + "','" + browsername + "','" + browserversion + "','" + ipAddress + "',"+startTime+")");
 
                 System.out.println("reg_code: " + regionalCenterCode + " user role: " + role + " username: " + userName);
@@ -284,7 +284,7 @@ public class CheckLogin extends HttpServlet {
                 session.setAttribute("login_ip_address", ipAddress);
                 session.setAttribute("login_start_time", startTime);
             
-                int result = statement.executeUpdate("insert into master_log_details(reg_code,user_role,username,login_time,browser_name,browser_version,"
+                statement.executeUpdate("insert into master_log_details(reg_code,user_role,username,login_time,browser_name,browser_version,"
                         + "ip_address,start_time)values('" + rc + "','" + role + "','" + userName + "','" + loginTime + "','" + browserName + 
                         "','" + browserversion + "','" + ipAddress + "'," + startTime + ")");
 
