@@ -20,14 +20,12 @@ import utility.Constants;
  
 public class RECEIVEOTHERS extends HttpServlet {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("RECEIVEOTHERS SERVLET STARTED TO EXECUTE");
     } 
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
         if(isNull(session)) {
@@ -44,7 +42,7 @@ public class RECEIVEOTHERS extends HttpServlet {
             int quantity = Integer.parseInt(request.getParameter("text_set"));
             String date = request.getParameter("text_date").toUpperCase();
             String receiveFrom = request.getParameter("receive_from").toLowerCase();
-    
+
             String regionalCenterCode = (String)session.getAttribute("rc");
             System.out.println("fields from others receive page successfully " + medium);
             String message = null;
@@ -53,6 +51,7 @@ public class RECEIVEOTHERS extends HttpServlet {
             if(flag.equals("OLD")) {
                 query = "select * from others_receive_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
                         " where crs_code='" + courseCode + "' and date='" + date + "'";
+
                 receiptType = request.getParameter("receipt_type");
             }
             if(flag.equals("NEW")) {
@@ -73,15 +72,17 @@ public class RECEIVEOTHERS extends HttpServlet {
                     if(receiptType.equals("complete")) {
                         message = "Entry Already Exist for Course: <br/>";
                         rs1 = statement.executeQuery("select no_of_blocks from course where crs_code='" + courseCode + "'");
+
                         while(rs1.next()) {
                             blocks = rs1.getInt(1);
                         }
-            
+
                         for(index = 0; index < blocks; index++) {
                             no = index + 1;
                             blockName = "B" + no;
                             first = statement.executeQuery("select * from others_receive_" + currentSession + Constants.UNDERSCORE + 
                                     regionalCenterCode + " where crs_code='" + courseCode + "' and block='" + blockName + "' and date='" + date + "'");
+
                             if(first.next()) {
                                 flagForReturn = 1;
                                 System.out.println("Entry Already Exist for Course " + courseCode + " block: " + blockName + " for date " + date);

@@ -21,14 +21,12 @@ import javax.servlet.http.HttpSession;
 
 import utility.Constants;
 public class BYSCSTUDENTSUBMIT extends HttpServlet {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("BYSCSTUDENTSUBMIT SERVLET STARTED TO EXECUTE");
     } 
+
     @SuppressWarnings({ "unused", "resource" })
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
@@ -51,15 +49,11 @@ public class BYSCSTUDENTSUBMIT extends HttpServlet {
             String firstTimer = request.getParameter("first_timer").toUpperCase();
             String buttonValue = request.getParameter("enter").toUpperCase();
             buttonValue = buttonValue.trim();
-    
+
             String[] student = request.getParameterValues("all_enr");
-            System.out.println("Total Number of Students: " + student.length);    
             String[] name = request.getParameterValues("name");
-            System.out.println("Total Name of Students: " + name.length); 
             String[] hiddenCourse = request.getParameterValues("hide_course");
-            System.out.println("Total Number of hidden course : " + hiddenCourse.length);    
-            
-        
+
             int dispatchStudentCount = 0, index = 0;
             int quantity = 0;//FIELD FOR HOLDING THE NUMBER OF MATERIALS TO BE DISPATCHED TO THE STUDENTS
             String remarks = "FOR STUDENTS";//FIELD FOR THE REMARKS IN THE SC_DISPATCH TABLE BECAUSE THIS CONTAIN TWO TYPE OF ENTRY ON FOR STUDENT AND OTHER FOR SC OFFICE USE
@@ -71,14 +65,14 @@ public class BYSCSTUDENTSUBMIT extends HttpServlet {
 
             String regionalCenterCode = (String)session.getAttribute("rc");
             System.out.println("All Parameters received from JSP"); 
-            request.setAttribute("first_timer", firstTimer);       
-            request.setAttribute("number_of_blocks", numberOfBlocks);      
+            request.setAttribute("first_timer", firstTimer);
+            request.setAttribute("number_of_blocks", numberOfBlocks);
             request.setAttribute("initial_block", initialBlock);
             request.setAttribute("student", student);
             request.setAttribute("name", name);
             request.setAttribute("hidden_course", hiddenCourse);
             request.setAttribute("semester", year);
-            request.setAttribute("current_session", currentSession);        
+            request.setAttribute("current_session", currentSession);
             request.setAttribute("date", date);
 
             int availableQuantity = 0;
@@ -91,17 +85,19 @@ public class BYSCSTUDENTSUBMIT extends HttpServlet {
                 int result = 5, result1 = 5, result2 = 5, blocks = 0;
                 blk = statement.executeQuery("select relative_crs_code from course_course where absolute_crs_code='" + courseCode + 
                             "' and rc_code='" + regionalCenterCode + "'");
+
                 while(blk.next()) {
                     relativeCourse = blk.getString(1);
                 }
-    
+
                 /*LOGIC FOR GETTING THE RELATIVE COURSE CODE FROM THE ACTUAL COURSE CODE*/  
                 String[] relativeCourseCode = new String[0];
                 rs = statement.executeQuery("select count(*) from course_course where absolute_crs_code='" + courseCode + "' and rc_code='" + regionalCenterCode + "'");
+
                 if(rs.next()) {
                     relativeCourseCode = new String[rs.getInt(1)];
                 }
-        
+
                 index = 0;
                 rs = statement.executeQuery("select relative_crs_code from course_course where absolute_crs_code='" + courseCode + "' and rc_code='" + regionalCenterCode + "'");
                 while(rs.next()) {
@@ -113,7 +109,7 @@ public class BYSCSTUDENTSUBMIT extends HttpServlet {
                 for(index = 0; index < relativeCourseCode.length; index++) {
                     dispatchCourseCode = dispatchCourseCode + " or crs_code='" + relativeCourseCode[index] + "'";
                 }
-                dispatchCourseCode = dispatchCourseCode + ")";        
+                dispatchCourseCode = dispatchCourseCode + ")";
 
                 if(buttonValue.equals("SKIP")) {
                     if(numberOfBlocks > 0) {
@@ -134,7 +130,6 @@ public class BYSCSTUDENTSUBMIT extends HttpServlet {
                         String[] dispatchName = new String[dispatchStudentCount];
                         String[] dispatchDate = new String[dispatchStudentCount];
                         String[] dispatchMode = new String[dispatchStudentCount];
-                        System.out.println("Array of Student Dispatched Created of length " + dispatchStudentCount);
                         index = 0;
                         int insertIndex = 0;
                         /*Inserting the Roll Numbers of the Despatched Students of the Study Centres*/      
@@ -162,20 +157,20 @@ public class BYSCSTUDENTSUBMIT extends HttpServlet {
                         while(rs.next()) {
                             availableQuantity = rs.getInt(1);
                         }
-                
+
                         request.setAttribute("available_qty", availableQuantity);
                         /*SETTING THE DESPATCH INDEXES FOR THE NEXT PAGE*/
                         request.setAttribute("dispatch_student", dispatchStudent);
                         request.setAttribute("dispatch_date", dispatchDate);
                         request.setAttribute("dispatch_mode", dispatchMode);
                         request.setAttribute("dispatch_name", dispatchName);
-        
+
                         try {
                                 message = (String)request.getAttribute("alternate_msg");
                         } catch(Exception exception) { 
                             message = null;
                         }
-        
+
                         j = j - 1;
                         if(message == null) {
                             message = "You have Skipped the Despatch Of Block " + j + ".";

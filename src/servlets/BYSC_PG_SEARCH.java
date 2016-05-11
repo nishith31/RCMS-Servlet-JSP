@@ -18,15 +18,12 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class BYSC_PG_SEARCH extends HttpServlet {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("BYSC_PG_SEARCH SERVLET STARTED");
     }
-    
+
     @SuppressWarnings("unused")
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
@@ -67,7 +64,7 @@ public class BYSC_PG_SEARCH extends HttpServlet {
                 if(rs.next()) {
                     relativeCourseCode = new String[rs.getInt(1)];
                 }
-        
+
                 index = 0;
                 rs = statement.executeQuery("select relative_crs_code from course_course where absolute_crs_code='" + courseCode + 
                         "' and rc_code='" + regionalCenterCode + "'");
@@ -75,6 +72,7 @@ public class BYSC_PG_SEARCH extends HttpServlet {
                     relativeCourseCode[index] = rs.getString(1);
                     index++;
                 }
+
                 /*LOGIC FOR CREATING THE RELATIVE COURSE CODE FROM ACTUAL COURSE CODE FOR CHECKING IN DESPATCH DATABASE*/
                 String dispatchCourseCode = "(crs_code='"  +courseCode + "'";
                 for(index = 0; index < relativeCourseCode.length; index++) {
@@ -87,7 +85,7 @@ public class BYSC_PG_SEARCH extends HttpServlet {
                 if(rs.next()) {
                     relativeProgrammeCode = new String[rs.getInt(1)];
                 }
-        
+
                 index = 0;
                 rs = statement.executeQuery("select relative_prg_code from program_program where absolute_prg_code='" + programmeCode + 
                             "' and rc_code='" + regionalCenterCode + "'");
@@ -101,14 +99,14 @@ public class BYSC_PG_SEARCH extends HttpServlet {
                 } else {
                     searchProgrammeCode = "(prg_code='" + programmeCode + year + "'";
                 }
-                    
+
                 for(index = 0; index < relativeProgrammeCode.length; index++) {
                     if(year.equals("NA") || year.equals("1")) {
                         searchProgrammeCode = searchProgrammeCode + " or prg_code='" + relativeProgrammeCode[index] + "'";
                     } else {
                         searchProgrammeCode = searchProgrammeCode + " or prg_code='" + relativeProgrammeCode[index] + year + "'";
                     }
-                 
+
                 }
                 searchProgrammeCode = searchProgrammeCode + ")";    //creation of prg_code complete like prg_code=this or prg_code=that
                 System.out.println("value of search prg code= " + searchProgrammeCode);
@@ -119,10 +117,12 @@ public class BYSC_PG_SEARCH extends HttpServlet {
                 int result = 5, result1 = 5;
                 rs = statement.executeQuery("select *  from student_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
                         " where sc_code='" + studyCenterCode + "' and " + searchProgrammeCode + "");
+
                 String check = null;
                 if(rs.next()) {
                     rs = statement.executeQuery("select *  from student_" + currentSession + Constants.UNDERSCORE + regionalCenterCode 
                                 + " where sc_code='" + studyCenterCode + "' and "+searchProgrammeCode);
+
                     while(rs.next()) {
                         for(int j = 17; j <= 35;) {
                             check = rs.getString(j);
@@ -168,7 +168,7 @@ public class BYSC_PG_SEARCH extends HttpServlet {
                             }
                         }  
                     }
-        
+
                     request.setAttribute("student", student);
                     request.setAttribute("name", name);
                     /*LOGIC FOR GETTING THE ACTUAL NUMBER OF STUDENRS TO WHOM PROGRAMME GUIDE HAS BEEN ALREADY DESPATCHED*/         
@@ -212,7 +212,7 @@ public class BYSC_PG_SEARCH extends HttpServlet {
                     while(rs.next()) {
                         availableQuantity = rs.getInt(1);
                     }
-        
+
                     request.setAttribute("available_qty", availableQuantity);
                     /*LOGIC FOR SETTING ALL THE DESPATCH RELATED INFORMATION ON THE REQUEST FOR THE NEXT PAGE*/         
                     request.setAttribute("dispatch_student", dispatchStudent);
@@ -237,7 +237,7 @@ public class BYSC_PG_SEARCH extends HttpServlet {
                         request.getRequestDispatcher("jsp/To_sc_students_pg1.jsp?sc_code=" + studyCenterCode + "&prg_code=" + programmeCode + 
                                 "&crs_code=" + courseCode + "&year=" + year + "&medium=" + medium + "&sets=" + student.length).forward(request, response);
                     }
-            
+
                 } else {
                     message = "No Students for Study Centre " + studyCenterCode + "<br/>  Of Program " + programmeCode + " <br/> Of Course" + courseCode;
                     request.setAttribute("msg", message);

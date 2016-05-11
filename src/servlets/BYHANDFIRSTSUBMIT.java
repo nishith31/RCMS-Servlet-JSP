@@ -19,16 +19,12 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class BYHANDFIRSTSUBMIT extends HttpServlet {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
-
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("BYHANDFIRSTSUBMIT SERVLET STARTED TO EXECUTE");
     } 
- 
+
     @SuppressWarnings("unused")
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting the reference of the session of the system to the session variable

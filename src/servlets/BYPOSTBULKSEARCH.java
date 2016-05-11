@@ -18,16 +18,12 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class BYPOSTBULKSEARCH extends HttpServlet {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
-
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("BYPOSTBULKSEARCH SERVLET STARTED TO EXECUTE");
     }
- 
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
         if(isNull(session)) {
@@ -38,7 +34,6 @@ public class BYPOSTBULKSEARCH extends HttpServlet {
             /*LOGIC FOR GETTING ALL THE PARAMETERS FROM THE BROWSER*/   
             String firstTimer = request.getParameter("first_timer").toUpperCase();
             System.out.println("value of first_timer is " + firstTimer);
-    
 
             String programmeCode = request.getParameter("mnu_prg_code").toUpperCase();
             String courseCode = request.getParameter("mnu_crs_code").toUpperCase();
@@ -46,8 +41,6 @@ public class BYPOSTBULKSEARCH extends HttpServlet {
             String lot = request.getParameter("text_lot").toUpperCase();
             int start = Integer.parseInt(request.getParameter("text_start"));
             int end = Integer.parseInt(request.getParameter("text_end"));
-
-            System.out.println("All parameters received. Course code: "+courseCode+" Programme Code: " + programmeCode);
 
             String regionalCenterCode = (String)session.getAttribute("rc");
             System.out.println("course code " + courseCode);
@@ -74,10 +67,11 @@ public class BYPOSTBULKSEARCH extends HttpServlet {
                 Connection connection = connections.ConnectionProvider.conn();
                 Statement statement = connection.createStatement();
                 block = statement.executeQuery("select no_of_blocks from course where crs_code='" + courseCode + "'");
+
                 while(block.next()) {
                     numberOfBlocks=block.getInt(1);
                 }
-    
+
                 request.setAttribute("number_of_blocks", numberOfBlocks);
                 request.setAttribute("first_timer", firstTimer);
                 /*request.setAttribute("date",date);        
@@ -92,12 +86,14 @@ public class BYPOSTBULKSEARCH extends HttpServlet {
                 /*LOGIC FOR GETTING THE RELATIVE COURSE CODE FROM THE ACTUAL COURSE CODE*/  
                 String[] relativeCourseCode = new String[0];
                 rs = statement.executeQuery("select count(*) from course_course where absolute_crs_code='" + courseCode + "' and rc_code='" + regionalCenterCode + "'");
+
                 if(rs.next()) {
                     relativeCourseCode=new String[rs.getInt(1)];
                 }
                 index = 0;
                 rs = statement.executeQuery("select relative_crs_code from course_course where absolute_crs_code='" + courseCode + 
                         "' and rc_code='" + regionalCenterCode + "'");
+
                 while(rs.next()) {
                     relativeCourseCode[index] = rs.getString(1);
                     index++;
@@ -122,6 +118,7 @@ public class BYPOSTBULKSEARCH extends HttpServlet {
                 String course18 = "(crs18='" + courseCode + "'";
                 String course19 = "(crs19='" + courseCode + "'";
                 String course20 = "(crs20='" + courseCode + "'";
+
                 for(index = 0; index < relativeCourseCode.length; index++) {
                     course1 = course1 + " or crs1='"+relativeCourseCode[index]+"'";
                     course2 = course2 + " or crs2='" + relativeCourseCode[index] + "'";
@@ -144,6 +141,7 @@ public class BYPOSTBULKSEARCH extends HttpServlet {
                     course19 = course19 + " or crs19='" + relativeCourseCode[index] + "'";
                     course20 = course20 + " or crs20='" + relativeCourseCode[index] + "'";
                 }
+
                 course1 = course1 + ")";
                 course2 = course2 + ")";
                 course3 = course3 + ")";
@@ -164,6 +162,7 @@ public class BYPOSTBULKSEARCH extends HttpServlet {
                 course18 = course18 + ")";
                 course19 = course19 + ")";
                 course20 = course20 + ")";
+
                 /*LOGIC FOR GETTING THE RELATIVE COURSE CODE FROM ACTUAL COURSE CODE FOR CHECKING IN DESPATCH DATABASE*/
                 String dispatchSearchCourseCode = "(crs_code='" + courseCode + "'";
                 for(index = 0; index < relativeCourseCode.length; index++) {
@@ -233,21 +232,16 @@ public class BYPOSTBULKSEARCH extends HttpServlet {
                                     if(check.equals(relativeCourseCode[index])) {
                                         length++;
                                     }
-                        
+
                                 }
                             }
                             j = j + 2;
                         }  
                     }
-                    System.out.println("Number of students " + length);
                     String student[] = new String[length];
-                    System.out.println("length of student array in servlet " + student.length);
                     String name[] = new String[length];
-                    System.out.println("length of student's name array in servlet " + name.length);
                     String serialNumber[] = new String[length];
-                    System.out.println("length of student's serial number array in servlet " + serialNumber.length);
                     String hiddenCourse[] = new String[length];
-                    System.out.println("length of hidden course array in servlet " + hiddenCourse.length);
 
                     rs = statement.executeQuery(query);
                     i = 0;
@@ -292,7 +286,7 @@ public class BYPOSTBULKSEARCH extends HttpServlet {
                         if(serialNumber[i] != null) {
                             finalLength++;
                         }
-            
+
                     }
                     System.out.println("final length is " + finalLength);
                     /*LOGIC FOR SORTING THE ARRAY OF SERIAL NUMBER ON THE ASCENDING ORDER*/

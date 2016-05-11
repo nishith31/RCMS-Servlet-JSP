@@ -20,15 +20,13 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class BYPOSTSUBMIT extends HttpServlet {
-    
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("BYPOSTSUBMIT SERVLET STARTED TO EXECUTE");
     } 
+
     @SuppressWarnings("unused")
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
@@ -85,19 +83,16 @@ public class BYPOSTSUBMIT extends HttpServlet {
                     }
                 }
             }
+
             String programmeGuideFlag = request.getParameter("pg_flag").trim();//
             String programmeGuideValue = null;
             if(programmeGuideFlag.equals("NO")) {
                 programmeGuideValue=request.getParameter("program_guide");
             }
-                
-            System.out.println("pg_value:" + programmeGuideValue);
-    
-            System.out.println("Courses selected for Despatch:" + blockCount);
             ResultSet rs = null, rs1 = null;
-
             response.setContentType(Constants.HEADER_TYPE_HTML);
             response.getWriter();
+
             try {
                 Connection connection = connections.ConnectionProvider.conn();
                 Statement statement = connection.createStatement();
@@ -108,9 +103,10 @@ public class BYPOSTSUBMIT extends HttpServlet {
                 if(rs.next()) {
                     relativeProgrammecode = new String[rs.getInt(1)];
                 }
-        
+
                 index = 0;
                 rs = statement.executeQuery("select absolute_prg_code from program_program where relative_prg_code='" + programmeCode + "' and rc_code='" + regionalCenterCode + "'");
+
                 while(rs.next()) {
                     relativeProgrammecode[index] = rs.getString(1);
                     index++;
@@ -119,26 +115,27 @@ public class BYPOSTSUBMIT extends HttpServlet {
                 for(index = 0; index < relativeProgrammecode.length; index++) {
                     searchCourseCode = searchCourseCode + " or crs_code='" + relativeProgrammecode[index].trim() + "'";
                 }
-            
+
                 searchCourseCode = searchCourseCode + ")";
-                System.out.println("value of search_crs_code " + searchCourseCode);
-    
+
                 if(programmeGuideFlag.equals("NO") && programmeGuideValue != null ) {
                     statement.executeUpdate("insert into student_dispatch_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
                             "(enrno,prg_code,crs_code,block,qty,date,dispatch_source,medium,challan_no,pkt_weight,pkt_type,reentry,express_no)values('" +
                             enrollmentNumber + "','" + programmeCode + "','" + programmeCode + "','PG',1,'" + date + "','" + dispatchSource + "','" + medium + "','"
                             + challanNumber + "'," + packetWeight + ",'" + packetType + "','NO','" + expressNumber + "')");
+
                     statement.executeUpdate("update material_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + " set qty=qty-1 where " + searchCourseCode
                             + " and block='PG' and medium='" + medium + "'");
                     flagForProgrammeGuide = 1;
                 }
-    
+
                 if (blockCount != 0) {
                     quantity = blockCount;
                     for(int z = 0; z < course.length; z++) {
                         int len = course[z].length();
                         for(int y = 0; y < courseDispatch.length; y++) {
                             rs1 = statement .executeQuery("Select * from course where crs_code='" + course[z] + "'");//checking the course in course table
+
                             if(rs1.next()) {
                                 relativeCourse = course[z];
                             } else {
@@ -147,7 +144,7 @@ public class BYPOSTSUBMIT extends HttpServlet {
                                 while(rs1.next()) {
                                     relativeCourse = rs1.getString(1);
                                 }
-                    
+
                             }
                             String courseCheck = courseDispatch[y].substring(0, len);
                             String blockCheck = courseDispatch[y].substring(len);
@@ -156,9 +153,10 @@ public class BYPOSTSUBMIT extends HttpServlet {
                                 if(initial.equals("B")) {
                                     rs = statement.executeQuery("select qty from material_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
                                             " where crs_code='" + relativeCourse + "' and block='" + blockCheck + "' and medium='" + medium + "'");
+
                                     while(rs.next()) {
                                         actualQuantity = rs.getInt(1);
-                                    }                        
+                                    }
                                     if(actualQuantity < 1) {
                                         flagForReturn++;
                                         message = message + " 1 set of Block " + blockCheck.substring(1) + " of " + course[z] + " Course.<br/>";
@@ -167,6 +165,7 @@ public class BYPOSTSUBMIT extends HttpServlet {
                             }
                         }
                     }
+
                     if(flagForReturn == 0) {
                         for(int z = 0; z < course.length; z++) {
                             int length = course[z].length();
@@ -180,7 +179,7 @@ public class BYPOSTSUBMIT extends HttpServlet {
                                     while(rs1.next()) {
                                         relativeCourse = rs1.getString(1);
                                     }
-                        
+
                                 }
                                 String courseCheck = courseDispatch[y].substring(0, length);
                                 String blockCheck = courseDispatch[y].substring(length);
@@ -198,6 +197,7 @@ public class BYPOSTSUBMIT extends HttpServlet {
                                 }
                             }
                         }    
+
                         if(result == 1 && result1 == 1) {   
                             System.out.println("Materials for " + course.length + " courses given to " + name);   
                             message = "" + courseDispatch.length + " Books Despatched to " + name + ".";
@@ -210,9 +210,8 @@ public class BYPOSTSUBMIT extends HttpServlet {
                         }
                         request.setAttribute("msg", message);
                         request.getRequestDispatcher("jsp/By_post.jsp").forward(request, response);
-            
+
                     } else {
-                        System.out.println("Sorry Material out of stock for " + flagForReturn + " Courses.");
                         String supplementaryMessage="Sorry Can not Despatch<br/>";
                         message = supplementaryMessage + message + "As Not Available in Stock.";
                         request.setAttribute("alternate_msg", message);
@@ -237,5 +236,4 @@ public class BYPOSTSUBMIT extends HttpServlet {
             }
         }
     }
- 
 }

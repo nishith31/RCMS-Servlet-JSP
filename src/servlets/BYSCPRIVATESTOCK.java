@@ -21,15 +21,13 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class BYSCPRIVATESTOCK extends HttpServlet {
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("BYSCPRIVATESTOCK SERVLET STARTED TO EXECUTE");
     }
-    
+
     @SuppressWarnings("unused")
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
@@ -59,7 +57,7 @@ public class BYSCPRIVATESTOCK extends HttpServlet {
                 while(rs.next()) {
                     blocks=rs.getInt(1);
                 }
-    
+
                 /*Logic for creating int variable of available sets of the blocks of the course selected*/
                 int availableQuantity[] = new int[blocks];
                 String block[] = new String[blocks];
@@ -80,7 +78,7 @@ public class BYSCPRIVATESTOCK extends HttpServlet {
                 while(rs.next()) {
                     studyCenterName = rs.getString(1);//getting the sc_name from database
                 }
-    
+
                 request.setAttribute("msg", message);
                 request.getRequestDispatcher("jsp/To_sc_office1.jsp?sc_code=" + studyCenterCode + "&sc_name=" + studyCenterName + "&prg_code="  +programmeCode + 
                         "&crs_code=" + courseCode + "&medium=" + medium).forward(request, response);  

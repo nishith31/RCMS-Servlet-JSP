@@ -18,15 +18,12 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class BYSCPRIVATE_PG_SUBMIT extends HttpServlet {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("BYSCPRIVATE_PG_SUBMIT SERVLET STARTED TO EXECUTE");
     }
-    
+
     @SuppressWarnings("unused")
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
@@ -46,7 +43,7 @@ public class BYSCPRIVATE_PG_SUBMIT extends HttpServlet {
             int remainQuantity = 0;//VARIABLE FOR HOLDING THE REMAINING QUANTITY OF MATERIALS AFTER SUCCESSFUL Despatch OF MATERIALS
             int result = 0, result1 = 0;
             String regionalCenterCode = (String)session.getAttribute("rc");//getting the code of thr rc which is logged in to the system
-    
+
             response.setContentType(Constants.HEADER_TYPE_HTML);
             ResultSet rs = null;
             try {
@@ -65,7 +62,7 @@ public class BYSCPRIVATE_PG_SUBMIT extends HttpServlet {
                     while(rs.next()) {
                         actualQuantity = rs.getInt(1);
                     }
-            
+
                     if(actualQuantity - quantity > -1) {
                         //IF MATERIAL IS AVAILABLE FOR Despatch THEN THIS SECTION WILL WORK OTHERWISE ELSE BLOCK WILL WORK
                         result = statement.executeUpdate("insert into sc_dispatch_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + " values('" + 
@@ -79,7 +76,7 @@ public class BYSCPRIVATE_PG_SUBMIT extends HttpServlet {
                         while(rs.next()) {
                             remainQuantity = rs.getInt(1);
                         }
-                
+
                         if(result == 1 && result1 == 1) {
                             message = "Successfully despatched to SC " + studyCenterCode + " PROGRAMME GUIDE OF  " + programmeCode + " sets= " + quantity;
                         } else if(result == 1 && result1 != 1) {
@@ -101,8 +98,9 @@ public class BYSCPRIVATE_PG_SUBMIT extends HttpServlet {
                     System.out.println("Sorry..Primary key violation..can not enter these details in the System...");
                     message = "You Cannot enter these details as they already Exists.<br/>Please Change One or More thing from the Combination of<br/> Study Centre= "
                             + studyCenterCode + "<br/>PROGRAMME GUIDE OF = " + programmeCode + "<br/>Date = " + date + "<br/> Remarks= " + remarks;
-                        request.setAttribute("msg", message);
-                        request.getRequestDispatcher("jsp/To_sc_office_pg.jsp").forward(request, response);
+
+                    request.setAttribute("msg", message);
+                    request.getRequestDispatcher("jsp/To_sc_office_pg.jsp").forward(request, response);
                 }
             } catch(Exception exception) {
                 System.out.println("Exception raised from BYSCPRIVATE_PG_SUBMIT.java " + exception);

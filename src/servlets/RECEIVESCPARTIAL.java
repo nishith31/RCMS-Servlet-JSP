@@ -21,14 +21,13 @@ import javax.servlet.http.HttpSession;
 
 import utility.Constants;
 public class RECEIVESCPARTIAL extends HttpServlet {
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("BYHANDFIRSTSUBMIT SERVLET STARTED TO EXECUTE");
     } 
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
         if(isNull(session)) {
@@ -37,7 +36,7 @@ public class RECEIVESCPARTIAL extends HttpServlet {
             request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
         } else {
             String currentSession = request.getParameter("txt_session").toLowerCase();//getting the value of current session
-            String studyCenterCode = request.getParameter("mnu_sc_code").toUpperCase();//gettting the prgram code
+            String studyCenterCode = request.getParameter("mnu_sc_code").toUpperCase();//getting the program code
             String[] course = request.getParameterValues("crs_code");//all the course codes from the jsp page
             int blockCount = 0;//int variable for number of blocks available with the course
             int count = 0;//int variable for multiple use
@@ -50,7 +49,7 @@ public class RECEIVESCPARTIAL extends HttpServlet {
                     blockCount = blockCount + temp.length;
                 }
             }
-            String[] courseDispatch = new String[blockCount];//array for holding the blocks to be receieved
+            String[] courseDispatch = new String[blockCount];//array for holding the blocks to be received
             String[] blockQuantity = new String[blockCount];//array for holding the quantity of the blocks to be received
             /*logic for getting all the courses selected by the user*/
             for(index = 0; index < course.length; index++) {
@@ -64,12 +63,11 @@ public class RECEIVESCPARTIAL extends HttpServlet {
                     }
                 }
             }
-    
+
             String medium = request.getParameter("txt_medium").toUpperCase();//getting the medium selected by the user
             String date = request.getParameter("txt_date").toUpperCase();//date from the jsp page date field
             int flagForReturn = 0;
             ResultSet rs = null;
-            System.out.println("All the Parameters received");
             request.setAttribute("current_session", currentSession);//setting the value of current session to the request
             String message = "";
             String regionalCenterCode = (String)session.getAttribute("rc");//getting the code of the rc which is logged in to the system
@@ -91,6 +89,7 @@ public class RECEIVESCPARTIAL extends HttpServlet {
                                     rs = statement.executeQuery("select * from sc_receive_" + currentSession + Constants.UNDERSCORE + 
                                             regionalCenterCode + " where sc_code='" + studyCenterCode + "' and crs_code='" + course[z] + "' and block='" + 
                                             blockCheck + "' and medium='" + medium + "' and date='" + date + "'");
+
                                     if(rs.next()) {
                                         message = message + course[z] + " Block " + blockCheck + " for date " + date + " in medium " + medium + "<br/>";
                                         flagForReturn = 1;
@@ -99,6 +98,7 @@ public class RECEIVESCPARTIAL extends HttpServlet {
                             }
                         }
                     }
+
                     /*LOGIC FOR RECEIVING OF MATERIAL IF SELECTED COURSE AND QUANTITY DOESN'T CONFLICT WITH THE PRIMARY KEY*/       
                     if(flagForReturn == 0) {
                         message = "Received Successfully from SC Course <br/>";
@@ -114,7 +114,7 @@ public class RECEIVESCPARTIAL extends HttpServlet {
                                         result = statement.executeUpdate("insert into sc_receive_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
                                                 "(sc_code,crs_code,block,qty,medium,date)values('" + studyCenterCode + "','" + course[z] + "','" + blockCheck + "'," +
                                                 blockQuantity[increment] + ",'" + medium + "','" + date + "')");
-                                        
+
                                         result1 = statement.executeUpdate("update material_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
                                                 " set qty=qty+" + blockQuantity[increment] + " where crs_code='" + course[z] + "' and block='" + blockCheck + 
                                                 "' and medium='" + medium + "'");
@@ -125,6 +125,7 @@ public class RECEIVESCPARTIAL extends HttpServlet {
                                 }
                             }
                         }
+
                         if(result == 1 && result1 == 1) {
                             System.out.println("Materials for " + course.length + " courses received from SC");
                         } else if(result==1 && result1 !=1) {
@@ -141,7 +142,6 @@ public class RECEIVESCPARTIAL extends HttpServlet {
                     }
                 } else {
                     //if no course selected by the user found then this section will work
-                    System.out.println("Sorry !!Not any courses Selected...");
                     message = "Sorry!! Not any courses selected..";
                     request.setAttribute("alternate_msg", message);
                     request.getRequestDispatcher("jsp/From_sc.jsp").forward(request, response);

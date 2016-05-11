@@ -20,16 +20,12 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class BYPOSTBULKSUBMIT extends HttpServlet {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
-
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("BYPOSTBULKSUBMIT SERVLET STARTED TO EXECUTE");
     }
- 
+
     @SuppressWarnings("unused")
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
@@ -63,13 +59,14 @@ public class BYPOSTBULKSUBMIT extends HttpServlet {
             } else {
                 enrollmentNumber = request.getParameterValues("enrno");
             }
+
             String[] student = request.getParameterValues("all_enr");
             String[] name = request.getParameterValues("name");
             String[] serialNumber = request.getParameterValues("serial");
             System.out.println("Total Number of Serial Numbers: " + serialNumber.length);
             String[] hiddenCourse = request.getParameterValues("hide_course");
             System.out.println("Total Number of hidden course : " + hiddenCourse.length);    
-    
+
             int quantity = 0;
             int actualQuantity = 0;
             int remainingQuantity = 0;
@@ -95,8 +92,8 @@ public class BYPOSTBULKSUBMIT extends HttpServlet {
             request.setAttribute("packet_weight", packetWeight);
             request.setAttribute("challan_no", challanNumber);
             request.setAttribute("current_session", currentSession);
-            System.out.println("Attributes settled in request");
             response.setContentType(Constants.HEADER_TYPE_HTML);
+
             try {
                 Connection connection = connections.ConnectionProvider.conn();//connection object for connecting with the database
                 Statement statement = connection.createStatement();//Statement object and fetching the reference from the conneciton object
@@ -132,21 +129,22 @@ public class BYPOSTBULKSUBMIT extends HttpServlet {
                                     sam++;
                                 }
                             } catch(Exception exception) { 
-                                System.out.print("nahi hai " + exception);
+                                System.out.print("Exception from for loop: " + exception);
                             }
                         }
-                        int available_qty=0;
+                        int availableQuantity=0;
                         j = j - 1;
                         message = "You have Skipped the despatch of Block " + j + ".";
                         /*Logic for creating int variable of available sets of the course selected*/
                         rs = statement.executeQuery("select qty from material_" + currentSession + Constants.UNDERSCORE + regionalCenterCode
                                 + " where crs_code='" + courseCode + "' and block='" + block + "' and medium='" + medium + "'");
+
                         while(rs.next()) {
-                            available_qty = rs.getInt(1);
+                            availableQuantity = rs.getInt(1);
                         }
-            
-                        request.setAttribute("available_qty", available_qty);
-            
+
+                        request.setAttribute("available_qty", availableQuantity);
+
                         request.setAttribute("dispatch_index", dispatchIndex);
                         request.setAttribute("msg", message);
                         request.getRequestDispatcher("jsp/By_post_bulk2.jsp?prg_code=" + programmeCode + "&crs_code=" + courseCode + "&medium=" + medium+"&lot="+lot+"&start="+start+"&end="+end+"&length="+finalLength+"").forward(request,response);
@@ -166,7 +164,7 @@ public class BYPOSTBULKSUBMIT extends HttpServlet {
                                 }
                             }
                         }
-    
+
                         quantity = enrollmentNumber.length;//getting the total number of student selected by the user
                         rs = statement.executeQuery("select TOP 1 qty from material_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
                                 " where crs_code='" + courseCode + "' and block='" + blockName + "' and medium='" + medium + "' ");
@@ -205,7 +203,7 @@ public class BYPOSTBULKSUBMIT extends HttpServlet {
                                 System.out.println("NO operation performed.!!!!!!");   
                                 message = "No Operation Performed";
                             }
-                            
+
                             int[] dispatchIndex;
                             if(numberOfBlocks > 0) {
                                 /*logic for checking the students filtered above in the Despatch table*/
@@ -248,7 +246,7 @@ public class BYPOSTBULKSUBMIT extends HttpServlet {
                                 while(rs.next()) {
                                     avaialbleQuantity=rs.getInt(1);
                                 }
-                                
+
                                 request.setAttribute("available_qty", avaialbleQuantity);
                                 request.setAttribute("dispatch_index", dispatchIndex);
                                 request.setAttribute("msg", message);
@@ -269,7 +267,7 @@ public class BYPOSTBULKSUBMIT extends HttpServlet {
                         message = "No Roll Number Selected<br/>";
                         request.setAttribute("alternate_msg", message);
                         request.getRequestDispatcher("BYPOSTBULKSEARCH?mnu_prg_code="+programmeCode+"&mnu_crs_code="+courseCode+"&mnu_medium="+medium+"&text_lot="+lot+"&text_start="+start+"&text_end="+end+"&").forward(request,response);
-    
+
                     }
                 }
             } catch(Exception exception) {

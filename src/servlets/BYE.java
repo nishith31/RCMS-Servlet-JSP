@@ -21,9 +21,6 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class BYE extends HttpServlet {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     String current_session = "";
     public void init(ServletConfig config) throws ServletException {
@@ -61,6 +58,7 @@ public class BYE extends HttpServlet {
             response.setContentType(Constants.HEADER_TYPE_HTML);
             int availableProgrammeGuide = 0;
             String programmeGuideFlag = null, programmeGuideDate = null;
+
             try {
                 Connection connection = connections.ConnectionProvider.conn();
                 Connection connection1 = connections.ConnectionProvider.conn();
@@ -86,7 +84,7 @@ public class BYE extends HttpServlet {
                         if(pr[ii] != ' ') {
                             length++;
                         }
-                
+
                     }
                     /*Logic for separating the year or semester number from the program code*/
                     if(pr[length - 1] == '1' || pr[length - 1] == '2' || pr[length - 1] == '3'||

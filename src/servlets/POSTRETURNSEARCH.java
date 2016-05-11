@@ -19,15 +19,14 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class POSTRETURNSEARCH extends HttpServlet {
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 1L;
     String currentSession = "";
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("POSTRETURNSEARCH SERVLET STARTED TO EXECUTE");
     } 
+
     @SuppressWarnings("resource")
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
@@ -45,7 +44,7 @@ public class POSTRETURNSEARCH extends HttpServlet {
             String programmeGuideFlag = null, programmeGuideDate = null, programmeGuideMedium = null,
             programmeGuideChallanNumber = null, programmeGuidePacketType = null, programmeGuideParcelNumber = null;
             String courseFlag = null;
-            
+
             String regionalCenterCode = (String)session.getAttribute("rc");
             response.setContentType(Constants.HEADER_TYPE_HTML);
             try {
@@ -56,7 +55,7 @@ public class POSTRETURNSEARCH extends HttpServlet {
                 while(rs.next()) {
                     currentSession = rs.getString(1).toLowerCase();
                 }
-                
+
                 request.setAttribute("current_session", currentSession);
                 /*LOGIC FOR CHECKING THE DESPATCH OF PROGRAMME GUIDE TO THE STUDENT*/
                 rs = statement.executeQuery("select * from student_dispatch_" + currentSession + Constants.UNDERSCORE + regionalCenterCode +
@@ -79,23 +78,25 @@ public class POSTRETURNSEARCH extends HttpServlet {
                 request.setAttribute("pg_flag", programmeGuideFlag);
                 rs = statement.executeQuery("select * from student_dispatch_"+currentSession + Constants.UNDERSCORE + regionalCenterCode
                         + " where enrno='" + enrollmentNumber + "' and block<>'PG' and dispatch_source='BY POST'");
-                int len = 0;
+
+                int length = 0;
                 if(rs.next()) {
                     courseFlag = "YES";
                     request.setAttribute("course_flag", courseFlag);
                     rs = statement.executeQuery("select * from student_" + currentSession + Constants.UNDERSCORE + regionalCenterCode 
                             + " where enrno='" + enrollmentNumber + "'");
                     while(rs.next()) {   
-                        programme = rs.getString(2);         
+                        programme = rs.getString(2);
                         char pr[] = programme.toCharArray();
                         for(int ii = 0; ii < pr.length; ii++) {
                             if(pr[ii] != ' ') {
-                                len++;
+                                length++;
                             }
                         }
-                        if(pr[len - 1] == '1' || pr[len - 1] == '2' || pr[len - 1] == '3' || 
-                                pr[len - 1] == '4'|| pr[len - 1] == '5' || pr[len - 1] == '6') {
-                            programme = programme.substring(0, len - 1);
+
+                        if(pr[length - 1] == '1' || pr[length - 1] == '2' || pr[length - 1] == '3' || 
+                                pr[length - 1] == '4'|| pr[length - 1] == '5' || pr[length - 1] == '6') {
+                            programme = programme.substring(0, length - 1);
                         } 
                         name = rs.getString(5);
                         medium = rs.getString(7);
@@ -118,6 +119,7 @@ public class POSTRETURNSEARCH extends HttpServlet {
                     index = 0;
                     rs = statement.executeQuery("select count(*) from student_dispatch_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
                             " where enrno='" + enrollmentNumber + "' and block<>'PG' and dispatch_source='BY POST'");
+
                     while(rs.next()) {
                         index = rs.getInt(1);
                     }
@@ -129,6 +131,7 @@ public class POSTRETURNSEARCH extends HttpServlet {
                     String parcelNumber[] = new String[index];
                     rs = statement.executeQuery("select * from student_dispatch_" + currentSession + Constants.UNDERSCORE + 
                             regionalCenterCode + " where enrno='" + enrollmentNumber + "' and block<>'PG' and dispatch_source='BY POST'");
+
                     index = 0;
                     while(rs.next()) {
                         courseBlock[index] = rs.getString(3).trim() + rs.getString(4).trim();
@@ -147,7 +150,7 @@ public class POSTRETURNSEARCH extends HttpServlet {
                     if(message == null) {
                         message = " ";
                     }
-                
+
                     message = message + "<br/>Found " + dispatchCourseCount +" Course for <br/>Roll No: " + enrollmentNumber
                             + "<br/>Name: " + name + ".";
                     request.setAttribute("msg", message);
@@ -170,16 +173,16 @@ public class POSTRETURNSEARCH extends HttpServlet {
                         char pr[] = programme.toCharArray();
                         for(int ii = 0; ii < pr.length; ii++) {
                                 if(pr[ii] != ' ') {
-                                    len++;
+                                    length++;
                                 }
                         }
-                        if(pr[len - 1] == '1' || pr[len - 1] == '2' || pr[len - 1] == '3' 
-                            || pr[len - 1] == '4' || pr[len - 1] == '5'|| pr[len - 1] == '6') {
-                            programme = programme.substring(0, len - 1);
+                        if(pr[length - 1] == '1' || pr[length - 1] == '2' || pr[length - 1] == '3' 
+                            || pr[length - 1] == '4' || pr[length - 1] == '5'|| pr[length - 1] == '6') {
+                            programme = programme.substring(0, length - 1);
                         } 
                         name = rs.getString(5);
                         medium = rs.getString(7);
-                        System.out.println( name + " " + programme + " " + len);
+                        System.out.println( name + " " + programme + " " + length);
                     }
                     System.out.println("Sorry!! ONLY PROGRAMME GUIDE FOUND DESPATCHED VIA POST.");
                     message = "Despatch of Programme Guide Found for the Roll no..";
@@ -191,7 +194,7 @@ public class POSTRETURNSEARCH extends HttpServlet {
                     request.setAttribute("msg", message);
                     request.getRequestDispatcher("jsp/From_post.jsp").forward(request, response); 
                 }
-    
+
             } catch(Exception exception) {
                 System.out.println("Exception raised from From_post.jsp " + exception);
                 message = "Some Serious Exception Hitted the page.<br/> Please check on Server Console for Details";

@@ -19,14 +19,12 @@ import utility.Constants;
  
 public class RECEIVERC extends HttpServlet {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("RECEIVERC SERVLET STARTED TO EXECUTE");
     } 
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
         if(isNull(session)) {
@@ -42,28 +40,26 @@ public class RECEIVERC extends HttpServlet {
             String courseCode4 = request.getParameter("mnu_crs_code4").toUpperCase();
             String courseCode5 = request.getParameter("mnu_crs_code5").toUpperCase();
             String courseCode6 = request.getParameter("mnu_crs_code6").toUpperCase();
-            String courseCode7 = request.getParameter("mnu_crs_code7").toUpperCase();       
+            String courseCode7 = request.getParameter("mnu_crs_code7").toUpperCase();
             String courseCode8 = request.getParameter("mnu_crs_code8").toUpperCase();
             String courseCode9 = request.getParameter("mnu_crs_code9").toUpperCase();
-            String courseCode10 = request.getParameter("mnu_crs_code10").toUpperCase();      
-            
-            int quantity = Integer.parseInt(request.getParameter("txt_no_of_set"));   
-            int quantity2 = Integer.parseInt(request.getParameter("txt_no_of_set2"));      
-            int quantity3 = Integer.parseInt(request.getParameter("txt_no_of_set3"));  
-            int quantity4 = Integer.parseInt(request.getParameter("txt_no_of_set4"));  
-            int quantity5 = Integer.parseInt(request.getParameter("txt_no_of_set5"));  
-            int quantity6 = Integer.parseInt(request.getParameter("txt_no_of_set6"));  
-            int quantity7 = Integer.parseInt(request.getParameter("txt_no_of_set7"));  
-            int quantity8 = Integer.parseInt(request.getParameter("txt_no_of_set8"));  
-            int quantity9 = Integer.parseInt(request.getParameter("txt_no_of_set9"));  
+            String courseCode10 = request.getParameter("mnu_crs_code10").toUpperCase();
+
+            int quantity = Integer.parseInt(request.getParameter("txt_no_of_set"));
+            int quantity2 = Integer.parseInt(request.getParameter("txt_no_of_set2"));
+            int quantity3 = Integer.parseInt(request.getParameter("txt_no_of_set3"));
+            int quantity4 = Integer.parseInt(request.getParameter("txt_no_of_set4"));
+            int quantity5 = Integer.parseInt(request.getParameter("txt_no_of_set5"));
+            int quantity6 = Integer.parseInt(request.getParameter("txt_no_of_set6"));
+            int quantity7 = Integer.parseInt(request.getParameter("txt_no_of_set7"));
+            int quantity8 = Integer.parseInt(request.getParameter("txt_no_of_set8"));
+            int quantity9 = Integer.parseInt(request.getParameter("txt_no_of_set9"));
             int quantity10 = Integer.parseInt(request.getParameter("txt_no_of_set10"));
             String medium = request.getParameter("txt_medium").toUpperCase();
             String  date = request.getParameter("txt_date").toUpperCase();
             String currentSession = request.getParameter("txt_session").toLowerCase();
             String receiptType = request.getParameter("receipt_type");
             String regionalCentreCode = (String)session.getAttribute("rc");
-            /*LOGIC ENDS HERE FOR GETTING THE PARAMETERS FORM THE REQUEST*/ 
-            System.out.println("fields from From_rc.jsp received Successfully");
             String message = null;
             @SuppressWarnings("unused")
             int index = 0, flag = 0, result_material = 0, result_receive = 0;
@@ -73,11 +69,11 @@ public class RECEIVERC extends HttpServlet {
             if(!courseCode.equals(Constants.NONE)) {
                 index++;
             }
-        
+
             if(!courseCode2.equals(Constants.NONE)) {
                 index++;
             }
-            
+
             if(!courseCode3.equals(Constants.NONE)) {
                 index++;
             }
@@ -105,9 +101,11 @@ public class RECEIVERC extends HttpServlet {
             if(!courseCode9.equals(Constants.NONE)) {
                 index++;
             }
+
             if(!courseCode10.equals(Constants.NONE)) {
                 index++;
             }
+
             String courses[] = new String[index];
             int quantities[] = new int[index];
             int insert = 0;
@@ -116,57 +114,67 @@ public class RECEIVERC extends HttpServlet {
                 quantities[insert] = quantity;
                 insert++;
             }
+
             if(!courseCode2.equals(Constants.NONE)) {
                 courses[insert] = courseCode2;
                 quantities[insert] = quantity2;
                 insert++;
             }
+
             if(!courseCode3.equals(Constants.NONE)) {
                 courses[insert] = courseCode3;
                 quantities[insert] = quantity3;
                 insert++;
             }
+
             if(!courseCode4.equals(Constants.NONE)) {
                 courses[insert] = courseCode4;
                 quantities[insert] = quantity4;
                 insert++;
             }
+
             if(!courseCode5.equals(Constants.NONE)) {
                 courses[insert] = courseCode5;
                 quantities[insert] = quantity5;
                 insert++;
             }
+
             if(!courseCode6.equals(Constants.NONE)) {
                 courses[insert] = courseCode6;
                 quantities[insert] = quantity6;
                 insert++;
             }
+
             if(!courseCode7.equals(Constants.NONE)) {
                 courses[insert] = courseCode7;
                 quantities[insert] = quantity7;
                 insert++;
             }
+
             if(!courseCode8.equals(Constants.NONE)) {
                 courses[insert] = courseCode8;
                 quantities[insert] = quantity8;
                 insert++;
             }
+
             if(!courseCode9.equals(Constants.NONE)) {
                 courses[insert] = courseCode9;
                 quantities[insert] = quantity9;
                 insert++;
             }
+
             if(!courseCode10.equals(Constants.NONE)) {
                 courses[insert] = courseCode10;
                 quantities[insert] = quantity10;
                 insert++;
             }
-            /*LOGIC ENDS HERE FOR GETTING THE SELECTED COURSE AND QUANTITY IN THE CORRESPONDING ARRAY*/ 
+
             int[] numberOfBlocks = new int[index];
             int blockCount = 0;
             ResultSet first; //RESULTSET VARIABLE FOR FETCHING DATA FROM THE DATABASE
             ResultSet block; //RESULTSET VARIABLE FOR FETCHING NUMBER OF BLOCKS FROM THE DATABASE
             response.setContentType(Constants.HEADER_TYPE_HTML);
+
             try {
                 Connection con = connections.ConnectionProvider.conn();
                 Statement stmt = con.createStatement();
@@ -176,6 +184,7 @@ public class RECEIVERC extends HttpServlet {
                     String[] blocks = new String[0];
                     for(int i = 0; i < courses.length; i++) {
                         block = stmt.executeQuery("select no_of_blocks from course where crs_code='" + courses[i] + "'");
+
                         while(block.next()) {
                             blockCount = block.getInt(1);
                         }
@@ -188,13 +197,14 @@ public class RECEIVERC extends HttpServlet {
                             first = stmt.executeQuery("select * from rc_receive_" + currentSession + "_" + regionalCentreCode + 
                                     " where reg_code='" + reg_code + "' and crs_code='" + courses[i] + "' and block='" + blocks[j] + "' and medium='" + medium
                                     + "' and date='" + date + "'");
+
                             if(first.next()) {
                                 flag = 1;
                                 message = message + courses[i] + " Block " + blocks[j] + " for Date " + date + " in Medium " + medium + "<br/>";
                             }
                         }
                     }
-                    /*LOGIC ENDS HERE FOR CHEKING THE EXISTENCE OF THE ENTRIES TO BE MADE*/
+
                     if(flag == 0) {
                         message = "Received Successfully from RC Course <br/>";
                         for(int i = 0; i < courses.length; i++) {
@@ -206,14 +216,17 @@ public class RECEIVERC extends HttpServlet {
                                 result_receive = stmt.executeUpdate("insert into rc_receive_" + currentSession + "_" + regionalCentreCode + 
                                         "(reg_code,crs_code,block,qty,date,medium) values('" + reg_code + "','" + courses[i] + "','" + blocks[j] + "'," + 
                                         quantities[i] + ",'" + date + "','" + medium + "')");
+
                                 result_material = stmt.executeUpdate("update material_" + currentSession + "_" + regionalCentreCode + " set qty=qty+" + quantities[i] 
                                         + " where crs_code='" + courses[i] + "' and block='" + blocks[j] + "' and medium='" + medium + "'");
+
                                 message = message + courses[i] + " Block " + blocks[j] + " for date " + date + " in medium " + medium + "<br/>";
                             }
                         }
                         request.setAttribute("msg", message);
                         request.getRequestDispatcher("jsp/From_rc.jsp").forward(request,response);  
-                    } else {//IF THIS ELSE WILL WORK MEANS ENTRIES ALREADY EXIST AND CAN NOT ENTER AGAIN.....
+                    } else {
+                        //IF THIS ELSE WILL WORK MEANS ENTRIES ALREADY EXIST AND CAN NOT ENTER AGAIN.....
                         request.setAttribute("msg",message);
                         request.getRequestDispatcher("jsp/From_rc.jsp").forward(request,response);
                     }
@@ -222,6 +235,7 @@ public class RECEIVERC extends HttpServlet {
                     String  programmeCode = request.getParameter("mnu_prg_code").toUpperCase();
                     for(int i = 0; i < courses.length; i++) {
                         block = stmt.executeQuery("select no_of_blocks from course where crs_code='" + courses[i] + "'");
+
                         while(block.next()) {
                             blockCount = block.getInt(1);
                         }
@@ -236,8 +250,7 @@ public class RECEIVERC extends HttpServlet {
                     request.setAttribute("medium", medium);
                     request.setAttribute("date", date);
                     request.setAttribute("msg", message);
-                    System.out.println("All attributes set for partial receipt in From_rc");
-                    request.getRequestDispatcher("jsp/From_rc1.jsp").forward(request,response);
+                    request.getRequestDispatcher("jsp/From_rc1.jsp").forward(request, response);
                 }
             } catch(Exception exception) {
                 System.out.println("Exception raised from RECEIVERC.JAVA page: " + exception);
@@ -247,5 +260,4 @@ public class RECEIVERC extends HttpServlet {
             }
         }
     } 
-    public void destroy() { }
 }

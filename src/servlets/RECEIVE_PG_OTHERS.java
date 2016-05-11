@@ -19,14 +19,12 @@ import utility.Constants;
  
 public class RECEIVE_PG_OTHERS extends HttpServlet {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("RECEIVE_PG_OTHERS SERVLET STARTED TO EXECUTE");
     } 
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
         if(isNull(session)) {
@@ -37,24 +35,22 @@ public class RECEIVE_PG_OTHERS extends HttpServlet {
             /*LOGIC FOR GETTING ALL THE PARAMETERS FROM THE REQUEST AND STORING THEM IN THE VARIABLES*/
             String  programmeCode = request.getParameter("mnu_prg_code").toUpperCase();
             String  programmeCode2 = request.getParameter("mnu_prg_code2").toUpperCase();
-    
+
             String  medium = request.getParameter("txt_medium").toUpperCase();
             String  medium2 = request.getParameter("txt_medium2").toUpperCase();
-    
+
             String  date = request.getParameter("txt_date").toUpperCase();
             String currentSession = request.getParameter("txt_session").toLowerCase();
             String receiveFrom = request.getParameter("receive_from").toLowerCase();
             String regionalCenterCode = (String)session.getAttribute("rc");
-        
-            /*LOGIC ENDS HERE FOR GETTING THE PARAMETERS FORM THE REQUEST*/ 
-            System.out.println("fields from From_mpdd_pg.jsp received Successfully");   
+
             String message;
             int index = 0, flag = 0;
             /*LOGIC FOR CHECKING THE SELECTED COURSE AND STORING THEM IN STRING ARRAY AND QUANTITIES IN INTEGER ARRAY*/     
             if(!programmeCode.equals(Constants.NONE)) {
                 index++;
             }
-            
+
             if(!programmeCode2.equals(Constants.NONE)) {
                 index++;
             }
@@ -69,7 +65,7 @@ public class RECEIVE_PG_OTHERS extends HttpServlet {
                 quantities[insert] = Integer.parseInt(request.getParameter("text_qty"));
                 insert++;
             }
-    
+
             if(!programmeCode2.equals(Constants.NONE)) {
                 courses[insert] = programmeCode2;
                 mediums[insert] = medium2;
@@ -79,21 +75,22 @@ public class RECEIVE_PG_OTHERS extends HttpServlet {
 
             ResultSet first = null;//RESULTSET VARIABLE FOR FETCHING DATA FROM THE DATABASE
             response.setContentType(Constants.HEADER_TYPE_HTML);
+
             try {
                 Connection connection = connections.ConnectionProvider.conn();
                 Statement statement = connection.createStatement();
                 /*LOGIC FOR CHECKING THE EXISTENCE OF THE ENTRIES TO BE MADE IN DATABSE ALREADY*/   
                 message = "Entry Already Exist for PROGRAMME GUIDE OF: <br/>";
-    
+
                 for(int i = 0; i < courses.length; i++) {
                     first = statement.executeQuery("select * from others_receive_" + currentSession + Constants.UNDERSCORE + 
                             regionalCenterCode + " where crs_code='" + courses[i] + "' and block='PG' and date='" + date + "'");
+
                     if(first.next()) {
                         flag = 1;
                         message = message + courses[i] + "  for Date " + date + " <br/>";
                     }
                 }
-                /*LOGIC ENDS HERE FOR CHEKING THE EXISTENCE OF THE ENTRIES TO BE MADE*/
                 if(flag == 0) {
                     message = "Received Successfully PROGRAMME GUIDES OF <br/>";
                     for(int i = 0; i < courses.length; i++) {
@@ -103,6 +100,7 @@ public class RECEIVE_PG_OTHERS extends HttpServlet {
 
                         statement.executeUpdate("update material_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + " set qty=qty+" + 
                                 quantities[i] + " where crs_code='" + courses[i] + "' and block='PG' and medium='" + mediums[i] + "'");
+
                         message = message + courses[i] + "  For Date " + date + " in Medium " + mediums[i] + "<br/>";
                     }
                     request.setAttribute("msg", message);

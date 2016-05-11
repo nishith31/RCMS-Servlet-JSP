@@ -20,16 +20,12 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class BYHANDREENTRYSUBMIT extends HttpServlet {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
-
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("BYHANDREENTRYSUBMIT SERVLET STARTED TO EXECUTE");
     } 
- 
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
         if(isNull(session)) {

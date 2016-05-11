@@ -18,9 +18,7 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class POSTRETURNSUBMIT extends HttpServlet {
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 1L;
     String current_session = "";
     public void init(ServletConfig config) throws ServletException {
@@ -42,23 +40,22 @@ public class POSTRETURNSUBMIT extends HttpServlet {
             String programmeCode = request.getParameter("text_prg_code").toUpperCase();
             String currentSession = request.getParameter("txt_session").toLowerCase();
             String date = request.getParameter("txt_date").toUpperCase();
-            String receiveRemarks = request.getParameter("txt_reason").toUpperCase();       
+            String receiveRemarks = request.getParameter("txt_reason").toUpperCase();
             String receiveSource = "BY POST";
             String[] course = new String[0];
             if(courseFlag.equals(Constants.YES)) {
                 course = request.getParameterValues("crs_code");//all the course codes from the jsp page
             }
+
             String message =  ""; 
             String expressNumber = null;
             String dispatchDate = null; 
             String medium = null;
-            System.out.println("All the Parameters Received Successfully");
             int blockCount = 0;//int variable for number of blocks available with the course
             String[] temp = new String[0];//array of String for multiple use
             int index = 0;
             String programmeGuideValue = null;
             /*logic for getting the number of total courses selected by user*/
-            System.out.println("Value of course_flag is " + courseFlag);
             if(courseFlag.equals(Constants.YES)) {
                 for(index = 0; index < course.length; index++) {
                     temp = request.getParameterValues(course[index]);
@@ -67,7 +64,7 @@ public class POSTRETURNSUBMIT extends HttpServlet {
                     }
                 }
             }
-                    
+
             int result = 0, result1 = 0, result2 = 0;
             int programmeGuideResult = 0, programmeGuideResult1 = 0, programmeGuideResult2 = 0;
 
@@ -75,6 +72,7 @@ public class POSTRETURNSUBMIT extends HttpServlet {
             response.setContentType(Constants.HEADER_TYPE_HTML);
             ResultSet rs = null;
             String actualProgrammeCode = "(crs_code='" + programmeCode + "'";
+
             try {
                 Connection connection = connections.ConnectionProvider.conn();
                 Statement stmt=connection.createStatement();
@@ -83,22 +81,22 @@ public class POSTRETURNSUBMIT extends HttpServlet {
                 if(!rs.next()) {
                     rs = stmt.executeQuery("select absolute_prg_code from program_program where relative_prg_code='" + programmeCode +
                             "' and rc_code='" + regionalCenterCode + "'");
+
                     if(rs.next()) {
                         actualProgrammeCode = actualProgrammeCode + " or crs_code='" + rs.getString(1) + "'";
                     }
                 }
                 actualProgrammeCode = actualProgrammeCode  + ")";
-                System.out.println("value of actual_prg_code is " + actualProgrammeCode);
                 /*LOGIC FOR SUBMITTING THE ENTRY OF PROGRAMME GUIDE*/       
                 if(programmeGuideFlag.equals(Constants.YES)) {
                     programmeGuideValue = request.getParameter("pg_checkbox");
                 }
-    
+
                 if(programmeGuideFlag.equals(Constants.YES) && programmeGuideValue != null ) {
                     String programmeGuideExpress = request.getParameter("pg_express").toUpperCase();
                     String programmeGuideDate = request.getParameter("pg_date").toUpperCase();
                     String programmeGuideMedium = request.getParameter("pg_medium").toUpperCase();
-    
+
                     programmeGuideResult = stmt.executeUpdate("insert into student_receive_" + currentSession + Constants.UNDERSCORE + 
                             regionalCenterCode + " values('" + enrollmentNumber + "','" + programmeCode + "','" + programmeCode + "','PG',1,'" + programmeGuideMedium 
                             + "','" + date + "','" + receiveSource + "','" + receiveRemarks + "','" + programmeGuideExpress + "','" + programmeGuideDate + "')");
@@ -117,6 +115,7 @@ public class POSTRETURNSUBMIT extends HttpServlet {
                         message = "Failed to perform Update the PG.<br/>Please Check on the Server Console or Database";
                     }
                 }  
+
                 if (course.length > 0) {
                     System.out.println(course.length +" Courses Selected By the Student");
                     /*logic for getting all the courses selected by the user*/
@@ -152,6 +151,7 @@ public class POSTRETURNSUBMIT extends HttpServlet {
                             }
                         } 
                     } 
+
                     if(result == blockCount && result1 == blockCount && result2 == blockCount) {
                         message = message + "Material Updated Successfully Returned from Post for " + blockCount + 
                                 " Blocks <br/> Roll No." + enrollmentNumber + "<br/>Name. " + name+"<br/>";
@@ -160,6 +160,7 @@ public class POSTRETURNSUBMIT extends HttpServlet {
                     }
                     request.setAttribute("msg", message);
                     request.getRequestDispatcher("jsp/From_post.jsp").forward(request, response);
+
                 } else if(programmeGuideFlag.equals(Constants.YES) && programmeGuideValue != null ) {
                     request.setAttribute("msg", message);
                     request.getRequestDispatcher("jsp/From_post.jsp").forward(request, response);

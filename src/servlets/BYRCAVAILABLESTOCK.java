@@ -17,15 +17,13 @@ import javax.servlet.http.HttpSession;
 
 import utility.Constants;
 public class BYRCAVAILABLESTOCK extends HttpServlet {
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         System.out.println("BYRCAVAILABLESTOCK SERVLET STARTED FROM INIT METHOD");
         super.init(config);
     }
-    
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
         if(isNull(session)) {
@@ -54,67 +52,79 @@ public class BYRCAVAILABLESTOCK extends HttpServlet {
             if(!courseCode.equals(Constants.NONE)) {
                 index++;
             }
-            
+
             if(!courseCode2.equals(Constants.NONE)) {
                 index++;
             }
+
             if(!courseCode3.equals(Constants.NONE)) {
                 index++;
             }
+
             if(!courseCode4.equals(Constants.NONE)) {
                 index++;
             }
+
             if(!courseCode5.equals(Constants.NONE)) {
                 index++;
             }
-            String courses[]        =   new String[index];//STRING ARRAY FOR HOLDING ALL THE SELECTED COURSE CODES
-            int blocks[]            =   new int[index];//INT ARRAY FOR HOLDING NUMBER OF BLOCKS FOR EACH COURSE SELECTED
+
+            String courses[] = new String[index];//STRING ARRAY FOR HOLDING ALL THE SELECTED COURSE CODES
+            int blocks[] = new int[index];//INT ARRAY FOR HOLDING NUMBER OF BLOCKS FOR EACH COURSE SELECTED
             if(!courseCode.equals(Constants.NONE)) {
                 courses[insert] = courseCode;
                 insert++;
             }
+
             if(!courseCode2.equals(Constants.NONE)) { 
                 courses[insert] = courseCode2;
                 insert++;
             }
+
             if(!courseCode3.equals(Constants.NONE)) {
                 courses[insert] = courseCode3;
                 insert++;
             }
+
             if(!courseCode4.equals(Constants.NONE)) {
                 courses[insert] = courseCode4;
                 insert++;
             }
+
             if(!courseCode5.equals(Constants.NONE)) {
                 courses[insert] = courseCode5;
                 insert++;
             }
+
             try {
                 Connection connection = connections.ConnectionProvider.conn();
                 Statement statement = connection.createStatement();
                 int totalLength = 0, count = 0;
                 /*Logic for creating int variable of blocks of the courses selected*/
-                for(int m=0;m<index;m++) {
-                    rs      =   statement.executeQuery("Select no_of_blocks from course where crs_code='"+courses[m]+"'");
+                for(int m = 0; m < index; m++) {
+                    rs = statement.executeQuery("Select no_of_blocks from course where crs_code='" + courses[m] + "'");
+
                     while(rs.next()) {
-                        blocks[m]           =   rs.getInt(1);
+                        blocks[m] = rs.getInt(1);
                     }
-                
+
                 }
                 /*Logic for counting the total number of courses with block like MCS51B1*/
                 for(int i = 0; i < courses.length; i++) {
                     totalLength = totalLength + blocks[i];
                 }
-                int[] stock             =   new int[totalLength];//int array for holding the stock available for all courses blockwise
+
+                int[] stock = new int[totalLength];//int array for holding the stock available for all courses blockwise
                 String courseBlock[]   =   new String[totalLength];//array for holding all the courses block wise
                 /*logic for creating array of course_block & stock availability*/
                 String boro = null;
                 for(int a=0;a<courses.length;a++) {
                     for(int b=1;b<=blocks[a];b++) {
-                        courseBlock[count]=courses[a]+"B"+b;
+                        courseBlock[count] = courses[a] + "B" + b;
                         boro = "B" + b;
                         rs = statement.executeQuery("select qty from material_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + " where crs_code='" 
                         + courses[a] + "' and block='" + boro + "' and medium='"+medium+"'");
+
                         while(rs.next()) {
                             stock[count]=rs.getInt(1);
                         }
@@ -128,16 +138,17 @@ public class BYRCAVAILABLESTOCK extends HttpServlet {
                 request.setAttribute("stock", stock);
                 /*Logic for creating reg_name variable of the name of the rc selected rc code*/ 
                 rs = statement.executeQuery("select reg_name from regional_centre where reg_code='" + reg_code + "'");
+
                 while(rs.next()) {
                     reg_name = rs.getString(1);
                 }
-            
+
                 message = "Available Stock Status:<br/>";
                 count = 0;
-                for(int i=0;i<courses.length;i++) {
+                for(int i = 0; i < courses.length; i++) {
                     message = message + courses[i] + "<br/>";
-                    for(int j=1;j<=blocks[i];j++) {
-                        message = message + stock[count]+" Sets of B"+j+"<br/>";
+                    for(int j = 1; j <= blocks[i]; j++) {
+                        message = message + stock[count] + " Sets of B" + j + "<br/>";
                         count++;
                     }
                 }

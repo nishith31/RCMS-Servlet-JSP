@@ -17,9 +17,7 @@ import javax.servlet.http.HttpSession;
 
 import utility.Constants;
 public class BYRCAVAILABLE_PG_STOCK extends HttpServlet {
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         System.out.println("BYRCAVAILABLE_PG_STOCK SERVLET STARTED FROM INIT METHOD");
@@ -47,29 +45,31 @@ public class BYRCAVAILABLE_PG_STOCK extends HttpServlet {
             ResultSet rs = null;//RESULTSET VARIABLE FOR FETCHING DATA FROM THE TABLES VARIOUS TIMES....
             response.setContentType(Constants.HEADER_TYPE_HTML);
             /*LOGIC FOR CHECKING THE SELECTED COURSES AND CREATING THEIR ARRAY OF STRING*/
+
             try {
                 Connection connection = connections.ConnectionProvider.conn();
                 Statement statement = connection.createStatement();
                 int totalLength = 0, count = 0;
-                int stock = 0;//int array for holding the stock available for all courses blockwise
+                int stock = 0;//int array for holding the stock available for all courses block wise
                 /*logic for creating array of course_block & stock availability*/
                 String boro = null;
                 rs = statement.executeQuery("select qty from material_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
                         " where crs_code='" + programmeCode + "' and block='PG' and medium='" + medium + "'");
+
                 while(rs.next()) {
-                    
+                    stock = rs.getInt(1); 
                 }
-                    stock=rs.getInt(1);
-                    request.setAttribute("stock", stock);
-                    /*Logic for creating reg_name variable of the name of the rc selected rc code*/ 
-                    rs = statement.executeQuery("select reg_name from regional_centre where reg_code='" + reg_code + "'");
-                    while(rs.next()) {
-                        reg_name=rs.getString(1);
-                    }
-    
-                    message = "Available Stock OF PROGRAMME GUIDE OF :" + programmeCode + "<br/> are " + stock + ".";
-                    request.setAttribute("msg", message);
-                    request.getRequestDispatcher("jsp/To_rc_pg1.jsp?reg_code=" + reg_code + "&reg_name=" + reg_name + "&prg_code=" + programmeCode + "&medium=" + medium).forward(request, response);
+                    
+                request.setAttribute("stock", stock);
+                /*Logic for creating reg_name variable of the name of the rc selected rc code*/ 
+                rs = statement.executeQuery("select reg_name from regional_centre where reg_code='" + reg_code + "'");
+                while(rs.next()) {
+                    reg_name=rs.getString(1);
+                }
+
+                message = "Available Stock OF PROGRAMME GUIDE OF :" + programmeCode + "<br/> are " + stock + ".";
+                request.setAttribute("msg", message);
+                request.getRequestDispatcher("jsp/To_rc_pg1.jsp?reg_code=" + reg_code + "&reg_name=" + reg_name + "&prg_code=" + programmeCode + "&medium=" + medium).forward(request, response);
             } catch(Exception exception) {
                 System.out.println("Exception raised from BYRCAVAILABLE_PG_STOCK.java and is " + exception);
                 message = "Some Serious Exception Hitted the Page.Please check on the Server Console for More Details";

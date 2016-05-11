@@ -23,15 +23,13 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class BYEPOSTSEARCH extends HttpServlet {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     String currentSession="";//variable for holding the value of the current session of the regional centre logged in.
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("BYEPOSTSEARCH SERVLET STARTED TO EXECUTE"); 
     }
+
     @SuppressWarnings({ "unused", "resource" })
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
@@ -66,6 +64,7 @@ public class BYEPOSTSEARCH extends HttpServlet {
             PrintWriter out = response.getWriter();
             int availableProgrammeGuide = 0;
             String programmeGuideFlag = null, programmeGuideDate = null;
+
             try {
                 Connection connection = connections.ConnectionProvider.conn();//creating the connection to the database and getting the reference
                 Connection connection1 = connections.ConnectionProvider.conn();//creating the connection to the database and getting the reference

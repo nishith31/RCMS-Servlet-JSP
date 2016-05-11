@@ -20,14 +20,12 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class AVAILABLECOMPLEMENTARY extends HttpServlet {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("AVAILABLECOMPLEMENTARY SERVLET STARTED TO EXECUTE");
     } 
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
         if(isNull(session)) {
@@ -52,17 +50,19 @@ public class AVAILABLECOMPLEMENTARY extends HttpServlet {
             if(!courseCode.equals(Constants.NONE)) {
                 index++;
             }
-            
+
             if(!courseCode2.equals(Constants.NONE)) {
                 index++;
             }
-                    
+
             if(!courseCode3.equals(Constants.NONE)) {   
                 index++;
             }
+
             if(!courseCode4.equals(Constants.NONE)) {
                 index++;
             }
+
             String courses[] = new String[index];//STRING ARRAY FOR HOLDING ALL THE SELECTED COURSE CODES
             int blocks[] = new int[index];//INT ARRAY FOR HOLDING NUMBER OF BLOCKS FOR EACH COURSE SELECTED
     
@@ -71,22 +71,22 @@ public class AVAILABLECOMPLEMENTARY extends HttpServlet {
                 courses[insert] = courseCode;
                 insert++;
             }
-    
+
             if(!courseCode2.equals(Constants.NONE)) {
                 courses[insert] = courseCode2;
                 insert++;
             }
-    
+
             if(!courseCode3.equals(Constants.NONE)) {
                 courses[insert] = courseCode3;
                 insert++;
             }
-    
+
             if(!courseCode4.equals(Constants.NONE)) {
                 courses[insert] = courseCode4;
                 insert++;
             }
-    
+
             response.setContentType(Constants.HEADER_TYPE_HTML);
             ResultSet rs = null;
             try {
@@ -100,7 +100,7 @@ public class AVAILABLECOMPLEMENTARY extends HttpServlet {
                         blocks[m] = rs.getInt(1);
                     }
                 }
-    
+
                 /*Logic for counting the total number of courses with block like MCS51B1*/
                 for(int i = 0; i < courses.length; i++) {
                     totalLength = totalLength + blocks[i];
@@ -109,7 +109,7 @@ public class AVAILABLECOMPLEMENTARY extends HttpServlet {
                 String courseBlock[] = new String[totalLength];//array for holding all the courses block wise
                 /*logic for creating array of course_block & stock availability*/
                 String boro = null;
-    
+
                 for(int a = 0; a < courses.length; a++) {
                     for(int b = 1; b <= blocks[a]; b++) {
                         courseBlock[count] = courses[a] + "B" + b;
@@ -119,8 +119,7 @@ public class AVAILABLECOMPLEMENTARY extends HttpServlet {
                         while(rs.next()) {
                             stock[count] = rs.getInt(1);
                         }
-            
-                        System.out.println(courseBlock[count] + " " + stock[count]);
+
                         count++;
                     }
                 }
@@ -141,7 +140,7 @@ public class AVAILABLECOMPLEMENTARY extends HttpServlet {
                 }
                 request.setAttribute("msg", message);
                 request.getRequestDispatcher("jsp/Complementary1.jsp?prg_code=" + programmeCode + "&medium=" + medium).forward(request, response);
-    
+
             } catch(Exception exception) {
                 System.out.println("Exception raised from AVAILABLECOMPLEMENTARY.java and is " + exception);
                 message = "Some Serious Exception Hitted the Page.Please check on the Server Console for More Details";

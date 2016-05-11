@@ -21,14 +21,13 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class BYSCSTUDENT_PG_SUBMIT extends HttpServlet {
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("BYSCSTUDENT_PG_SUBMIT SERVLET STARTED TO EXECUTE");
     } 
+
     @SuppressWarnings("unused")
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java   
@@ -81,6 +80,7 @@ public class BYSCSTUDENT_PG_SUBMIT extends HttpServlet {
                         qty = enrno.length;//number of sets to be despatched according to the number of checkboxes checked.
                         rs = statement.executeQuery("select qty from material_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + " where crs_code='" +
                         programmeCode + "' and block='PG' and medium='" + medium + "'");
+
                         while(rs.next()) {
                             actualQuantity = rs.getInt(1);
                         }
@@ -97,6 +97,7 @@ public class BYSCSTUDENT_PG_SUBMIT extends HttpServlet {
 
                             result1 = statement.executeUpdate("update material_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + " set qty=qty-" + qty + 
                                     " where crs_code='" + programmeCode + "' and block='PG' and medium='" + medium + "'");
+
                             if(result == 1 && result1 == 1 && result2 == 1) {
                                 System.out.println("PRGRAMME GUIDE OF " + programmeCode + " dispatched to " + qty + " students of Study centre " + studyCenterCode);
                                 message = "PROGRAMME GUIDE Of " + programmeCode + "<br/> Despatched to " + qty + " Students of Study Centre " + studyCenterCode;

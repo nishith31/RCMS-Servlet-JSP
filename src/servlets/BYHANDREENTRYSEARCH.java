@@ -19,16 +19,13 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class BYHANDREENTRYSEARCH extends HttpServlet {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     String current_session = "";
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("BYHANDREENTRYSEARCH SERVLET STARTED TO EXECUTE");
     } 
- 
+
     @SuppressWarnings("resource")
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
@@ -365,6 +362,7 @@ public class BYHANDREENTRYSEARCH extends HttpServlet {
                     request.getRequestDispatcher("jsp/By_hand.jsp").forward(request, response); 
                 }
             } catch(Exception exception) {
+
                 System.out.println("Exception raised from By_hand.jsp" + exception);
                 message = "Some Serious Exception Hitted the page. Please check on Server Console for Details";
                 request.setAttribute("msg", message);

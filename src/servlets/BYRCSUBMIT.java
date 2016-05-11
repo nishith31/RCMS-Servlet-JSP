@@ -19,9 +19,7 @@ import javax.servlet.http.HttpSession;
 
 import utility.Constants;
 public class BYRCSUBMIT extends HttpServlet {
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         System.out.println("BYRCSUBMIT SERVLET STARTED FROM INIT METHOD");
@@ -58,6 +56,7 @@ public class BYRCSUBMIT extends HttpServlet {
             ResultSet rs = null;//RESULTSET VARIABLE FOR FETCHING DATA FROM THE TABLES VARIOUS TIMES....
             String regionalCenterCode = (String)session.getAttribute("rc");//getting the rc code of the logged rc from the session
             response.setContentType(Constants.HEADER_TYPE_HTML);
+
             try {
                 Connection connection = connections.ConnectionProvider.conn();
                 Statement statement = connection.createStatement();
@@ -102,7 +101,7 @@ public class BYRCSUBMIT extends HttpServlet {
                                         while(rs.next()) {
                                             actualQuantity = rs.getInt(1);
                                         }
-                            
+
                                         if(actualQuantity < 1) {
                                             flagForReturn++;
                                             message = message + " 1 set of Block " + blockCheck.substring(1) + " of " + course[z] + " Course.<br/>";
@@ -114,6 +113,7 @@ public class BYRCSUBMIT extends HttpServlet {
                             }
                         }
                     }
+
                     if(flagForDuplicate == 0) {
                         if(flagForReturn== 0) {
                             for(int  z = 0; z < course.length; z++) {
@@ -142,6 +142,7 @@ public class BYRCSUBMIT extends HttpServlet {
                                     }
                                 }
                             }
+
                             if(result == 1 && result1 == 1) {   
                                 message = "" + courseDispatch.length + " books dispatched to " + reg_code + ".<br/>" + quantityRemain;
                             } else if(result == 1 && result1 != 1) {

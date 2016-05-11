@@ -18,16 +18,13 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class BYSCPRIVATE_PG_STOCK extends HttpServlet {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("BYSCPRIVATE_PG_STOCK SERVLET STARTED TO EXECUTE");
     } 
- 
+
     @SuppressWarnings("unused")
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
@@ -58,19 +55,20 @@ public class BYSCPRIVATE_PG_STOCK extends HttpServlet {
                 while(rs.next()) {
                     availableQuantity = rs.getInt(1);
                 }
-        
+
                 message = message + "Available Stock Status:" + availableQuantity + "</br> PROGRAMME GUIDE of " + programmeCode + ".</br>";
                 request.setAttribute("available_qty", availableQuantity);
                 rs = statement.executeQuery("select sc_name from study_centre where sc_code='" + studyCenterCode + "'");
                 while(rs.next()) {
                     studyCenterName = rs.getString(1);//getting the sc_name from database
                 }
-    
+
                 request.setAttribute("msg", message);
                 request.getRequestDispatcher("jsp/To_sc_office_pg1.jsp?sc_code=" + studyCenterCode + "&sc_name=" + studyCenterName + "&prg_code=" + programmeCode
                             + "&medium=" + medium).forward(request, response); 
+
             } catch(Exception exception) {
-                System.out.println("exception mila rey from BYSCPRIVATE_PG_STOCK.java and exception is " + exception);
+                System.out.println("Exception raised from BYSCPRIVATE_PG_STOCK.java and exception is " + exception);
                 message = "Some Serious Exception came.Please check on the Server Console for more Details";
                 request.setAttribute("msg", message);
                 request.getRequestDispatcher("jsp/To_sc_office_pg.jsp").forward(request, response);

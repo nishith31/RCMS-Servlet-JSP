@@ -21,9 +21,7 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class RECEIVEMPDDPARTIAL extends HttpServlet {
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -49,7 +47,7 @@ public class RECEIVEMPDDPARTIAL extends HttpServlet {
                     blockCount = blockCount + temp.length;
                 }
             }
-            String[] courseDispatch = new String[blockCount];//array for holding the blocks to be receieved
+            String[] courseDispatch = new String[blockCount];//array for holding the blocks to be received
             String[] blockQuantity = new String[blockCount];//array for holding the quantity of the blocks to be received
             /*logic for getting all the courses selected by the user*/
             for(index = 0; index < course.length; index++) {
@@ -68,7 +66,6 @@ public class RECEIVEMPDDPARTIAL extends HttpServlet {
             String date = request.getParameter("txt_date").toUpperCase();//date from the jsp page date field
             int flagForReturn = 0;
             ResultSet rs = null;
-            System.out.println("All the Parameters received");
             request.setAttribute("current_session", currentSession);//setting the value of current session to the request
             String message = "";
             String regionalCenterCode = (String)session.getAttribute("rc");//getting the code of the rc which is logged in to the system
@@ -90,6 +87,7 @@ public class RECEIVEMPDDPARTIAL extends HttpServlet {
                                     rs = statement.executeQuery("select * from mpdd_receive_" + currentSession + Constants.UNDERSCORE + 
                                             regionalCenterCode + " where crs_code='" + course[z] + "' and block='" + blockCheck + "' and medium='" 
                                             + medium + "' and date='" + date + "'");
+
                                     if(rs.next()) {
                                         message = message + course[z] + " Block " + blockCheck + " for date " + date + " in medium " + medium + "<br/>";
                                         flagForReturn = 1;
@@ -98,6 +96,7 @@ public class RECEIVEMPDDPARTIAL extends HttpServlet {
                             }
                         }
                     }
+
                     if(flagForReturn == 0) {
                         message = "Received Successfully from MPDD Course <br/>";
                         int increment = 0;
@@ -112,7 +111,7 @@ public class RECEIVEMPDDPARTIAL extends HttpServlet {
                                         result = statement.executeUpdate("insert into mpdd_receive_" + currentSession + Constants.UNDERSCORE + 
                                                 regionalCenterCode + "(crs_code,block,qty,medium,date)values('" + course[z] + "','" + blockCheck
                                                 + "'," + blockQuantity[increment] + ",'" + medium + "','" + date + "')");
-                                        
+
                                         result1 = statement.executeUpdate("update material_" + currentSession + Constants.UNDERSCORE + 
                                                 regionalCenterCode + " set qty=qty+" + blockQuantity[increment] + " where crs_code='" + 
                                                 course[z] + "' and block='" + blockCheck + "' and medium='" + medium + "'");
@@ -123,6 +122,7 @@ public class RECEIVEMPDDPARTIAL extends HttpServlet {
                                 }
                             }
                         }
+
                         if(result == 1 && result1 == 1) {
                             System.out.println("Materials for " + course.length + " courses received from MPDD");
                         } else if(result == 1 && result1 != 1) {

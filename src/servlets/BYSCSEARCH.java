@@ -20,11 +20,8 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class BYSCSEARCH extends HttpServlet {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("BYSCSEARCH SERVLET STARTED");
@@ -64,7 +61,7 @@ public class BYSCSEARCH extends HttpServlet {
             } else {
                 programmeCode2 = programmeCode + year;
             }
-            
+
             response.setContentType(Constants.HEADER_TYPE_HTML);
             String relativeCourse;
             ResultSet rs = null, block = null;
@@ -78,14 +75,14 @@ public class BYSCSEARCH extends HttpServlet {
                 while(block.next()) {
                     numberOfBlocks = block.getInt(1);
                 }
-            
+
                 /*LOGIC FOR GETTING THE RELATIVE COURSE CODE FROM THE ACTUAL COURSE CODE*/  
                 String[] relativeCourseCode = new String[0];
                 rs = statement.executeQuery("select count(*) from course_course where absolute_crs_code='" + courseCode + "' and rc_code='" + regionalCenterCode + "'");
                 if(rs.next()) {
                     relativeCourseCode = new String[rs.getInt(1)];
                 }
-                
+
                 index = 0;
                 rs = statement.executeQuery("select relative_crs_code from course_course where absolute_crs_code='" + courseCode + "' and rc_code='" + regionalCenterCode + "'");
                 while(rs.next()) {
@@ -104,13 +101,15 @@ public class BYSCSEARCH extends HttpServlet {
                 if(rs.next()) {
                     relativeProgrammeCode = new String[rs.getInt(1)];
                 }
-                
+
                 index = 0;
                 rs = statement.executeQuery("select relative_prg_code from program_program where absolute_prg_code='" + programmeCode + "' and rc_code='" + regionalCenterCode + "'");
+
                 while(rs.next()) {
                     relativeProgrammeCode[index] = rs.getString(1);
                     index++;
                 }
+
                 String searchProgrammeCode = null;
                 if(year.equals("NA") || year.equals("1")) {
                     searchProgrammeCode = "(prg_code='" + programmeCode + "'";
@@ -135,6 +134,7 @@ public class BYSCSEARCH extends HttpServlet {
                 int result = 5, result1 = 5;
                 rs = statement.executeQuery("select *  from student_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + " where sc_code='" 
                         + studyCenterCode + "' and " + searchProgrammeCode + "");
+
                 String check = null;
                 int ll = 1;
                 if(rs.next()) {
@@ -189,13 +189,14 @@ public class BYSCSEARCH extends HttpServlet {
                             
                         }  
                     }    
-                
+
                     request.setAttribute("student", student);
                     request.setAttribute("name", name);
                     request.setAttribute("hidden_course", hiddenCourse);
                     for(index = 0; index < student.length; index++) {
                         rs = statement.executeQuery("select * from student_dispatch_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
                                 " where enrno='" + student[index] + "' and " + dispatchCourseCode + " and block='" + blockName + "' and reentry='NO'");
+
                         if(rs.next()) {
                             dispatchStudentCount++;
                         }
@@ -213,6 +214,7 @@ public class BYSCSEARCH extends HttpServlet {
                         if(rs.next()) {
                             rs = statement.executeQuery("select * from student_dispatch_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
                                     " where enrno='" + student[index] + "' and " + dispatchCourseCode + " and block='" + blockName + "' and reentry='NO'");
+
                             while(rs.next()) {
                                 dispatchStudent[insertIndex] = rs.getString(1);
                                 dispatchDate[insertIndex] = rs.getDate(6).toString();
@@ -229,10 +231,11 @@ public class BYSCSEARCH extends HttpServlet {
                             }
                         }
                     }
-        
+
                     /*Logic for creating int variable of available sets of the course selected*/
                     rs = statement.executeQuery("select qty from material_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
                             " where crs_code='" + courseCode + "' and block='" + blockName + "' and medium='" + medium + "'");
+
                     while(rs.next()) {
                         availableQuantity = rs.getInt(1);
                     }
@@ -250,7 +253,7 @@ public class BYSCSEARCH extends HttpServlet {
                     if(message == null) {
                         message="";
                     }
-        
+
                     message = message + student.length + " Students Found For the Study Center Selected";
                     request.setAttribute("msg", message);
                     request.getRequestDispatcher("jsp/To_sc_students1.jsp?sc_code=" + studyCenterCode + "&prg_code=" + programmeCode + "&crs_code=" + 

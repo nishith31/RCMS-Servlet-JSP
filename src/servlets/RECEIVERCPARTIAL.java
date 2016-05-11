@@ -19,14 +19,13 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class RECEIVERCPARTIAL extends HttpServlet {
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("RECEIVERCPARTIAL SERVLET STARTED TO EXECUTE");
     } 
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         if(isNull(session)) {
@@ -48,6 +47,7 @@ public class RECEIVERCPARTIAL extends HttpServlet {
                     blockCount = blockCount + temporary.length;
                 }
             }
+
             String[] courseDispatch = new String[blockCount];//array for holding the blocks to be receieved
             String[] blockQuantity = new String[blockCount];//array for holding the quantity of the blocks to be received
             /*logic for getting all the courses selected by the user*/
@@ -65,9 +65,8 @@ public class RECEIVERCPARTIAL extends HttpServlet {
             String medium = request.getParameter("txt_medium").toUpperCase();
             String date = request.getParameter("txt_date").toUpperCase();//date from the jsp page date field
             int flagForReturn = 0;
-    
+
             ResultSet resultSet = null;
-            System.out.println("All the Parameters received");
             request.setAttribute("current_session", currentSession);//setting the value of current session to the request
             String message = "";
             String regionalCenterCode = (String)session.getAttribute("rc");//getting the code of the rc which is logged in to the system
@@ -89,7 +88,7 @@ public class RECEIVERCPARTIAL extends HttpServlet {
                                     resultSet = statement.executeQuery("select * from rc_receive_" + currentSession + Constants.UNDERSCORE + 
                                             regionalCenterCode + " where reg_code='" + reg_code + "' and crs_code='" + course[z] + "' and block='" + 
                                             blockCheck + "' and medium='" + medium + "' and date='" + date + "'");
-                                    
+
                                     if(resultSet.next()) {
                                         message = message + course[z] + " Block " + blockCheck + " for date " + date + " in medium " + medium + "<br/>";
                                         flagForReturn = 1;
@@ -98,6 +97,7 @@ public class RECEIVERCPARTIAL extends HttpServlet {
                             }
                         }
                     }
+
                     if(flagForReturn == 0) {
                         message = "Received Successfully from RC Course <br/>";
                         int increment = 0;
@@ -112,11 +112,11 @@ public class RECEIVERCPARTIAL extends HttpServlet {
                                         result = statement.executeUpdate("insert into rc_receive_" + currentSession + Constants.UNDERSCORE + 
                                                 regionalCenterCode + "(reg_code,crs_code,block,qty,medium,date)values('"+ reg_code + "','"
                                                 + course[z] + "','" + blockCheck + "'," + blockQuantity[increment] + ",'" + medium + "','" + date + "')");
-    
+
                                         result1 = statement.executeUpdate("update material_" + currentSession + Constants.UNDERSCORE + 
                                             regionalCenterCode + " set qty=qty+" + blockQuantity[increment] + " where crs_code='" + 
                                             course[z] + "' and block='" + blockCheck + "' and medium='" + medium + "'");
-    
+
                                         message = message + course[z] + " Block " + blockCheck + " for date " + date + " in medium " + medium + "<br/>";
                                         increment++;
                                     }

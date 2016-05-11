@@ -16,11 +16,8 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class LOTUPDATESEARCH extends HttpServlet {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("LOTUPDATESEARCH SERVLET STARTED TO EXECUTE");
@@ -28,7 +25,7 @@ public class LOTUPDATESEARCH extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
-    
+
         if(isNull(session)) {
             String message = Constants.LOGIN_ACCESS_MESSAGE;
             request.setAttribute("msg", message);
@@ -40,7 +37,6 @@ public class LOTUPDATESEARCH extends HttpServlet {
             buttonValue = buttonValue.trim();
             System.out.println("Value of Button: " + buttonValue);   
             if(buttonValue.equals("REFRESH")) {
-                System.out.println("Entered into REFRESH block");
                 request.getRequestDispatcher("jsp/Lot_Update.jsp").forward(request, response);
             } else {      
                 try {

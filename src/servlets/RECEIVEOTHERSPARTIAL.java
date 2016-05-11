@@ -22,16 +22,13 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class RECEIVEOTHERSPARTIAL extends HttpServlet {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
             super.init(config);
             System.out.println("RECEIVEOTHERSPARTIAL SERVLET STARTED TO EXECUTE");
     } 
- 
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
         if(isNull(session)) {
@@ -52,6 +49,7 @@ public class RECEIVEOTHERSPARTIAL extends HttpServlet {
             String[] blockQuantity = new String[blockCount];//array for holding the quantity of the blocks to be received
             /*logic for getting all the courses selected by the user*/
             String[] courseBlock = request.getParameterValues(courseCode);
+
             if(!isNull(courseBlock)) {
                 int lengthDispatch = courseBlock.length;
                 for(int e = 0; e < lengthDispatch;e++) {
@@ -60,12 +58,12 @@ public class RECEIVEOTHERSPARTIAL extends HttpServlet {
                     blockQuantity[e] = request.getParameter(courseBlock[e]);
                 }
             }
+
             String medium = request.getParameter("mnu_medium").toUpperCase();
             String date = request.getParameter("text_date").toUpperCase();//date from the jsp page date field
             String receiveFrom = request.getParameter("receive_from").toUpperCase();//receive_from from the jsp page receive_from field
             int flagForReturn = 0;
             ResultSet rs = null;
-            System.out.println("All the Parameters received");
             request.setAttribute("current_session", currentSession);//setting the value of current session to the request
             String message = "";  
             String regionlaCenterCode = (String)session.getAttribute("rc");//getting the code of the rc which is logged in to the system
@@ -86,7 +84,7 @@ public class RECEIVEOTHERSPARTIAL extends HttpServlet {
                                 rs = statement.executeQuery("select * from others_receive_" + currentSession + Constants.UNDERSCORE + 
                                         regionlaCenterCode + " where crs_code='" + courseCode + "' and block='" + blockCheck + "' and medium='"
                                         + medium + "' and date='" + date + "'");
-                                
+
                                 if(rs.next()) {
                                     message = message + " Block " + blockCheck + " for date " + date + " in medium " + medium + "<br/>";
                                     flagForReturn = 1;
@@ -105,25 +103,26 @@ public class RECEIVEOTHERSPARTIAL extends HttpServlet {
                                     result = statement.executeUpdate("insert into others_receive_" + currentSession + Constants.UNDERSCORE + 
                                             regionlaCenterCode + "(crs_code,block,qty,medium,date,receive_from)values('" + courseCode + "','"
                                             + blockCheck + "'," + blockQuantity[y] + ",'" + medium + "','" + date + "','" + receiveFrom + "')");
-                                    
+
                                     result1 = statement.executeUpdate("update material_" + currentSession + Constants.UNDERSCORE + 
                                             regionlaCenterCode + " set qty=qty+" + blockQuantity[y] + " where crs_code='" + courseCode + "' and block='"
                                             + blockCheck + "' and medium='" + medium + "'");
-                                    
+
                                     message = message + " Block " + blockCheck + " for date " + date + " in medium " + medium + "<br/>";
                                 }
                             }
                         }
-                        if(result == 1 && result1 == 1) {   
+
+                        if(result == 1 && result1 == 1) {
                             System.out.println("Materials for " + courseDispatch.length + " courses received from Others");
-                        } else if(result == 1 && result1 !=1) {
+                        } else if(result == 1 && result1 != 1) {
                             System.out.println("Receive table hitted but material table not affected..!!!!!");   
                         } else {
-                            System.out.println("NO operation performed.!!!!!");   
+                            System.out.println("NO operation performed.!!!!!");
                         }
                         request.setAttribute("msg", message);
                         request.getRequestDispatcher("jsp/From_others.jsp").forward(request, response);
-                        
+
                     } else {
                         //if material is out of stock then this section will work and give message to the user
                         request.setAttribute("msg", message);

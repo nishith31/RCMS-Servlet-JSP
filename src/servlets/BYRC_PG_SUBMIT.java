@@ -20,16 +20,14 @@ import javax.servlet.http.HttpSession;
 import utility.Constants;
  
 public class BYRC_PG_SUBMIT extends HttpServlet {
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 1L;
 
     public void init(ServletConfig config) throws ServletException {
         System.out.println("BYRC_PG_SUBMIT SERVLET STARTED FROM INIT METHOD");
         super.init(config);
     } 
- 
+
     @SuppressWarnings("unused")
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
@@ -52,24 +50,25 @@ public class BYRC_PG_SUBMIT extends HttpServlet {
             String message = null;
             ResultSet rs = null;//RESULTSET VARIABLE FOR FETCHING DATA FROM THE TABLES VARIOUS TIMES....
             String regionalCenterCode = (String)session.getAttribute("rc");//getting the rc code of the logged rc from the session
-            
+
             response.setContentType(Constants.HEADER_TYPE_HTML);
             try {
                 Connection connection = connections.ConnectionProvider.conn();
                 Statement statement = connection.createStatement();
                 int flagForReturn = 0, flagForDuplicate = 0;
                 String quantityRemain = ""; 
-            
+
                 rs = statement.executeQuery("select * from rc_dispatch_" + currentSession + Constants.UNDERSCORE + regionalCenterCode +
                         " where reg_code='" + reg_code + "' and crs_code='" + programmeCode + "' and block='PG' and date='" + date + "'");
                 if(!rs.next()) {
                     //IF DUPLICATE RECORDS NOT FOUND THEN ENTER ON THIS SECTION FOR FURTHER ACTIONS OTHERWISE TO ELSE BLOCK.
                     rs = statement.executeQuery("select qty from material_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
                             " where crs_code='" + programmeCode + "' and block='PG' and medium='" + medium + "'");
+
                     while(rs.next()) {
                         actualQuantity = rs.getInt(1);
                     }
-                    
+
                     if(actualQuantity - quantity > -1) {
                         result = statement.executeUpdate("insert into rc_dispatch_" + currentSession + Constants.UNDERSCORE + regionalCenterCode + 
                                 " values('" + reg_code + "','" + programmeCode + "','PG'," + quantity + ",'" + medium + "','" + date + "','" + remarks + "')");
@@ -84,7 +83,7 @@ public class BYRC_PG_SUBMIT extends HttpServlet {
                             remainingQuantity = rs.getInt(1);
                             quantityRemain = quantityRemain + remainingQuantity + " set remained of PROGRAMME GUIDE OF " + programmeCode + " <br/>";
                         }
-            
+
                         if(result == 1 && result1 == 1){   
                             message = "" + quantity + " PRGRAMME GUIDE OF " + programmeCode + " Despatched to " + reg_name + "(" + reg_code + ").<br/>" + quantityRemain;
                         } else if(result == 1 && result1 != 1) {

@@ -22,21 +22,15 @@ import utility.Constants;
 
 
 public class CheckLogin extends HttpServlet {
- 
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 1L;
-    /**
-     * Log configuration
-     */
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("CHECKLOGIN SERVLET STARTED TO EXECUTE");
     }  
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String loginMode = request.getParameter("mode");
-        System.out.println("value of mode variable is " + loginMode);
         String regionalCenterCode;
         String userName;
         String password;
@@ -64,7 +58,6 @@ public class CheckLogin extends HttpServlet {
             if(rs.next()) {
                 //LOGIC FOR GETTING THE REMEMBER ME OPTION
                 if(request.getParameter("RememberMe") != null) {  
-                    System.out.println("come to the RememberMe if sections");
                     Cookie regionalCenterCookie = new Cookie("rc_code_cookie", regionalCenterCode);
                     Cookie roleCookie = new Cookie("role_cookie", role);
                     Cookie userNameCookie = new Cookie("username_cookie", userName);
@@ -78,7 +71,6 @@ public class CheckLogin extends HttpServlet {
                     response.addCookie(userNameCookie);
                     response.addCookie(passwordCookie);
                 } else {
-                    System.out.println("come to the Not RememberMe else sections");
                     Cookie regionalCenterCookie = new Cookie("rc_code_cookie", null);
                     Cookie roleCookie = new Cookie("role_cookie", null);
                     Cookie userNameCookie = new Cookie("username_cookie", null);
@@ -92,7 +84,6 @@ public class CheckLogin extends HttpServlet {
                     response.addCookie( userNameCookie );
                     response.addCookie( passwordCookie );
                 }
-                //  LOGIC ENDS OF REMEMBER ME OPTION
                 HttpSession session = request.getSession(true);
                 session.setMaxInactiveInterval(600);
                 session.setAttribute("rc", regionalCenterCode);
@@ -134,9 +125,6 @@ public class CheckLogin extends HttpServlet {
                 if (ipAddress == null) {  
                     ipAddress = request.getRemoteAddr();  
                 }
-                //  java.sql.Date login_date = new java.sql.Date(session.getCreationTime());//System.currentTimeMillis());
-                //System.out.println(new Date(session.getCreationTime()));//System.currentTimeMillis());
-                //System.out.println(new Date());//System.currentTimeMillis());
                 request.setAttribute("uname", userName);
                 session.setAttribute("login_rc_code", regionalCenterCode);
                 session.setAttribute("login_user_role", role);
@@ -146,7 +134,7 @@ public class CheckLogin extends HttpServlet {
                 session.setAttribute("login_browser_version", browserversion);
                 session.setAttribute("login_ip_address", ipAddress);
                 session.setAttribute("login_start_time", startTime);
-            
+
                 statement.executeUpdate("insert into master_log_details(reg_code,user_role,username,login_time,browser_name,browser_version,ip_address,start_time)values('"
                         + regionalCenterCode + "','" + role + "','" + userName+"','" + loginTime + "','" + browsername + "','" + browserversion + "','" + ipAddress + "',"+startTime+")");
 
@@ -176,7 +164,6 @@ public class CheckLogin extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String mode = request.getParameter("mode");
-        System.out.println("value of mode variable is "+mode);
         String rc   = null;
         String userName = null;
         String password = null;

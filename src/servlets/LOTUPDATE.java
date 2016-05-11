@@ -20,11 +20,7 @@ import utility.Constants;
  
 public class LOTUPDATE extends HttpServlet {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
-
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         System.out.println("LOTUPDATE SERVLET STARTED TO EXECUTE");
@@ -32,7 +28,7 @@ public class LOTUPDATE extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);//getting and checking the availability of session of java
-    
+
         if(isNull(session)) {
             String message = Constants.LOGIN_ACCESS_MESSAGE;
             request.setAttribute("msg", message);
@@ -45,12 +41,12 @@ public class LOTUPDATE extends HttpServlet {
             try {
                 String lots[] = request.getParameterValues("lot_name");//all the lot name from the jsp page
                 String lotsName[] = new String[lots.length];
-                
+
                 int index = 0;
                 for(index = 0; index < lots.length; index++) {
                     lotsName[index] = request.getParameter(lots[index]);
                 }
-                
+
                 int programmeGuideResult = 0;
                 Connection connection = connections.ConnectionProvider.conn();
                 Statement statement = connection.createStatement();
@@ -60,16 +56,18 @@ public class LOTUPDATE extends HttpServlet {
                 while(rs.next()) {
                     currentSession = rs.getString(1).toLowerCase();
                 }
-                
+
                 for(index = 0; index < lots.length; index++) {
                     programmeGuideResult += statement.executeUpdate("update student_" + currentSession + Constants.UNDERSCORE + 
                             regionalCenterCode + " set lot='" + lotsName[index] + "' where lot_name='" + lots[index] + "'");        
                 }
+
                 if(programmeGuideResult > 0) {
                     message = "Successfully Updates " + lots.length + " Lots Name.<br/>Total Updated Student are : " + programmeGuideResult + ".<br/>";
                 } else {
                     message = "Failed to update";
                 }
+
                 request.setAttribute("lots", lots);
                 request.setAttribute("msg", message);
                 request.getRequestDispatcher("jsp/Lot_Update.jsp").forward(request, response);
