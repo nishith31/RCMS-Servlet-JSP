@@ -122,9 +122,9 @@ public class BYE extends HttpServlet {
                         for(index = 0; index < courseNumber; index++) {
                             course[index] = rs.getString(i).trim();
                             serialNumber[index] = rs.getString(j);
-                            
+
                             rs1 = statement1.executeQuery("Select * from course where crs_code='" + course[index] + "'");
-                            if(rs1.next()) {   
+                            if(rs1.next()) {
                                 rs1 = statement1 .executeQuery("Select no_of_blocks from course where crs_code='" + course[index] + "'");
                                 while(rs1.next()) {
                                     blocks[index] = rs1.getInt(1);
@@ -151,7 +151,7 @@ public class BYE extends HttpServlet {
                     for(index = 0; index < course.length; index++) {
                         totalLength = totalLength + blocks[index];
                     }
-        
+
                     int[] stock = new int[totalLength];//int array for holding the stock available for all courses blockwise
                     String courseBlock[] = new String[totalLength];//array for holding all the courses block wise
                     /*logic for creating array of course_block & stock availability*/
@@ -160,6 +160,7 @@ public class BYE extends HttpServlet {
                         for(int b = 1; b <= blocks[index]; b++) {
                             courseBlock[count] = course[index] + "B" + b;
                             rs1 = statement1 .executeQuery("Select * from course where crs_code='" + course[index] + "'");//checking the course in course table
+
                             if(rs1.next()) {
                                 relativeCourse=course[index];
                             } else {
@@ -202,16 +203,16 @@ public class BYE extends HttpServlet {
                     for(index = 0; index < relativeProgrammeCode.length; index++) {
                         searchCourseCode = searchCourseCode + " or crs_code='" + relativeProgrammeCode[index] + "'";
                     }
-    
+
                     searchCourseCode = searchCourseCode + ")";
                     System.out.println("value of search_crs_code " + searchCourseCode);
-    
-            
-                    /*Logic for checking the Despatch of Programme guide for the student entered into the system*/
+
+                    /*Logic for checking the Despatch of Program guide for the student entered into the system*/
                     rs = statement.executeQuery("select * from student_dispatch_"+current_session + Constants.UNDERSCORE + regionalCenterCode + 
                             " where enrno='" + enrollmentNumber + "' and " + searchCourseCode + " and block='PG' and reentry='NO'");
+
                     if(rs.next()) {
-                        programmeGuideDate = rs.getDate(6).toString();   
+                        programmeGuideDate = rs.getDate(6).toString();
                         programmeGuideFlag = Constants.YES;//if entered already then flag will be yes
                     } else {
                         programmeGuideFlag = Constants.NO;//if not entered earlier then flag will be no
@@ -221,10 +222,11 @@ public class BYE extends HttpServlet {
     
                     rs = statement.executeQuery("select qty from material_"+current_session + Constants.UNDERSCORE + regionalCenterCode 
                             + " where " + searchCourseCode + " and block='PG' and medium='" + medium + "'");
+
                     while(rs.next()) {
                         availableProgrammeGuide = rs.getInt(1);
                     }
-            
+
                     request.setAttribute("pg_flag", programmeGuideFlag);//sending the pg_flag means despatched or not
                     request.setAttribute("pg_date", programmeGuideDate);//sending the pg_flag means despatched or not
                     int dispatchCourseCount = 0;//variable for holding the number of courses despatched block wise now
@@ -233,14 +235,14 @@ public class BYE extends HttpServlet {
                     while(rs.next()) {
                         dispatchCourseCount = rs.getInt(1);
                     }
-            
+
                     /*If Not any course opted by student has been Despatched then this logic will create empty Despatch course and date array*/
-    
+
                     if(dispatchCourseCount == 0) {
                         String dispatch[] = new String[dispatchCourseCount];//create array of Despatch courses
                         String dispatchDate[] = new String[dispatchCourseCount];//create array of Despatch courses date
                         message = message + "Welcome to the By Hand Entry for " + name + " First Time.";
-                        /*Sending the Despatch courses and dates empty array with the msg variable with appropriate msg to the Browser*/        
+                        /*Sending the Despatch courses and dates empty array with the msg variable with appropriate msg to the Browser*/
                         request.setAttribute("dispatch", dispatch);
                         request.setAttribute("dispatch_date", dispatchDate);
                         request.setAttribute("blocks_shadow", blocksShadow);
@@ -257,7 +259,7 @@ public class BYE extends HttpServlet {
                         while(rs.next()) {
                             dispatchCourseCount=rs.getInt(1);
                         }
-    
+
                         String dispatch[] = new String[dispatchCourseCount];//array for dispatched courses
                         String dispatchDate[] = new String[dispatchCourseCount];//array for date of Despatched courses
 
@@ -275,7 +277,7 @@ public class BYE extends HttpServlet {
                             m++;
                         }
                         m = 0;
-                
+
                         message = message + "Partially Despatched Courese of " + name + " are ";
                         for(index = 0; index < dispatch.length; index++) {
                             message = " " + message + " " + dispatch[index];
@@ -295,13 +297,13 @@ public class BYE extends HttpServlet {
                         while(rs.next()) {
                             lengthOfDispatchCourse = rs.getInt(1);
                         }
-        
+
                         String dispatch[] = new String[lengthOfDispatchCourse];//array of despatched courses block wise
                         String dispatchDate[] = new String[lengthOfDispatchCourse];//array of Despatch dates of courses despatched
 
                         rs = statement.executeQuery("select * from student_dispatch_"+current_session + Constants.UNDERSCORE + regionalCenterCode + 
                                 " where enrno='" + enrollmentNumber + "'  and reentry='NO' and block<>'PG'");
-    
+
                         while(rs.next()) {
                             dispatch[m] = rs.getString(3).trim() + rs.getString(4).trim();
                             dispatchDate[m] = rs.getDate(6).toString();
@@ -321,7 +323,7 @@ public class BYE extends HttpServlet {
                     message = "Sorry!! Roll Number not found Please Contact to Admission Department. Thank You..";
                     request.setAttribute("msg", message);//sending the message to the browser
                     request.getRequestDispatcher("jsp/By_hand.jsp").forward(request, response); 
-                }   
+                }
             } catch(Exception exception) {
                 System.out.println("Exception raised from By_hand.jsp" + exception);
                 message = "Some Serious Exception Hitted the Page. Please Check on Server Console For Details.";
