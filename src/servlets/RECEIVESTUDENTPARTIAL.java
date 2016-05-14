@@ -24,7 +24,6 @@ public class RECEIVESTUDENTPARTIAL extends HttpServlet {
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        System.out.println("BYHANDFIRSTSUBMIT SERVLET STARTED TO EXECUTE");
     } 
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -50,6 +49,7 @@ public class RECEIVESTUDENTPARTIAL extends HttpServlet {
                     blockCount = blockCount+temporaryVar.length;
                 }
             }
+
             String[] courseDispatch = new String[blockCount];//array for holding the blocks to be received
             String[] blockQuantity = new String[blockCount];//array for holding the quantity of the blocks to be received
             /*logic for getting all the courses selected by the user*/

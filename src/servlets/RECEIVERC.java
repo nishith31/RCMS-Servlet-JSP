@@ -22,7 +22,6 @@ public class RECEIVERC extends HttpServlet {
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        System.out.println("RECEIVERC SERVLET STARTED TO EXECUTE");
     } 
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -64,7 +63,8 @@ public class RECEIVERC extends HttpServlet {
             @SuppressWarnings("unused")
             int index = 0, flag = 0, result_material = 0, result_receive = 0;
             @SuppressWarnings("unused")
-            int actual_qty = 0;//VARIABLE FOR STORING THE ACTUAL NUMBER OF BOOKS ON THE STORE FROM THE MATERIAL TABLE
+            int actualQuantity = 0;//VARIABLE FOR STORING THE ACTUAL NUMBER OF BOOKS ON THE STORE FROM THE MATERIAL TABLE
+
             /*LOGIC FOR CHECKING THE SELECTED COURSE AND STORING THEM IN STRING ARRAY AND QUANTITIES IN INTEGER ARRAY*/     
             if(!courseCode.equals(Constants.NONE)) {
                 index++;

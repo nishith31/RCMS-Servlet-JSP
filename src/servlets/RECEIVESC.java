@@ -24,7 +24,6 @@ public class RECEIVESC extends HttpServlet {
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        System.out.println("RECEIVESC SERVLET STARTED TO EXECUTE");
     } 
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -61,7 +60,6 @@ public class RECEIVESC extends HttpServlet {
             String date = request.getParameter("txt_date").toUpperCase();
             String currentSession = request.getParameter("txt_session").toLowerCase();
             String receiptType = request.getParameter("receipt_type");
-            System.out.println("fields from From_SC.jsp received");
             String regionalCenterCode = (String)session.getAttribute("rc");
             String message = null;
             int index = 0, flag = 0;

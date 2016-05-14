@@ -26,7 +26,6 @@ public class RECEIVESTUDENT extends HttpServlet {
 
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        System.out.println("RECEIVESTUDENT SERVLET STARTED.....");
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -64,9 +63,8 @@ public class RECEIVESTUDENT extends HttpServlet {
             String medium = request.getParameter("txt_medium").toUpperCase();
             String  date = request.getParameter("txt_date").toUpperCase();
             String currentSession = request.getParameter("txt_session").toLowerCase();
-            String receiptType =    request.getParameter("receipt_type");
+            String receiptType = request.getParameter("receipt_type");
             String receive_source = "BY HAND";
-            System.out.println("fields from From_student.jsp received Successfully");
             String message = null;
             String regionalCenterCode = (String)session.getAttribute("rc");
             int index = 0, flag = 0;
@@ -113,6 +111,7 @@ public class RECEIVESTUDENT extends HttpServlet {
             String courses[] = new String[index];
             int qtys[] = new int[index];
             int insert = 0;
+
             if(!courseCode.equals("NONE")) {
                 courses[insert] = courseCode;
                 qtys[insert] = quantity;
@@ -224,7 +223,6 @@ public class RECEIVESTUDENT extends HttpServlet {
 
                                 message = message + courses[i] + " Block " + blocks[j] + " for date " + date + " in medium " + medium + "<br/>";
                             }
-                            System.out.println("Received Succesfully from STUDENT: " + enrollmentNumber + " Course code " + courses[i]);
                         }
 
                         request.setAttribute("msg", message);

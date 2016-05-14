@@ -25,8 +25,7 @@ public class RECEIVEOTHERSPARTIAL extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
-            super.init(config);
-            System.out.println("RECEIVEOTHERSPARTIAL SERVLET STARTED TO EXECUTE");
+        super.init(config);
     } 
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -37,15 +36,16 @@ public class RECEIVEOTHERSPARTIAL extends HttpServlet {
             request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
         } else {
             String currentSession = request.getParameter("txt_session").toLowerCase();//getting the value of current session
-            String courseCode = request.getParameter("mnu_crs_code").toUpperCase();//gettting the course code
+            String courseCode = request.getParameter("mnu_crs_code").toUpperCase();//getting the course code
             int blockCount = 0;//int variable for number of blocks available with the course
             String[] temp = new String[0];//array of String for multiple use
+
             /*logic for getting the number of total courses selected by user*/
             temp = request.getParameterValues(courseCode);
             if(!isNull(temp)) {
                 blockCount = blockCount + temp.length;
             }
-            String[] courseDispatch =  new String[blockCount];//array for holding the blocks to be receieved
+            String[] courseDispatch =  new String[blockCount];//array for holding the blocks to be received
             String[] blockQuantity = new String[blockCount];//array for holding the quantity of the blocks to be received
             /*logic for getting all the courses selected by the user*/
             String[] courseBlock = request.getParameterValues(courseCode);

@@ -23,7 +23,6 @@ public class RECEIVERCPARTIAL extends HttpServlet {
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        System.out.println("RECEIVERCPARTIAL SERVLET STARTED TO EXECUTE");
     } 
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -40,6 +39,7 @@ public class RECEIVERCPARTIAL extends HttpServlet {
             int count = 0;//int variable for multiple use
             String[] temporary = new String[0];//array of String for multiple use
             int index = 0;
+
             /*logic for getting the number of total courses selected by user*/
             for(index = 0; index < course.length; index++) {
                 temporary = request.getParameterValues(course[index]);
@@ -73,7 +73,7 @@ public class RECEIVERCPARTIAL extends HttpServlet {
             response.setContentType(Constants.HEADER_TYPE_HTML);
             try {
                 Connection connection = connections.ConnectionProvider.conn();//creating the connection object for the database
-                Statement statement = connection.createStatement();//fetching the refernce of the statement from the connection object.
+                Statement statement = connection.createStatement();//fetching the reference of the statement from the connection object.
                 int result = 5, result1 = 5;
                 if (blockCount != 0) {
                     message = "Entry Already Exist for Course: <br/>";

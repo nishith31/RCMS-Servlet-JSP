@@ -25,7 +25,6 @@ public class RECEIVESCPARTIAL extends HttpServlet {
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        System.out.println("BYHANDFIRSTSUBMIT SERVLET STARTED TO EXECUTE");
     } 
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -42,6 +41,7 @@ public class RECEIVESCPARTIAL extends HttpServlet {
             int count = 0;//int variable for multiple use
             String[] temp = new String[0];//array of String for multiple use
             int index = 0;
+
             /*logic for getting the number of total courses selected by user*/
             for(index = 0; index < course.length; index++) {
                 temp = request.getParameterValues(course[index]);

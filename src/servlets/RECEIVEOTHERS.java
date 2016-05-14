@@ -23,7 +23,6 @@ public class RECEIVEOTHERS extends HttpServlet {
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        System.out.println("RECEIVEOTHERS SERVLET STARTED TO EXECUTE");
     } 
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -44,7 +43,6 @@ public class RECEIVEOTHERS extends HttpServlet {
             String receiveFrom = request.getParameter("receive_from").toLowerCase();
 
             String regionalCenterCode = (String)session.getAttribute("rc");
-            System.out.println("fields from others receive page successfully " + medium);
             String message = null;
             String query = null;
             String receiptType = null;
