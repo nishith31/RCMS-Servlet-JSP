@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import utility.CommonUtility;
 import utility.Constants;
  
 public class BYEPOSTSEARCH extends HttpServlet {
@@ -27,7 +28,6 @@ public class BYEPOSTSEARCH extends HttpServlet {
     String currentSession="";//variable for holding the value of the current session of the regional centre logged in.
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        System.out.println("BYEPOSTSEARCH SERVLET STARTED TO EXECUTE"); 
     }
 
     @SuppressWarnings({ "unused", "resource" })
@@ -70,11 +70,8 @@ public class BYEPOSTSEARCH extends HttpServlet {
                 Connection connection1 = connections.ConnectionProvider.conn();//creating the connection to the database and getting the reference
                 Statement statement = connection.createStatement();//creating the statement object and getting the reference from the connection object
                 Statement statement1 = connection1.createStatement();//creating the statement object and getting the reference from the connection object
-                ResultSet rs = statement.executeQuery("select TOP 1 session_name from sessions_" + regionalCenterCode + " order by id DESC");//getting the value of current session of the rc that is logged in the system.
-                /*Logic for fetching the value of current session from the ResultSet variable and setting it to own variable*/
-                while(rs.next()) {
-                    currentSession = rs.getString(1).toLowerCase();
-                }
+                ResultSet rs;
+                currentSession = CommonUtility.getCurrentSessionName(regionalCenterCode);
     
                 request.setAttribute("current_session", currentSession);
                 /*Logic for fetching all details of the student from the student database of the RC logged in*/

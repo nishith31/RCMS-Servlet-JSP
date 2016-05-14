@@ -23,7 +23,6 @@ public class BYPOSTBULKSUBMIT extends HttpServlet {
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        System.out.println("BYPOSTBULKSUBMIT SERVLET STARTED TO EXECUTE");
     }
 
     @SuppressWarnings("unused")
@@ -65,7 +64,7 @@ public class BYPOSTBULKSUBMIT extends HttpServlet {
             String[] serialNumber = request.getParameterValues("serial");
             System.out.println("Total Number of Serial Numbers: " + serialNumber.length);
             String[] hiddenCourse = request.getParameterValues("hide_course");
-            System.out.println("Total Number of hidden course : " + hiddenCourse.length);    
+            System.out.println("Total Number of hidden course : " + hiddenCourse.length);
 
             int quantity = 0;
             int actualQuantity = 0;
@@ -74,7 +73,7 @@ public class BYPOSTBULKSUBMIT extends HttpServlet {
             int start = Integer.parseInt(request.getParameter("text_start"));
             int end = Integer.parseInt(request.getParameter("text_end"));
             int finalLength = student.length;
-            String message = null;    
+            String message = null;
             ResultSet rs = null;//ResultSet variable for  fetching the data from the statement
             String regionalCenterCode = (String)session.getAttribute("rc");
             request.setAttribute("first_timer", firstTimer);

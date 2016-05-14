@@ -22,7 +22,6 @@ public class BYRCSUBMIT extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
-        System.out.println("BYRCSUBMIT SERVLET STARTED FROM INIT METHOD");
         super.init(config);
     } 
 

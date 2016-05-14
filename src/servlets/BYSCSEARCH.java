@@ -24,7 +24,6 @@ public class BYSCSEARCH extends HttpServlet {
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        System.out.println("BYSCSEARCH SERVLET STARTED");
     } 
  
     @SuppressWarnings("unused")
@@ -36,8 +35,8 @@ public class BYSCSEARCH extends HttpServlet {
             request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
         } else {
             String message = null;
-            String studyCenterCode = request.getParameter("mnu_sc_code").toUpperCase();//variable for holding the study centre code from the browser
-            String programmeCode = request.getParameter("mnu_prg_code").toUpperCase();//variable for holding the programe code from the browser
+            String studyCenterCode = request.getParameter("mnu_sc_code").toUpperCase();//variable for holding the study center code from the browser
+            String programmeCode = request.getParameter("mnu_prg_code").toUpperCase();//variable for holding the program code from the browser
             String courseCode = request.getParameter("mnu_crs_code").toUpperCase();//variable for holding the course code from the browser
             String year = request.getParameter("textyear").toUpperCase();//variable for holding the year from the browser
             String medium = request.getParameter("textmedium").toUpperCase();//variable for holding the medium of student from the browser

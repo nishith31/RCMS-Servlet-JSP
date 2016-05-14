@@ -4,9 +4,9 @@ THIS SERVLET TAKES THE DETAILS OF THE DESPATCHED COURSES FROM THE BROWSER AND TH
 THE SELECTED COURSES.
 CALLED JSP:-Lot_Update1.jsp*/
 import static utility.CommonUtility.isNull;
+
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.Statement;
 
 import javax.servlet.ServletConfig;
@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import utility.CommonUtility;
 import utility.Constants;
  
 public class LOTUPDATE extends HttpServlet {
@@ -50,12 +51,7 @@ public class LOTUPDATE extends HttpServlet {
                 int programmeGuideResult = 0;
                 Connection connection = connections.ConnectionProvider.conn();
                 Statement statement = connection.createStatement();
-                ResultSet rs = null;
-                /*Logic for getting the current session name from the sessions table of the regional centre logged in and send to the browser*/ 
-                rs = statement.executeQuery("select TOP 1 session_name from sessions_" + regionalCenterCode + " order by id DESC");
-                while(rs.next()) {
-                    currentSession = rs.getString(1).toLowerCase();
-                }
+                currentSession = CommonUtility.getCurrentSessionName(regionalCenterCode);
 
                 for(index = 0; index < lots.length; index++) {
                     programmeGuideResult += statement.executeUpdate("update student_" + currentSession + Constants.UNDERSCORE + 

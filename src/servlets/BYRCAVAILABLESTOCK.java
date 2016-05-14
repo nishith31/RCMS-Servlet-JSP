@@ -20,7 +20,6 @@ public class BYRCAVAILABLESTOCK extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
-        System.out.println("BYRCAVAILABLESTOCK SERVLET STARTED FROM INIT METHOD");
         super.init(config);
     }
 
@@ -32,17 +31,17 @@ public class BYRCAVAILABLESTOCK extends HttpServlet {
             request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
         } else {
             /*LOGIC FOR GETTING ALL THE PARAMETERS FROM THE REQUEST SELECTED BY THE CLIENT*/
-            String reg_code         =    request.getParameter("mnu_reg_code").toUpperCase();//FIELD FOR HOLDING THE REGIONAL CENTRE CODE
-            String prg_code         =    request.getParameter("mnu_prg_code").toUpperCase();//FIELD FOR HOLDING THE REGIONAL CENTRE CODE    
-            String  courseCode                =    request.getParameter("mnu_crs_code").toUpperCase();
-            String  courseCode2               =    request.getParameter("mnu_crs_code2").toUpperCase();
-            String  courseCode3               =    request.getParameter("mnu_crs_code3").toUpperCase();
-            String  courseCode4               =    request.getParameter("mnu_crs_code4").toUpperCase();
-            String  courseCode5               =    request.getParameter("mnu_crs_code5").toUpperCase();
-            String medium           =    request.getParameter("txtmedium").toUpperCase();//FIELD FOR HOLDING THE MEDIUM SELECTED BY THE STUDENT
-            String currentSession  =    request.getParameter("txtsession").toLowerCase();//FIELD FOR HOLDING THE NAME OF THE CURRENT SESSION THAT IS BEING CREATED
+            String reg_code = request.getParameter("mnu_reg_code").toUpperCase();//FIELD FOR HOLDING THE REGIONAL CENTRE CODE
+            String programmeCode = request.getParameter("mnu_prg_code").toUpperCase();//FIELD FOR HOLDING THE REGIONAL CENTRE CODE    
+            String  courseCode = request.getParameter("mnu_crs_code").toUpperCase();
+            String  courseCode2 = request.getParameter("mnu_crs_code2").toUpperCase();
+            String  courseCode3 = request.getParameter("mnu_crs_code3").toUpperCase();
+            String  courseCode4 = request.getParameter("mnu_crs_code4").toUpperCase();
+            String  courseCode5 = request.getParameter("mnu_crs_code5").toUpperCase();
+            String medium = request.getParameter("txtmedium").toUpperCase();//FIELD FOR HOLDING THE MEDIUM SELECTED BY THE STUDENT
+            String currentSession = request.getParameter("txtsession").toLowerCase();//FIELD FOR HOLDING THE NAME OF THE CURRENT SESSION THAT IS BEING CREATED
             request.setAttribute("current_session", currentSession);
-            String regionalCenterCode          =   (String)session.getAttribute("rc");
+            String regionalCenterCode = (String)session.getAttribute("rc");
             String reg_name = null;
             int index = 0, insert = 0;
             String message = "";
@@ -153,7 +152,7 @@ public class BYRCAVAILABLESTOCK extends HttpServlet {
                     }
                 }
                 request.setAttribute("msg", message);
-                request.getRequestDispatcher("jsp/To_rc1.jsp?reg_code=" + reg_code + "&reg_name=" + reg_name + "&prg_code=" + prg_code + "&medium="+medium+"").forward(request, response);       
+                request.getRequestDispatcher("jsp/To_rc1.jsp?reg_code=" + reg_code + "&reg_name=" + reg_name + "&prg_code=" + programmeCode + "&medium="+medium+"").forward(request, response);       
             } catch(Exception exception) {
                 System.out.println("Exception raised from BYRCSUBMIT.java and is " + exception);
                 message = "Some Serious Exception Hitted the Page.Please check on the Server Console for More Details";

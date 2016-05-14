@@ -20,7 +20,6 @@ public class BYRCAVAILABLE_PG_STOCK extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
-        System.out.println("BYRCAVAILABLE_PG_STOCK SERVLET STARTED FROM INIT METHOD");
         super.init(config);
     }  
 

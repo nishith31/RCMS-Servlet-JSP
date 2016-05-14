@@ -22,7 +22,6 @@ public class BYSCPRIVATE_PG_STOCK extends HttpServlet {
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        System.out.println("BYSCPRIVATE_PG_STOCK SERVLET STARTED TO EXECUTE");
     } 
 
     @SuppressWarnings("unused")

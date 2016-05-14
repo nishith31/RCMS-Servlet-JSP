@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import utility.CommonUtility;
 import utility.Constants;
  
 public class BYE extends HttpServlet {
@@ -64,12 +65,8 @@ public class BYE extends HttpServlet {
                 Connection connection1 = connections.ConnectionProvider.conn();
                 Statement statement = connection.createStatement();
                 Statement statement1 = connection1.createStatement();
-    
-                /*Logic for getting the current session name from the sessions table of the regional centre logged in and send to the browser*/ 
-                ResultSet rs = statement.executeQuery("select TOP 1 session_name from sessions_" + regionalCenterCode + " order by id DESC");
-                while(rs.next()) {
-                    current_session = rs.getString(1).toLowerCase();
-                }
+                ResultSet rs;
+                current_session = CommonUtility.getCurrentSessionName(regionalCenterCode);
         
                 request.setAttribute("current_session", current_session);
                 /*Complete Logic for fetching the details of the student from the the student database*/

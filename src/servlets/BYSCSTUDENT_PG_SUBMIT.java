@@ -25,7 +25,6 @@ public class BYSCSTUDENT_PG_SUBMIT extends HttpServlet {
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        System.out.println("BYSCSTUDENT_PG_SUBMIT SERVLET STARTED TO EXECUTE");
     } 
 
     @SuppressWarnings("unused")

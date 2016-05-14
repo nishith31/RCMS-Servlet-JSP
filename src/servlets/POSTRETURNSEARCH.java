@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import utility.CommonUtility;
 import utility.Constants;
  
 public class POSTRETURNSEARCH extends HttpServlet {
@@ -50,12 +51,9 @@ public class POSTRETURNSEARCH extends HttpServlet {
             try {
                 Connection connection = connections.ConnectionProvider.conn();
                 Statement statement = connection.createStatement();
-                /*logic for getting the value of the current session of the RC*/
-                ResultSet rs = statement.executeQuery("select TOP 1 session_name from sessions_" + regionalCenterCode + " order by id DESC");
-                while(rs.next()) {
-                    currentSession = rs.getString(1).toLowerCase();
-                }
+                ResultSet rs;
 
+                currentSession = CommonUtility.getCurrentSessionName(regionalCenterCode);
                 request.setAttribute("current_session", currentSession);
                 /*LOGIC FOR CHECKING THE DESPATCH OF PROGRAMME GUIDE TO THE STUDENT*/
                 rs = statement.executeQuery("select * from student_dispatch_" + currentSession + Constants.UNDERSCORE + regionalCenterCode +

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import utility.CommonUtility;
 import utility.Constants;
  
 public class BYPOSTBULKSEARCH extends HttpServlet {
@@ -78,10 +79,8 @@ public class BYPOSTBULKSEARCH extends HttpServlet {
                 request.setAttribute("packet_type",packet_type);        */
                 request.setAttribute("start", start);
                 request.setAttribute("end", end);
-                rs = statement.executeQuery("select TOP 1 session_name from sessions_" + regionalCenterCode + " order by id DESC");
-                while(rs.next()) {
-                    currentSession=rs.getString(1).toLowerCase();
-                }
+                currentSession = CommonUtility.getCurrentSessionName(regionalCenterCode);
+
                 request.setAttribute("current_session", currentSession);
                 /*LOGIC FOR GETTING THE RELATIVE COURSE CODE FROM THE ACTUAL COURSE CODE*/  
                 String[] relativeCourseCode = new String[0];

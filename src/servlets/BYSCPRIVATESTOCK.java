@@ -25,7 +25,6 @@ public class BYSCPRIVATESTOCK extends HttpServlet {
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        System.out.println("BYSCPRIVATESTOCK SERVLET STARTED TO EXECUTE");
     }
 
     @SuppressWarnings("unused")
@@ -43,8 +42,8 @@ public class BYSCPRIVATESTOCK extends HttpServlet {
             String currentSession = request.getParameter("text_session").toLowerCase();//FIELD FOR GETTING THE  SESSION NAME
             String message = "";            //VARIABLE FOR SENDING APPROPRIATE MESSAGE TO THE BROWSER
             String studyCenterName = "";
-            int result=5,result1=5;
-            ResultSet rs=null;  
+            int result = 5, result1 = 5;
+            ResultSet rs = null;  
             String regionalCenterCode = (String)session.getAttribute("rc");
             response.setContentType(Constants.HEADER_TYPE_HTML);
             request.setAttribute("current_session", currentSession);

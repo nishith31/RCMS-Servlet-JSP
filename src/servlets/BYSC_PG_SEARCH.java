@@ -21,7 +21,6 @@ public class BYSC_PG_SEARCH extends HttpServlet {
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        System.out.println("BYSC_PG_SEARCH SERVLET STARTED");
     }
 
     @SuppressWarnings("unused")

@@ -22,7 +22,6 @@ public class BYHANDFIRSTSUBMIT extends HttpServlet {
     private static final long serialVersionUID = 1L;
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        System.out.println("BYHANDFIRSTSUBMIT SERVLET STARTED TO EXECUTE");
     } 
 
     @SuppressWarnings("unused")
@@ -33,10 +32,10 @@ public class BYHANDFIRSTSUBMIT extends HttpServlet {
             request.setAttribute("msg", message);
             request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
         } else {
-            String enrollmentNumber = request.getParameter("text_enr").toUpperCase();//getting the enrolment number of student
+            String enrollmentNumber = request.getParameter("text_enr").toUpperCase();//getting the enrollment number of student
             String name = request.getParameter("text_name").toUpperCase();//getting the name of the student
             String currentSession = request.getParameter("text_session").toLowerCase();//getting the value of current session
-            String programmeCode = request.getParameter("text_prog_code").toUpperCase();//gettting the prgram code
+            String programmeCode = request.getParameter("text_prog_code").toUpperCase();//getting the program code
             String[] course = request.getParameterValues("crs_code");//all the course codes from the jsp page
             int blockCount = 0;//int variable for number of blocks available with the course
             int count = 0;//int variable for multiple use
